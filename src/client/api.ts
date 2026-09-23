@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, type SetStateAction } from 'react';
 export class RequestError extends Error {
   constructor(
     message: string,
@@ -17,15 +17,21 @@ export async function api<T>(path: string, options: RequestInit = {}): Promise<T
       ...options.headers,
     },
   });
-  const data = await response
-    .json()
-    .catch(() => ({ error: 'The server returned an unexpected response. Please try again.' }));
-  if (!response.ok)
+  const data = await response.json().catch(() => {
+    throw new RequestError(
+      'The server returned an unexpected response. Please try again.',
+      response.ok ? 502 : response.status,
+    );
+  });
+  if (!response.ok) {
+    if (data.code === 'UNAUTHENTICATED' && path !== '/auth/me')
+      window.dispatchEvent(new Event('remainder:session-expired'));
     throw new RequestError(
       data.error || 'Something went wrong. Please try again.',
       response.status,
       data.code,
     );
+  }
   return data as T;
 }
 export const post = <T>(path: string, data: unknown = {}) =>
@@ -33,7 +39,22 @@ export const post = <T>(path: string, data: unknown = {}) =>
 export const patch = <T>(path: string, data: unknown) =>
   api<T>(path, { method: 'PATCH', body: JSON.stringify(data) });
 export function useApi<T>(path: string) {
-  const [data, setData] = useState<T | null>(null);
+  const [result, setResult] = useState<{ path: string; value: T | null }>({ path, value: null });
+  const data = result.path === path ? result.value : null;
+  const setData = useCallback(
+    (next: SetStateAction<T | null>) => {
+      setResult((previous) => ({
+        path,
+        value:
+          typeof next === 'function'
+            ? (next as (value: T | null) => T | null)(
+                previous.path === path ? previous.value : null,
+              )
+            : next,
+      }));
+    },
+    [path],
+  );
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   const [tick, setTick] = useState(0);
@@ -43,7 +64,9 @@ export function useApi<T>(path: string) {
     setLoading(true);
     setError('');
     api<T>(path, { signal: ctrl.signal })
-      .then(setData)
+      .then((value) => {
+        if (!ctrl.signal.aborted) setData(value);
+      })
       .catch((e) => {
         if (e.name !== 'AbortError') setError(e.message);
       })
@@ -51,7 +74,7 @@ export function useApi<T>(path: string) {
         if (!ctrl.signal.aborted) setLoading(false);
       });
     return () => ctrl.abort();
-  }, [path, tick]);
+  }, [path, tick, setData]);
   return { data, error, loading, reload, setData };
 }
 export const money = (value: number, currency = 'USD') =>
@@ -60,11 +83,14 @@ export const money = (value: number, currency = 'USD') =>
   );
 export const date = (value: string | null, full = false) =>
   value
-    ? new Date(value).toLocaleDateString('en-US', {
+    ? (/^\d{4}-\d{2}-\d{2}$/.test(value)
+        ? new Date(`${value}T00:00:00`)
+        : new Date(value)
+      ).toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
         ...(full ? { year: 'numeric' } : {}),
       })
-    : '—';
+    : 'Not set';
 export const errorMessage = (error: unknown) =>
   error instanceof Error ? error.message : 'Something went wrong. Please try again.';

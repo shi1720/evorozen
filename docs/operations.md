@@ -27,7 +27,7 @@ pg_restore --no-owner --no-privileges --exit-on-error --dbname TARGET_DATABASE r
 
 Verify record counts, sessions as appropriate, approved claims, credits, and exact remaining amounts before treating a backup as recoverable. Do not start a restored test copy with production outbound-provider credentials: it could duplicate remote operations. Clean up disposable restores and sensitive archives under a documented retention policy. Never overwrite the live database merely to test a backup.
 
-The release rehearsal used an isolated schema-only Neon branch and a complete dump/restore, then compared the synthetic case's 6355/1875/4480 integer pence. Its temporary branch and archive were deleted. An ongoing backup schedule remains an operator responsibility; deployment persistence alone is not a backup.
+The release rehearsal used an isolated schema-only Neon branch and a complete dump/restore, then compared the synthetic case's 6355/1875/4480 integer pence. Its temporary branch and archive were deleted. The Firebase release now runs a verified nightly backup schedule. See the [backup guide](backups.md) for the current job, retention, scheduled execution, and isolated restore evidence. Operators deploying elsewhere must configure an equivalent schedule.
 
 ## Incident behavior
 

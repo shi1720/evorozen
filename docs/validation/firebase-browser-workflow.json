@@ -1,0 +1,137 @@
+{
+  "timestamp": "2026-09-23T05:29:13.845Z",
+  "base": "https://remainder-desk.web.app",
+  "kind": "disposable_fictional_hosted_browser_verification",
+  "passed": false,
+  "checks": [
+    {
+      "name": "browser signup and Firebase __session cookie",
+      "detail": {
+        "secure": true,
+        "httpOnly": true,
+        "sameSite": "Lax"
+      }
+    },
+    {
+      "name": "OpenAI configured on hosted backend",
+      "detail": true
+    },
+    {
+      "name": "supplier alias and pack-unit notes saved in UI",
+      "detail": true
+    },
+    {
+      "name": "normal account case creation, deep link, and reload persistence",
+      "detail": true
+    },
+    {
+      "name": "hosted PDF worker extraction, review, and save",
+      "detail": true
+    },
+    {
+      "name": "hosted image OCR under production CSP, reviewed without duplicate save",
+      "detail": true
+    },
+    {
+      "name": "TXT receiving note and explicit pack equivalence saved",
+      "detail": true
+    },
+    {
+      "name": "live OpenAI shortages, linked evidence, explicit selection, and claim approval",
+      "detail": true
+    },
+    {
+      "name": "browser evidence PDF download through Firebase",
+      "detail": true
+    },
+    {
+      "name": "live partial credit reconciliation retains USD 72 remainder",
+      "detail": true
+    },
+    {
+      "name": "PDF, CSV, JSON, EML and workspace export preserve balances",
+      "detail": true
+    }
+  ],
+  "analyses": [
+    {
+      "traceId": "req_4efd6ed132e24ffdb6aacd1e857a19b0",
+      "provider": "openai",
+      "durationMs": 2710,
+      "findings": [
+        {
+          "product": "OAT BARISTA 6X1L",
+          "amountCents": 14400,
+          "needsReview": false
+        },
+        {
+          "product": "TOMATO WHOLE 6X2.5KG",
+          "amountCents": 7200,
+          "needsReview": false
+        }
+      ],
+      "credits": []
+    },
+    {
+      "traceId": "req_8ebf05f75d9b40b1848f22f5a0a11fd6",
+      "provider": "openai",
+      "durationMs": 5158,
+      "findings": [
+        {
+          "product": "OAT BARISTA 6X1L",
+          "amountCents": 14400,
+          "needsReview": false
+        },
+        {
+          "product": "TOMATO WHOLE 6X2.5KG",
+          "amountCents": 7200,
+          "needsReview": false
+        }
+      ],
+      "credits": [
+        {
+          "reference": "CN-208",
+          "amountCents": 14400
+        }
+      ]
+    }
+  ],
+  "exports": [
+    {
+      "format": "pdf",
+      "status": 200,
+      "bytes": 26784
+    },
+    {
+      "format": "csv",
+      "status": 200,
+      "bytes": 902
+    },
+    {
+      "format": "json",
+      "status": 200,
+      "bytes": 13337
+    },
+    {
+      "format": "eml",
+      "status": 200,
+      "bytes": 1097
+    }
+  ],
+  "responsive": [],
+  "browserErrors": [],
+  "cleanup": {
+    "deleted": true,
+    "oldSessionRejected": true,
+    "deletedAccountLoginRejected": true
+  },
+  "totals": {
+    "currency": "USD",
+    "claimedCents": 21600,
+    "creditedCents": 14400,
+    "remainingCents": 7200,
+    "status": "partial"
+  },
+  "error": "dashboard overflow at 320",
+  "modelRequests": 2
+}

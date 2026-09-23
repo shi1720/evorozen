@@ -691,7 +691,8 @@ export function createApp({ db, analyze = analyzeDocuments, memory = defaultMemo
     res.json({ case: value });
   });
   app.post('/api/cases/:id/analyze', limit('analysis', 30, 60 * 60_000, true), async (req, res) => {
-    z.object({})
+    const { force = false } = z
+      .object({ force: z.boolean().optional() })
       .strict()
       .parse(req.body ?? {});
     const user = authenticatedUser(res);
@@ -714,7 +715,8 @@ export function createApp({ db, analyze = analyzeDocuments, memory = defaultMemo
         );
       const supplier = await findSupplier(tx, user.id, value.supplierName);
       const sourceHash = analysisSourceHash(value.documents, supplier);
-      if (value.analysis?.sourceHash === sourceHash) return { value, supplier, cached: true };
+      if (!force && value.analysis?.sourceHash === sourceHash)
+        return { value, supplier, cached: true };
       await tx.query(
         'UPDATE recovery_cases SET analysis_token=$1,analysis_started_at=NOW() WHERE id=$2 AND user_id=$3',
         [token, id, user.id],
@@ -809,6 +811,7 @@ export function createApp({ db, analyze = analyzeDocuments, memory = defaultMemo
               )
               .map((credit) => ({ ...credit, verified: false })),
           ];
+          analysis.summary = `The approved claim is unchanged. ${analysis.findings.filter((finding) => finding.accepted).length} reviewed shortage findings retained. ${analysis.credits.filter((credit) => !credit.verified).length} credit notes matched for separate verification.`;
         } else {
           // Preserve explicit acceptance decisions where grounded finding identifiers have stayed stable.
           const decisions = new Map(

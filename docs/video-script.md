@@ -1,60 +1,72 @@
-# Remainder: three-minute video script
+# Remainder: final demo narration
 
-**Narrator:** Shivam Gupta. **Target:** approximately 2:40 at 135-145 words per minute, leaving room for transitions. Read the narration below verbatim. Rehearse with the actual screen recording and keep the final export under 3:00.
+The final film is **2 minutes 50.88 seconds**, with a stock AI-generated presenter voice and visible captions. It uses fictional business documents in a normal account and actual OpenAI analysis. It does not impersonate Shivam Gupta. The account setup happens off camera, and screen holds make the evidence readable; the film is an edited demonstration, not a latency benchmark.
 
-The base script describes the labeled sample workflow and a separately verified live Gemini integration. The silent recording preserves that distinction. For the final submission, pair it with Shivam’s narration and, if available, footage of a fresh real-provider request. Never present sample replay as fresh inference.
+Speech model: `gpt-4o-mini-tts`. Stock voice: `cedar`. Narration was generated without speeding up the audio. The voice disclosure appears on the opening and closing cards and throughout the caption area.
 
 ## Verbatim narration
 
-It's six in the morning. A cafe receives its delivery. Four cases of oat milk and three cases of tomatoes are missing. The supplier says, “We'll credit you.”
+A cafe is missing part of its delivery. The supplier says, "We will credit you." Days later, a credit arrives. But it covers only the oat milk.
 
-Days later, a credit note arrives. But it covers only the oat milk.
+Meet Remainder, built by Shivam Gupta: a supplier-credit desk for independent businesses. This demonstration uses fictional documents and real OpenAI analysis.
 
-I'm Shivam Gupta, and this is Remainder: a supplier-credit desk for independent food businesses.
+The invoice bills twelve cases of oat milk and ten cases of tomatoes. Every document lives in one case, with text the owner can review.
 
-Let's follow a clearly labeled fictional case for Fern and Flour cafe.
+The receiving record shows eight oat-milk cases and seven tomato cases. A confirmed supplier alias connects the different names for the same oat drink.
 
-I open the delivery issue and inspect its invoice and receiving note. Remainder brings the evidence into one case. Its AI layer helps interpret different product descriptions and proposes the shortage findings.
+Now the owner starts a real OpenAI request. The model interprets the documents. Remainder checks quoted evidence, units, prices, and supplier identity before an amount can enter a claim.
 
-Here, four missing oat-drink cases at thirty-six dollars each make one hundred forty-four dollars. Three missing tomato cases at twenty-four dollars each make seventy-two. The total claim is two hundred sixteen dollars.
+Four missing cases at thirty-six dollars make one hundred forty-four dollars. Three tomato cases at twenty-four dollars make seventy-two. Together, the shortage is two hundred sixteen dollars.
 
-Every finding links to its source quotation. I review those records before accepting the amounts. If the evidence is incomplete or uncertain, the case stays open for review.
+Each finding links to its source. Nothing starts approved. The owner reviews the evidence and explicitly selects the supported shortages.
 
-I approve the claim and export a supplier email draft and evidence PDF. I control what gets sent.
+Preparing the claim locks its amount and evidence. A later credit cannot rewrite what was originally requested. This claim is for two hundred sixteen dollars.
 
-Now I add the supplier's credit note. It references this invoice, but covers only one hundred forty-four dollars. Remainder matches that credit and leaves seventy-two dollars outstanding.
+The owner downloads an evidence PDF and an email draft. Remainder fits the existing email workflow, and the owner decides what actually gets sent.
 
-That distinction matters. We have verified a credit note. Applying it to a bill, or receiving cash, is a separate accounting step.
+Here is the supplier credit note. It names the same invoice, but credits only one hundred forty-four dollars for the oat milk.
 
-This walkthrough uses sample replay. Separately, live Gemini tests passed on this case and an independent example in pounds. Remainder checks the source evidence and calculates money in code. The Evorozen adapter is implemented, but its inference service was unavailable during verification.
+A second live analysis matches the credit. The owner inspects its source before verification. Duplicate checks prevent the same note from being counted twice.
 
-Our first customers to validate with are independent cafes and hospitality bookkeepers. We'll begin with a few real cases, measure review time and corrections, then ask for a paid commitment.
+Two hundred sixteen claimed. One hundred forty-four in a verified credit note. Seventy-two still outstanding. The case stays open. A credit note is distinct from cash received.
 
-Our pricing hypothesis is twenty-nine dollars per location per month. We have a finite provider allowance, so the commercial plan tests inference and support costs before expanding.
+The follow-up draft acknowledges the credit already issued and asks only about the remaining seventy-two dollars. That is the point: a partial credit stays partial.
 
-This is a product demonstration, not a claim of customer traction. The goal is straightforward: help a small business see exactly what remains outstanding.
+Separately verified Evorozen memory stores approved product aliases. Financial checks and durable balances stay in application code.
 
-I'm Shivam Gupta. This is Remainder.
+Start with independent operators and hospitality bookkeepers. Measure review time and repeat use, then test twenty-nine dollars per location per month. Customer traction is not yet claimed.
 
-## Provider evidence and optional replacement
+Try Remainder at remainder desk dot web dot app. Built by Shivam Gupta for Evorozen Apex. Know exactly what is still outstanding.
 
-The base narration reflects two successful Gemini 3.5 Flash-Lite tests on synthetic packs. Those checks verify integration and the tested calculations; they do not establish customer traction, broad accuracy, or successful Evorozen inference. The signed Evorozen memory module also passed a real write/recall/delete check. This is separate from its chat endpoint and must not be presented as proof that sponsor inference worked. See [AI validation](validation-ai.md).
+## Scene timing
 
-If the final recording includes a fresh successful request, replace the provider paragraph with a truthful description naming the actual provider shown. Keep the sample replay label on any fixture replay footage. A failed provider call should be fixed or disclosed; never edit a failure into an apparent success.
+| Start | Scene |
+| --- | --- |
+| 0:00 | The promise |
+| 0:10 | Meet Remainder |
+| 0:22 | 01 / Bring the evidence |
+| 0:32 | What actually arrived |
+| 0:41 | 02 / Run real analysis |
+| 0:54 | A difference worth following |
+| 1:06 | Evidence before approval |
+| 1:15 | 03 / Prepare the claim |
+| 1:26 | Ready for the owner to send |
+| 1:36 | 04 / A credit arrives |
+| 1:45 | Match, inspect, verify |
+| 1:55 | 05 / Keep the remainder open |
+| 2:06 | The next action changes |
+| 2:18 | Built around review |
+| 2:28 | A focused commercial starting point |
+| 2:40 | Know what is still outstanding |
 
-The working preview is [remainder-apex.onrender.com](https://remainder-apex.onrender.com); place it and [the source repository](https://github.com/shi1720/evorozen) in the final video description. The supplied silent master remains 170 seconds.
+## What the footage proves
 
-## Screen sequence
+The successful recorded run used a normal account and two actual OpenAI analyses. Its first result supported the $216 shortage. After explicit review and approval, the second result matched the $144 credit note. Verification left $72 outstanding and the case partial. Actual PDF and email exports were downloaded. No supplier email was sent.
 
-| Approximate time | Picture | Recording cue |
-| --- | --- | --- |
-| 0:00-0:20 | Remainder title, then sample case | Keep the sample label visible. |
-| 0:20-0:55 | Invoice and receiving evidence, findings | Pause briefly on the $144 and $72 calculations. |
-| 0:55-1:15 | Source quotation and approval | Show the actual review control. |
-| 1:15-1:30 | Claim draft and PDF | Open the downloaded PDF, avoiding a blank loading frame. |
-| 1:30-1:55 | Credit CN-208 and updated balance | Hold $216 claimed / $144 verified credit / $72 open on screen. |
-| 2:08-2:24 | Separately labeled live-integration evidence card | Two synthetic Gemini checks; explicitly distinguish these from the sample replay footage. Replace with fresh-request footage if available. |
-| 2:15-2:45 | Pricing and first-customer plan, then product | Label pricing as proposed and usage as pre-launch unless verified evidence changes that status. |
-| 2:45-2:55 | Remainder and Shivam Gupta | End cleanly, with enough buffer below three minutes. |
+The final film uses captured app screens and recorded actions with held frames for narration. The sample business, supplier, and records are fictional. This is not the application's precomputed sample replay. Optional Evorozen memory is described as separately verified and was not enabled for this recording.
 
-Use clear narration and legible screen capture rather than fast cursor movement. Record at 1920x1080 or higher, use a quiet room, and keep subtitles inside the safe margins. No music is necessary. Do not speed the speech up to rescue an overlong edit; remove pauses or shorten supporting visuals first.
+The public app is [remainder-desk.web.app](https://remainder-desk.web.app). The source is [GitHub](https://github.com/shi1720/evorozen). The film does not claim customers, revenue, applied credit, or cash recovery.
+
+## Generation references
+
+The [official speech guide](https://developers.openai.com/api/docs/guides/text-to-speech) documents the stock voice and the disclosure requirement. The [transcription guide](https://developers.openai.com/api/docs/guides/speech-to-text) documents word timestamps used to align captions. Approved narration wording is retained where automatic transcription misspells a name.

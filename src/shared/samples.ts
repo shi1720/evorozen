@@ -1,7 +1,7 @@
 import type { DocumentKind } from './types';
 
 /** Fictional fixtures. These are never represented as live AI or customer traction. */
-export const SAMPLE_INVOICE = `FICTIONAL DEMO DOCUMENT — not a real invoice
+export const SAMPLE_INVOICE = `FICTIONAL DEMO DOCUMENT: not a real invoice
 NORTHSTAR FOODS
 Invoice: NF-1042
 Customer: Fern & Flour cafe
@@ -17,7 +17,7 @@ Tax: USD 0.00
 Invoice total: USD 800.00
 Payment terms: net 14 days. Please quote NF-1042 in all correspondence.`;
 
-export const SAMPLE_DELIVERY = `FICTIONAL DEMO DOCUMENT — not a real delivery note
+export const SAMPLE_DELIVERY = `FICTIONAL DEMO DOCUMENT: not a real delivery note
 NORTHSTAR FOODS
 Delivery note: DN-771
 Invoice: NF-1042
@@ -32,7 +32,7 @@ OLIVE OIL 5L | Received: 4 tins | Condition: good
 Receiving check: four cases of oat drink and three cases of tomatoes were missing.
 Received quantities above were counted at the door.`;
 
-export const SAMPLE_MESSAGE = `FICTIONAL DEMO DOCUMENT — not a real supplier message
+export const SAMPLE_MESSAGE = `FICTIONAL DEMO DOCUMENT: not a real supplier message
 From: Northstar Foods customer service
 Subject: Product naming for invoice NF-1042
 Date: 2026-09-22
@@ -41,7 +41,7 @@ Our invoice product OAT BARISTA 6X1L is described as barista oat drink on delive
 One case contains six 1L cartons. Quantities on both documents are cases, not cartons.
 Please send your receiving record with any shortage query so we can review it.`;
 
-export const SAMPLE_CREDIT = `FICTIONAL DEMO DOCUMENT — not a real credit note
+export const SAMPLE_CREDIT = `FICTIONAL DEMO DOCUMENT: not a real credit note
 NORTHSTAR FOODS
 Credit note: CN-208
 For invoice: NF-1042

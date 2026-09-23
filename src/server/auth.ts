@@ -3,7 +3,8 @@ import type { CookieOptions, Request, Response } from 'express';
 import type { Queryable } from './db';
 import type { User } from '../shared/types';
 
-export const COOKIE_NAME = 'remainder_session';
+// Firebase Hosting forwards only this cookie to a Cloud Run rewrite.
+export const COOKIE_NAME = '__session';
 const SESSION_DAYS = 7;
 // OWASP's 32 MiB configuration balances memory use on small hosts with offline-attack cost.
 // https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html#scrypt

@@ -70,10 +70,10 @@ function AddDocument({
     setBusy(true);
     setError('');
     try {
-      setName(file.name);
       const result = await extractText(file, setProgress);
       if (result.length > 40000)
         throw new Error('This document is too long. Limit it to 40,000 characters.');
+      setName(file.name);
       setText(result);
     } catch (e) {
       setError(errorMessage(e));
@@ -121,8 +121,8 @@ function AddDocument({
       <form className="stack-form" onSubmit={save}>
         {!user.isDemo && (
           <p className="field-hint">
-            Public pilot: use fictional or non-confidential, redacted records. Confirmed text is
-            sent to AI when you analyze.{' '}
+            Upload only records you have permission to process. Remove unnecessary personal or bank
+            details. Confirmed text is sent to the configured AI provider when you analyze.{' '}
             <Link to="/privacy" target="_blank">
               Data use details
             </Link>
@@ -132,7 +132,11 @@ function AddDocument({
         <div className="form-row">
           <label>
             Document type
-            <select value={kind} onChange={(e) => setKind(e.target.value as DocumentKind)}>
+            <select
+              disabled={busy}
+              value={kind}
+              onChange={(e) => setKind(e.target.value as DocumentKind)}
+            >
               {Object.entries(docNames)
                 .filter(([key]) => !finalized || key === 'credit_note')
                 .map(([key, label]) => (
@@ -146,6 +150,7 @@ function AddDocument({
             Document name
             <input
               required
+              disabled={busy}
               value={name}
               onChange={(e) => setName(e.target.value)}
               maxLength={160}
@@ -193,6 +198,7 @@ function AddDocument({
           Evidence text
           <textarea
             required
+            disabled={busy}
             minLength={10}
             maxLength={40000}
             rows={10}
@@ -213,6 +219,7 @@ function AddDocument({
             <button
               type="button"
               className="text-button"
+              disabled={busy}
               onClick={() => sample(finalized || kind === 'credit_note')}
             >
               {finalized || kind === 'credit_note'
@@ -291,10 +298,41 @@ export function CasePage() {
     [claimText, setClaimText] = useState(''),
     [exportOpen, setExportOpen] = useState(false);
   const record = data?.case;
-  const tab = params.get('tab') || 'findings';
+  const requestedTab = params.get('tab');
+  const tab =
+    requestedTab && ['findings', 'documents', 'claim', 'history'].includes(requestedTab)
+      ? requestedTab
+      : 'findings';
+  const unsavedClaim = Boolean(record && claimText !== record.claimText);
+  const exportRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!exportOpen) return;
+    function close(event: MouseEvent | KeyboardEvent) {
+      if (
+        event instanceof KeyboardEvent
+          ? event.key === 'Escape'
+          : !exportRef.current?.contains(event.target as Node)
+      )
+        setExportOpen(false);
+    }
+    document.addEventListener('mousedown', close);
+    document.addEventListener('keydown', close);
+    return () => {
+      document.removeEventListener('mousedown', close);
+      document.removeEventListener('keydown', close);
+    };
+  }, [exportOpen]);
+  useEffect(() => {
+    if (!unsavedClaim) return;
+    const protect = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+    };
+    window.addEventListener('beforeunload', protect);
+    return () => window.removeEventListener('beforeunload', protect);
+  }, [unsavedClaim]);
   useEffect(() => {
     if (record) setClaimText(record.claimText);
-  }, [record?.claimText]);
+  }, [record?.id, record?.claimText]);
   useEffect(() => {
     const docId = params.get('doc');
     if (docId && record) {
@@ -327,10 +365,11 @@ export function CasePage() {
     if (doc) setEvidence({ doc, quote: c.quote });
   }
   if (loading && !record) return <Loading />;
-  if (error && !record)
+  if (error)
     return (
       <ErrorBanner>
-        {error} <Link to="/app/cases">Back to cases</Link>
+        {error} <button onClick={reload}>Try again</button>{' '}
+        <Link to="/app/cases">Back to cases</Link>
       </ErrorBanner>
     );
   if (!record) return null;
@@ -346,17 +385,20 @@ export function CasePage() {
   const hasUnanalyzed = record.documents.some(
     (d) => d.kind === 'credit_note' && !record.analysis?.credits.some((c) => c.documentId === d.id),
   );
-  const nextStep = !record.analysis
-    ? 'Analyze documents'
-    : record.status === 'review'
-      ? 'Review & prepare claim'
-      : record.status === 'approved'
-        ? 'Export & send claim'
-        : record.status === 'partial'
-          ? 'Follow up on the remainder'
-          : record.status === 'resolved'
-            ? 'All credits accounted for'
-            : 'Match an arriving credit';
+  const nextStep =
+    record.status === 'dismissed'
+      ? 'Case dismissed'
+      : !record.analysis
+        ? 'Analyze documents'
+        : record.status === 'review'
+          ? 'Review & prepare claim'
+          : record.status === 'approved'
+            ? 'Export & send claim'
+            : record.status === 'partial'
+              ? 'Follow up on the remainder'
+              : record.status === 'resolved'
+                ? 'All credits accounted for'
+                : 'Match an arriving credit';
   return (
     <>
       <Link className="back-link" to="/app/cases">
@@ -379,12 +421,19 @@ export function CasePage() {
           </div>
         </div>
         <div className="case-heading-actions">
-          <div className="export-dropdown">
-            <Button className="button-secondary" onClick={() => setExportOpen(!exportOpen)}>
+          <div className="export-dropdown" ref={exportRef}>
+            <Button
+              className="button-secondary"
+              disabled={unsavedClaim || !!busy}
+              title={unsavedClaim ? 'Save claim wording before exporting' : undefined}
+              aria-expanded={exportOpen}
+              aria-controls="case-export-options"
+              onClick={() => setExportOpen(!exportOpen)}
+            >
               <Download size={16} /> Export <ChevronDown size={13} />
             </Button>
             {exportOpen && (
-              <div className="dropdown-menu">
+              <div className="dropdown-menu" id="case-export-options">
                 {[
                   ['pdf', 'Evidence PDF'],
                   ['eml', 'Email draft'],
@@ -459,7 +508,29 @@ export function CasePage() {
       </div>
       <div className="case-layout">
         <div className="case-primary">
-          <div className="detail-tabs" role="tablist" aria-label="Case sections">
+          <div
+            className="detail-tabs"
+            role="tablist"
+            aria-label="Case sections"
+            onKeyDown={(event) => {
+              if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+              const buttons = Array.from(
+                event.currentTarget.querySelectorAll<HTMLButtonElement>('[role="tab"]'),
+              );
+              const current = buttons.indexOf(event.target as HTMLButtonElement);
+              if (current < 0) return;
+              event.preventDefault();
+              const next =
+                event.key === 'Home'
+                  ? 0
+                  : event.key === 'End'
+                    ? buttons.length - 1
+                    : (current + (event.key === 'ArrowRight' ? 1 : -1) + buttons.length) %
+                      buttons.length;
+              buttons[next].focus();
+              buttons[next].click();
+            }}
+          >
             {[
               ['findings', 'Findings', findings.length],
               ['documents', 'Documents', record.documents.length],
@@ -469,6 +540,7 @@ export function CasePage() {
               <button
                 role="tab"
                 aria-selected={tab === value}
+                tabIndex={tab === value ? 0 : -1}
                 key={value}
                 className={tab === value ? 'active' : ''}
                 onClick={() => setParams({ tab: String(value) })}
@@ -699,11 +771,15 @@ export function CasePage() {
                   action={
                     <Button
                       busy={busy === 'analyze'}
-                      disabled={record.documents.length < 2}
+                      disabled={!!busy || closed || record.documents.length < 2}
                       onClick={() =>
                         void action(
                           'analyze',
-                          () => post(`/cases/${record.id}/analyze`),
+                          () =>
+                            post(
+                              `/cases/${record.id}/analyze`,
+                              record.analysis ? { force: true } : {},
+                            ),
                           'Analysis complete. Review the evidence below.',
                         )
                       }
@@ -794,8 +870,19 @@ export function CasePage() {
                     </div>
                     <Mail size={21} />
                   </div>
+                  {unsavedClaim && (
+                    <div className="unsaved-note" role="status">
+                      <CircleAlert size={17} />
+                      <span>
+                        You have unsaved wording. Save it before downloading or marking this claim
+                        as sent.
+                      </span>
+                    </div>
+                  )}
                   <textarea
                     aria-label="Claim draft"
+                    maxLength={20000}
+                    disabled={!!busy}
                     className="claim-editor"
                     value={claimText}
                     onChange={(e) => setClaimText(e.target.value)}
@@ -806,22 +893,38 @@ export function CasePage() {
                     <div>
                       <a
                         className="button button-secondary"
-                        href={`/api/cases/${record.id}/export?format=eml`}
+                        href={
+                          unsavedClaim ? undefined : `/api/cases/${record.id}/export?format=eml`
+                        }
+                        aria-disabled={unsavedClaim}
                       >
                         <Download size={16} />
                         {record.creditedCents > 0 ? 'Follow-up draft' : 'Email draft'}
                       </a>
                       <a
                         className="button button-secondary"
-                        href={`/api/cases/${record.id}/export?format=pdf`}
+                        href={
+                          unsavedClaim ? undefined : `/api/cases/${record.id}/export?format=pdf`
+                        }
+                        aria-disabled={unsavedClaim}
                       >
                         <FileText size={16} />
                         Evidence PDF
                       </a>
                     </div>
-                    {claimText !== record.claimText && (
+                    {unsavedClaim && (
+                      <Button
+                        className="button-secondary"
+                        disabled={!!busy}
+                        onClick={() => setClaimText(record.claimText)}
+                      >
+                        Discard changes
+                      </Button>
+                    )}
+                    {unsavedClaim && (
                       <Button
                         busy={busy === 'save-claim'}
+                        disabled={!!busy}
                         onClick={() =>
                           void action(
                             'save-claim',
@@ -927,7 +1030,8 @@ export function CasePage() {
                 onClick={() =>
                   void action(
                     'analyze',
-                    () => post(`/cases/${record.id}/analyze`),
+                    () =>
+                      post(`/cases/${record.id}/analyze`, record.analysis ? { force: true } : {}),
                     'Analysis complete. Every finding is ready for inspection.',
                   )
                 }
@@ -936,9 +1040,18 @@ export function CasePage() {
                 {hasUnanalyzed
                   ? 'Match new credit'
                   : record.analysis
-                    ? 'Run analysis again'
+                    ? user.isDemo
+                      ? 'Run sample again'
+                      : 'Run AI again'
                     : 'Analyze documents'}
               </Button>
+            )}
+            {!closed && record.analysis && !hasUnanalyzed && (
+              <p className="field-hint analysis-rerun-note">
+                {user.isDemo
+                  ? 'Replays the fictional sample. Real workspaces use another AI request.'
+                  : 'Uses another AI request. Review the new results before acting.'}
+              </p>
             )}
           </section>
           {record.analysis && (
@@ -1012,7 +1125,9 @@ export function CasePage() {
                 ? 'Has the claim been sent?'
                 : 'Dismiss this recovery case?'
           }
-          onClose={() => setConfirm(null)}
+          onClose={() => {
+            if (!busy) setConfirm(null);
+          }}
         >
           <p className="confirmation-copy">
             {confirm === 'claim'
@@ -1022,7 +1137,7 @@ export function CasePage() {
                 : 'The case will be closed without claiming a credit. Its evidence and activity will remain available.'}
           </p>
           <div className="form-actions">
-            <Button className="button-secondary" onClick={() => setConfirm(null)}>
+            <Button className="button-secondary" disabled={!!busy} onClick={() => setConfirm(null)}>
               Go back
             </Button>
             <Button

@@ -1,6 +1,6 @@
 # Remainder
 
-[Open the live app](https://remainder-apex.onrender.com) · [Watch the silent walkthrough](deliverables/remainder-walkthrough-silent.mp4) · [CI checks](https://github.com/shi1720/evorozen/actions/workflows/ci.yml)
+[Open the live app](https://remainder-desk.web.app) · [Watch the narrated demo](https://remainder-desk.web.app/demo/) · [CI checks](https://github.com/shi1720/evorozen/actions/workflows/ci.yml)
 
 **The supplier promised a credit. Make sure it does not disappear.**
 
@@ -10,7 +10,7 @@ Built by **Shivam Gupta**, with AI-assisted research, engineering, and testing, 
 
 ![Remainder keeps a fictional $216 claim open after a $144 credit, with $72 remaining](public/media/case-desktop.png)
 
-[Overview](public/media/dashboard-desktop.png) · [Landing page](public/media/landing-desktop.png) · [Mobile case](public/media/case-mobile.png) · [Silent 2:50 walkthrough](deliverables/remainder-walkthrough-silent.mp4)
+[Overview](public/media/dashboard-desktop.png) · [Landing page](public/media/landing-desktop.png) · [Mobile case](public/media/case-mobile.png) · [Narrated demo with captions](deliverables/remainder-demo-final.mp4)
 
 ## The problem in one delivery
 
@@ -50,12 +50,12 @@ A real workspace needs one server-side provider key to analyze documents. Docume
 
 ### Configure live AI
 
-Edit `.env`, then restart the server. Keep keys out of source control and out of `VITE_*` variables. `AI_PROVIDER=auto` uses the order below; set `AI_PROVIDER=gemini`, `openai`, or `evorozen` to select a configured provider directly. The public-preview configuration selects Gemini directly.
+Edit `.env`, then restart the server. Keep keys out of source control and out of `VITE_*` variables. `AI_PROVIDER=auto` uses the order below; set `AI_PROVIDER=gemini`, `openai`, or `evorozen` to select a configured provider directly. The Firebase release selects OpenAI with `gpt-5.4-mini` directly.
 
 | Provider | Configuration | Behavior |
 | --- | --- | --- |
 | Evorozen Neural Pulse | `EVOROZEN_API_KEY` | Selected first when configured. Uses the documented `chat` action at `https://pulse.evorozen.com/api/neural`. |
-| OpenAI | `OPENAI_API_KEY`, optionally `OPENAI_MODEL` | Selected when Evorozen is absent. Defaults to `gpt-4o-mini`. |
+| OpenAI | `OPENAI_API_KEY`, optionally `OPENAI_MODEL` | Selected when Evorozen is absent. Defaults to `gpt-5.4-mini` with strict Responses API output and `store:false`. |
 | Gemini | `GEMINI_API_KEY`, optionally `GEMINI_MODEL` | Selected when Evorozen and OpenAI are absent. Defaults to `gemini-3.5-flash-lite`. |
 
 Obtain an Evorozen key from the [Neural Pulse service](https://pulse.evorozen.com/). Google provides key creation through [Google AI Studio and its API-key guide](https://ai.google.dev/gemini-api/docs/api-key); use a current key with access to the configured model. OpenAI's [API quickstart](https://developers.openai.com/api/docs/quickstart) explains creating a server-side API key. Provider eligibility, free allowances, and availability vary; no paid plan is required to explore the demo.
@@ -64,7 +64,7 @@ Fallback is explicit. If Evorozen fails, OpenAI is tried only with `OPENAI_FALLB
 
 Evorozen Neural Pulse imposes a 2,000-character prompt cap. Its adapter uses bounded extraction windows instead of silently dropping source text. `EVOROZEN_MAX_CALLS_PER_ANALYSIS` defaults to 8 (configurable from 1 to 12). A larger document set produces an actionable size error or uses an explicitly enabled alternate provider; each window consumes a daily request-budget unit. Account for those extra requests when setting a pilot's budget.
 
-Live synthetic testing verified Gemini extraction and Evorozen Virtual DB operations. Evorozen's chat route returned an upstream-provider error during validation, so it is not the verified primary analysis engine. See [AI validation](docs/validation-ai.md) for the actual evidence and limits.
+Live synthetic testing verified OpenAI extraction on both complete reference packs and six varied cases, as well as earlier Gemini extraction and Evorozen Virtual DB operations. Evorozen's chat route returned an upstream-provider error during validation, so it is not the verified primary analysis engine. See [AI validation](docs/validation-ai.md) for the actual evidence and limits.
 
 Local supplier memory is always tenant-scoped. Optional **Evorozen Virtual DB memory** stores signed, owner-reviewed product aliases after approval and recalls them for a later uncached analysis. Enable `EVOROZEN_MEMORY_ENABLED=true` with `EVOROZEN_API_KEY` and a private `EVOROZEN_MEMORY_SIGNING_KEY` of at least 32 characters. It stores no raw documents, invoice references, or financial amounts. Read/write failures leave the approved claim usable and are recorded honestly; local evidence and deterministic checks remain authoritative. Preserve the signing key so remote records can later be removed.
 
@@ -74,7 +74,7 @@ Optional memory has separate conservative global allowances: `EVOROZEN_MEMORY_MA
 
 The default budgets are **30 outbound AI attempts per day across the deployment** and **10 per workspace**, resetting at midnight UTC. Failed calls and fallback calls consume budget. Demo replay and cached analysis consume none. Configure `AI_MAX_DAILY_CALLS` and `AI_MAX_DAILY_CALLS_PER_USER`; setting either to `0` stops new real requests for that scope. Provider quotas and billing controls apply independently.
 
-A separate rate limit allows 30 analysis requests per workspace per hour. The budget is a cap on requests, not a promise about token cost. Review your provider's data handling and pricing before processing actual supplier documents.
+The Firebase release raises the shared daily request allowance to 100 while retaining 10 per workspace. A separate rate limit allows 30 analysis requests per workspace per hour. The budget is a cap on requests, not a promise about token cost. Review your provider's data handling and pricing before processing actual supplier documents.
 
 ## The recovery workflow
 
@@ -104,9 +104,17 @@ flowchart LR
 
 The AI interprets language; it does not authorize users, execute tools, send messages, or determine balances. Financial transitions and credit ledgers are transactional. Source changes invalidate review-stage analysis. An analysis lease blocks overlapping work; version checks prevent stale edits. See [architecture](docs/architecture.md), [security and operating limits](docs/security.md), and the [API contract](docs/implementation-contract.md).
 
-The public preview uses Gemini’s unpaid service. Use fictional or non-confidential, redacted documents. Google’s unpaid-service data terms permit product improvement using submissions; real customer onboarding needs privacy-appropriate provider terms, verified backups, and suitable hosting availability. See [Google’s terms](https://ai.google.dev/gemini-api/terms) and the [deployment guide](docs/deployment.md).
+The Firebase release uses OpenAI. Requests disable response storage with `store:false`; provider abuse-monitoring retention may still apply. Use only documents you are authorized to share, remove unnecessary personal/payment details, and review the [OpenAI data controls](https://developers.openai.com/api/docs/guides/your-data). If you configure Gemini unpaid service instead, its separate data terms apply. The public test is intended for fictional or non-confidential redacted records.
 
-## Production deployment
+## Firebase deployment
+
+The public address is **https://remainder-desk.web.app**. Firebase Hosting forwards requests to a dedicated Cloud Run service with secure `__session` cookies and persistent Neon PostgreSQL. Secrets live in Secret Manager with access limited to the Remainder runtime. The service scales to zero and has a two-instance limit.
+
+Run `bash scripts/deploy-firebase.sh` from an authenticated operator workstation. It validates, builds, deploys only the named Remainder service/site, and checks database health. See [Firebase operations](docs/firebase-deployment.md) for setup, cost limits, rollback, and the distinction between this release and the older Render preview.
+
+Nightly private database backups run at 03:00 UTC with a 14-day lifecycle. Both the scheduled invocation and an isolated restore have been verified. [Backup operations](docs/backups.md)
+
+## Other production hosts
 
 Build and start from the repository root:
 
@@ -128,7 +136,7 @@ Production deliberately fails startup without `DATABASE_URL`. A single-instance 
 
 The runtime needs `dist/client`, `dist/server.js`, production Node dependencies, and `assets/fonts` for PDF generation. Run from the repository root or preserve that layout in the container. PostgreSQL allows multiple app instances with shared sessions, rate limits, request budgets, analysis locks, and credit uniqueness constraints. Schema initialization is additive, idempotent, and guarded by a PostgreSQL advisory lock.
 
-Arrange database backups and verify restoration before onboarding real businesses. The repository does not provision backups, email delivery, SSO, billing, accounting integrations, or a customer support operation.
+The Firebase release includes [scheduled private backups and a verified restore procedure](docs/backups.md). Configure an equivalent backup and restore process if deploying elsewhere. Email delivery, SSO, subscription billing, accounting integrations, and a customer support operation are not implemented.
 
 ## Verify
 
@@ -157,22 +165,22 @@ public/samples/       Downloadable fictional invoice, receiving note, message, c
 assets/fonts/         OFL-licensed fonts embedded in evidence PDFs
 public/media/         Curated screenshots captured from the working app
 docs/                 Architecture, security, research, GTM, demo and pitch script
-deliverables/         Pitch deck, product brief, silent walkthrough and evidence PDF
+deliverables/         Narrated demo, captions, pitch deck, product brief and evidence PDF
 ```
 
 ## Submission and business materials
 
-- [Devpost submission text](docs/submission.md)
+- [Devpost project story](docs/project-story.md) and [judge testing instructions](docs/testing-instructions.md)
 - [Three-minute, word-for-word video script](docs/video-script.md)
 - [Demo recording runbook](docs/demo-runbook.md)
-- [Silent 2:50 walkthrough](deliverables/remainder-walkthrough-silent.mp4) and [voiceover/editing instructions](docs/video-editing.md)
+- [Narrated demo with captions](deliverables/remainder-demo-final.mp4) and [voiceover/editing instructions](docs/video-editing.md)
 - [AI integration validation](docs/validation-ai.md)
 - [Six-case live model evaluation](docs/validation-model-eval.md)
-- [Public deployment and restore verification](docs/validation-deployment.md)
+- [Firebase workflow verification](docs/validation-firebase.md) and [scheduled backup restore](docs/validation/scheduled-backup-restore.json)
 - [Final submission handoff](docs/submission-handoff.md)
 - [Operating and backup guide](docs/operations.md)
 - [Optional artifact reproduction](docs/reproduce-assets.md)
-- [Independent judge review](docs/judge-review.md)
+- [Independent rubric review](docs/review-round-two.md)
 - [Go-to-market plan and commercial assumptions](docs/go-to-market.md)
 - [Research and source notes](docs/research.md)
 - [Judging checklist](docs/judging-checklist.md)

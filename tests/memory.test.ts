@@ -79,6 +79,8 @@ beforeEach(() => {
   vi.stubEnv('EVOROZEN_API_KEY', `test-${randomUUID()}`);
 });
 afterEach(() => {
+  vi.useRealTimers();
+  vi.restoreAllMocks();
   vi.unstubAllEnvs();
   vi.unstubAllGlobals();
 });
@@ -193,5 +195,75 @@ describe('signed Evorozen reviewed supplier memory', () => {
     await expect(forgetWorkspaceMemory(context)).rejects.toMatchObject({
       code: 'MEMORY_INVALID_RESPONSE',
     });
+  });
+});
+
+describe('optional memory latency budget', () => {
+  function controlledTimeouts() {
+    vi.useFakeTimers();
+    return vi.spyOn(AbortSignal, 'timeout').mockImplementation((milliseconds) => {
+      const controller = new AbortController();
+      setTimeout(
+        () => controller.abort(new DOMException('Timed out', 'TimeoutError')),
+        milliseconds,
+      );
+      return controller.signal;
+    });
+  }
+  it('aborts a stalled schema request after five seconds without starting a select', async () => {
+    const timeout = controlledTimeouts();
+    const fetcher = vi.fn(
+      (_url, init: RequestInit) =>
+        new Promise<Response>((_resolve, reject) => {
+          init.signal!.addEventListener('abort', () => reject(init.signal!.reason), { once: true });
+        }),
+    );
+    vi.stubGlobal('fetch', fetcher);
+    let settled = false;
+    const outcome = recallSupplierMemory(context).catch((error: unknown) => {
+      settled = true;
+      return error;
+    });
+    await vi.advanceTimersByTimeAsync(4999);
+    expect(settled).toBe(false);
+    await vi.advanceTimersByTimeAsync(1);
+    expect(await outcome).toMatchObject({ code: 'MEMORY_UNAVAILABLE' });
+    expect(timeout).toHaveBeenCalledWith(5000);
+    expect(fetcher).toHaveBeenCalledTimes(1);
+  });
+  it('bounds a cold schema plus stalled select to less than ten seconds of network wait', async () => {
+    const timeout = controlledTimeouts();
+    const actions: string[] = [];
+    vi.stubGlobal(
+      'fetch',
+      vi.fn((_url, init: RequestInit) => {
+        const action = JSON.parse(String(init.body)).action_type;
+        actions.push(action);
+        return new Promise<Response>((resolve, reject) => {
+          const signal = init.signal!;
+          const abort = () => reject(signal.reason);
+          signal.addEventListener('abort', abort, { once: true });
+          if (action === 'create_schema')
+            setTimeout(() => {
+              signal.removeEventListener('abort', abort);
+              resolve(new Response(JSON.stringify({ action, executed: true, errors: [] })));
+            }, 4999);
+        });
+      }),
+    );
+    const beforeRequest = vi.fn(async () => {});
+    let settled = false;
+    const outcome = recallSupplierMemory({ ...context, beforeRequest }).catch((error: unknown) => {
+      settled = true;
+      return error;
+    });
+    await vi.advanceTimersByTimeAsync(4999);
+    expect(actions).toEqual(['create_schema', 'select_data']);
+    await vi.advanceTimersByTimeAsync(4999);
+    expect(settled).toBe(false);
+    await vi.advanceTimersByTimeAsync(1);
+    expect(await outcome).toMatchObject({ code: 'MEMORY_UNAVAILABLE' });
+    expect(timeout.mock.calls.map(([milliseconds]) => milliseconds)).toEqual([5000, 5000]);
+    expect(beforeRequest).toHaveBeenCalledTimes(2);
   });
 });

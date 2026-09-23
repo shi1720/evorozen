@@ -1,4 +1,6 @@
-# Deployment checklist: Render and Neon
+# Historical deployment: Render and Neon
+
+The current public release is [Remainder on Firebase](https://remainder-desk.web.app). Use the [Firebase deployment guide](firebase-deployment.md) for current configuration. This document preserves the earlier Gemini/Render preview setup; its provider and free-host notes do not describe the current Firebase release.
 
 The repository includes a Render Blueprint for an application preview. The persistent PostgreSQL connection is supplied separately through `DATABASE_URL`; no database password or AI key is committed.
 

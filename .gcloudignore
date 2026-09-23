@@ -1,0 +1,14 @@
+.git
+node_modules
+dist
+.env
+.env.*
+.data
+.artifacts
+output
+coverage
+test-results
+playwright-report
+deliverables
+.firebase
+*.log

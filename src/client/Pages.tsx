@@ -63,7 +63,9 @@ export function NewCase({ onClose }: { onClose: () => void }) {
     <Modal
       title="Give this paper trail a home."
       description="Start with a supplier. You’ll add the documents next."
-      onClose={onClose}
+      onClose={() => {
+        if (!busy) onClose();
+      }}
     >
       <form onSubmit={submit} className="stack-form">
         {error && <ErrorBanner>{error}</ErrorBanner>}
@@ -92,7 +94,7 @@ export function NewCase({ onClose }: { onClose: () => void }) {
           </label>
         </div>
         <div className="form-actions">
-          <Button type="button" className="button-secondary" onClick={onClose}>
+          <Button type="button" className="button-secondary" disabled={busy} onClick={onClose}>
             Cancel
           </Button>
           <Button type="submit" busy={busy}>
@@ -150,7 +152,7 @@ function CaseTable({ cases, currency }: { cases: RecoveryCase[]; currency: strin
                   {!c.claimedCents && identified > 0 && <small>Identified · not claimed</small>}
                 </td>
                 <td className="table-money">
-                  {c.claimedCents ? money(c.remainingCents, currency) : '—'}
+                  {c.claimedCents ? money(c.remainingCents, currency) : 'Not claimed'}
                 </td>
                 <td className="muted">{date(c.updatedAt)}</td>
                 <td>
@@ -412,7 +414,7 @@ export function DashboardPage() {
 }
 export function CasesPage() {
   const { user } = useUser();
-  const { data, error, loading } = useApi<{ cases: RecoveryCase[] }>('/cases');
+  const { data, error, loading, reload } = useApi<{ cases: RecoveryCase[] }>('/cases');
   const [create, setCreate] = useState(false),
     [search, setSearch] = useState(''),
     [filter, setFilter] = useState('all');
@@ -452,6 +454,7 @@ export function CasesPage() {
               <button
                 key={value}
                 onClick={() => setFilter(value)}
+                aria-pressed={filter === value}
                 className={filter === value ? 'selected' : ''}
               >
                 {label}
@@ -469,7 +472,9 @@ export function CasesPage() {
           </div>
         </div>
         {error ? (
-          <ErrorBanner>{error}</ErrorBanner>
+          <ErrorBanner>
+            {error} <button onClick={reload}>Try again</button>
+          </ErrorBanner>
         ) : loading ? (
           <Loading />
         ) : visible.length ? (
@@ -498,7 +503,7 @@ export function CasesPage() {
   );
 }
 export function DocumentsPage() {
-  const { data, error, loading } = useApi<{ cases: RecoveryCase[] }>('/cases');
+  const { data, error, loading, reload } = useApi<{ cases: RecoveryCase[] }>('/cases');
   const [search, setSearch] = useState('');
   const docs = (data?.cases || [])
     .flatMap((c) =>
@@ -510,7 +515,7 @@ export function DocumentsPage() {
       <PageHeading
         eyebrow="THE SOURCE OF EVERY ANSWER"
         title="Document library"
-        subtitle="Your invoices, delivery notes, and credit notes—connected to their cases."
+        subtitle="Your invoices, delivery notes, and credit notes, connected to their cases."
       />
       <div className="panel">
         <div className="list-toolbar">
@@ -526,7 +531,9 @@ export function DocumentsPage() {
           </div>
         </div>
         {error ? (
-          <ErrorBanner>{error}</ErrorBanner>
+          <ErrorBanner>
+            {error} <button onClick={reload}>Try again</button>
+          </ErrorBanner>
         ) : loading ? (
           <Loading />
         ) : docs.length ? (
@@ -552,14 +559,16 @@ export function DocumentsPage() {
           </div>
         ) : (
           <Empty
-            title="Your evidence belongs here."
+            title={search.trim() ? 'No matching documents.' : 'Your evidence belongs here.'}
             action={
               <Link className="button" to="/app/cases">
                 Open recovery cases <ArrowRight size={16} />
               </Link>
             }
           >
-            Add documents inside a recovery case to keep the complete paper trail together.
+            {search.trim()
+              ? 'Try a different document or supplier name.'
+              : 'Add documents inside a recovery case to keep the complete paper trail together.'}
           </Empty>
         )}
       </div>
@@ -613,7 +622,9 @@ export function SuppliersPage() {
         }
       />
       {error ? (
-        <ErrorBanner>{error}</ErrorBanner>
+        <ErrorBanner>
+          {error} <button onClick={reload}>Try again</button>
+        </ErrorBanner>
       ) : loading ? (
         <Loading />
       ) : data?.suppliers.length ? (
@@ -666,7 +677,9 @@ export function SuppliersPage() {
         <Modal
           title={edit === 'new' ? 'Add a supplier.' : 'The details worth remembering.'}
           description="These notes help interpret documents in your workspace. Save only information you have confirmed."
-          onClose={() => setEdit(null)}
+          onClose={() => {
+            if (!saving) setEdit(null);
+          }}
         >
           <form onSubmit={submit} className="stack-form">
             {formError && <ErrorBanner>{formError}</ErrorBanner>}
@@ -708,7 +721,12 @@ export function SuppliersPage() {
               />
             </label>
             <div className="form-actions">
-              <Button className="button-secondary" type="button" onClick={() => setEdit(null)}>
+              <Button
+                className="button-secondary"
+                type="button"
+                disabled={saving}
+                onClick={() => setEdit(null)}
+              >
                 Cancel
               </Button>
               <Button busy={saving}>
@@ -722,7 +740,7 @@ export function SuppliersPage() {
   );
 }
 export function ActivityPage() {
-  const { data, error, loading } = useApi<{ activities: Activity[] }>('/activity');
+  const { data, error, loading, reload } = useApi<{ activities: Activity[] }>('/activity');
   return (
     <>
       <PageHeading
@@ -738,7 +756,9 @@ export function ActivityPage() {
           </span>
         </div>
         {error ? (
-          <ErrorBanner>{error}</ErrorBanner>
+          <ErrorBanner>
+            {error} <button onClick={reload}>Try again</button>
+          </ErrorBanner>
         ) : loading ? (
           <Loading />
         ) : (
@@ -750,7 +770,12 @@ export function ActivityPage() {
 }
 export function SettingsPage() {
   const { user, setUser } = useUser();
-  const { data } = useApi<{
+  const {
+    data,
+    error: settingsError,
+    loading: settingsLoading,
+    reload: reloadSettings,
+  } = useApi<{
     user: User;
     engine: { provider: string; configured: boolean; memoryEnabled: boolean };
   }>('/settings');
@@ -852,13 +877,22 @@ export function SettingsPage() {
               <h2>Intelligence layer</h2>
               <Sparkles size={19} />
             </div>
+            {settingsError && (
+              <ErrorBanner>
+                {settingsError} <button onClick={reloadSettings}>Try again</button>
+              </ErrorBanner>
+            )}
             <span className={`engine-pill ${data?.engine.configured ? 'connected' : ''}`}>
               <i />
               {user.isDemo
                 ? 'Demo replay'
-                : data?.engine.configured
-                  ? `${data.engine.provider} configured`
-                  : 'Provider not configured'}
+                : settingsLoading
+                  ? 'Checking provider…'
+                  : settingsError
+                    ? 'Provider status unavailable'
+                    : data?.engine.configured
+                      ? `${data.engine.provider} configured`
+                      : 'Provider not configured'}
             </span>
             <p>
               {user.isDemo
@@ -962,6 +996,10 @@ export function SettingsPage() {
         >
           <form className="stack-form" onSubmit={deleteAccount}>
             {deleteError && <ErrorBanner>{deleteError}</ErrorBanner>}
+            <p className="muted">
+              Live workspace records are removed immediately after successful deletion. Restricted,
+              encrypted backups can retain a copy for up to 14 days plus storage cleanup time.
+            </p>
             <label>
               Current password
               <input
@@ -1048,17 +1086,30 @@ export function LegalPage({ type }: { type: 'privacy' | 'terms' }) {
               financial amounts.
             </p>
             <p>
-              This public preview uses Gemini’s unpaid service. Google may use submitted content and
-              responses to improve its products. Use fictional or non-confidential records; remove
-              personal information, bank details, and other confidential content before saving.
-              Customer onboarding with confidential documents requires a provider account and data
-              terms appropriate for that use. See the{' '}
+              Settings identifies the configured provider, and each completed analysis identifies
+              the provider used. Processing and retention follow that provider’s applicable terms.
+              If Gemini’s unpaid service is configured, Google may use submitted content and
+              responses to improve its products. For that service, use fictional or non-confidential
+              records and remove personal information. Confidential customer records require
+              provider terms appropriate for that use. See the{' '}
               <a href="https://ai.google.dev/gemini-api/terms" target="_blank" rel="noreferrer">
                 Gemini API data terms
               </a>
               .
             </p>
             <h2>Files and evidence</h2>
+            <p>
+              OpenAI requests disable response storage. This does not disable the provider's
+              abuse-monitoring retention. Review the{' '}
+              <a
+                href="https://developers.openai.com/api/docs/guides/your-data"
+                target="_blank"
+                rel="noreferrer"
+              >
+                OpenAI data controls
+              </a>{' '}
+              before sharing confidential records.
+            </p>
             <p>
               PDF and image text extraction occurs in your browser. The application stores the
               extracted text you review, not the original image/PDF binary. Evidence hashes apply to
@@ -1072,6 +1123,11 @@ export function LegalPage({ type }: { type: 'privacy' | 'terms' }) {
               remote supplier memory; a failed remote cleanup is reported before local records are
               deleted. For assistance, use the repository’s issue tracker without posting personal
               or supplier data.
+            </p>
+            <p>
+              Restricted database backups are encrypted at rest and expire after 14 days, subject to
+              storage lifecycle processing time. Deleted records may remain in those backups until
+              expiry. They are not available through the application.
             </p>
             <h2>Analytics and retention</h2>
             <p>

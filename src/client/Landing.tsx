@@ -30,7 +30,7 @@ export function Landing({ onDemo, busy }: { onDemo: () => void; busy: boolean })
             Log in
           </Link>
           <Link to="/signup" className="button">
-            Start your workspace <ArrowRight size={16} />
+            Start workspace <ArrowRight size={16} />
           </Link>
         </div>
       </header>
@@ -220,9 +220,8 @@ export function Landing({ onDemo, busy }: { onDemo: () => void; busy: boolean })
               <em>Not a paper chase.</em>
             </h2>
             <p>
-              A promise isn’t a credit. An alert isn’t a resolution.
-              <br />
-              Remainder gives the little things a place to land—
+              A promise isn’t a credit. An alert isn’t a resolution. <br />
+              Remainder gives the little things a place to land
               <br />
               and a clear next step.
             </p>

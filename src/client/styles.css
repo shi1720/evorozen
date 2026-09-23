@@ -4673,3 +4673,130 @@ code {
 .credit-top > b {
   color: #f4f7ed;
 }
+
+/* Clear recovery paths for interrupted sessions and unsaved edits. */
+.auth-unavailable {
+  max-width: 620px;
+  margin: 12vh auto;
+  padding: 24px;
+}
+.auth-unavailable h1 {
+  margin-top: 36px;
+}
+.auth-unavailable > .button {
+  margin-top: 20px;
+}
+.unsaved-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 22px;
+  background: #fff7e7;
+  color: #6b4b16;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.unsaved-note svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.button[aria-disabled='true'] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.mobile-nav-close {
+  display: none;
+}
+@media (max-width: 700px) {
+  .sidebar {
+    visibility: hidden;
+  }
+  .sidebar.open {
+    visibility: visible;
+  }
+  .mobile-nav-close {
+    display: flex;
+    position: absolute;
+    right: 8px;
+    top: 5px;
+    width: 32px;
+    height: 32px;
+  }
+}
+/* Keep wide tables and decorative art inside their own layout at small widths. */
+.table-scroll {
+  position: relative;
+}
+@media (max-width: 700px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .hero-copy {
+    min-width: 0;
+  }
+  .hero h1 {
+    font-size: clamp(40px, 12vw, 57px);
+  }
+  .hero-actions {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .hero-visual {
+    left: calc(50% - 201px);
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .hero-meta {
+    align-items: flex-start;
+    line-height: 1.6;
+  }
+  .hero-meta svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+}
+@media (max-width: 379px) {
+  .landing-nav {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .nav-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .hero-visual {
+    transform: scale(0.57);
+    left: calc(50% - 142px);
+    margin-bottom: -171px;
+  }
+}
+@media (max-width: 379px) {
+  .landing-footer {
+    flex-wrap: wrap;
+  }
+}
+
+.login-link {
+  white-space: nowrap;
+}
+
+.analysis-rerun-note {
+  margin-top: 12px;
+  line-height: 1.6;
+}
+@media (max-width: 700px) {
+  .dashboard-middle {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 379px) {
+  .loop-visual {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .loop-legend {
+    width: 100%;
+    justify-content: space-between;
+    gap: 16px;
+  }
+}

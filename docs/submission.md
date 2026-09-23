@@ -75,7 +75,7 @@ Created by **Shivam Gupta**, with AI-assisted research, design, and engineering.
 | Field | Current value or action |
 | --- | --- |
 | GitHub | [Public source repository](https://github.com/shi1720/evorozen) |
-| Public working app | [Remainder live preview](https://remainder-apex.onrender.com) — Render + Neon PostgreSQL. Homepage and database health returned HTTP 200 on September 23. The [hosted real-AI workflow, redeploy persistence, cleanup and restore rehearsal](validation-deployment.md) passed using fictional records. |
+| Public working app | [Remainder live preview](https://remainder-apex.onrender.com): Render + Neon PostgreSQL. Homepage and database health returned HTTP 200 on September 23. The [hosted real-AI workflow, redeploy persistence, cleanup and restore rehearsal](validation-deployment.md) passed using fictional records. |
 | Video | Silent 170-second walkthrough prepared in `deliverables/remainder-walkthrough-silent.mp4`; add Shivam’s narration and the verified public/unlisted URL. |
 | Live AI evidence | Gemini 3.5 Flash-Lite: two synthetic extraction packs passed. Evorozen: signed production memory module passed live. See [validation](validation-ai.md). |
 | Traction | Add only measured non-demo usage. Otherwise retain the pre-launch statement. |

@@ -1,0 +1,67 @@
+{
+  "kind": "fictional_normal_account_live_video_workflow",
+  "recordedAt": "2026-09-23T05:21:36.512Z",
+  "provider": "openai",
+  "configuredModel": "gpt-5.4-mini",
+  "initial": {
+    "provider": "openai",
+    "traceId": "req_0b8cdfb8d40e46daa1bd7f2777e44f85",
+    "sourceHash": "5df6958d0af0bc2d20c7c022ed98e52580438baaace8e298cd58ef045b8e5bad",
+    "durationMs": 2139,
+    "findings": [
+      {
+        "product": "OAT BARISTA 6X1L",
+        "amountCents": 14400,
+        "needsReview": false
+      },
+      {
+        "product": "TOMATO WHOLE 6X2.5KG",
+        "amountCents": 7200,
+        "needsReview": false
+      }
+    ]
+  },
+  "credit": {
+    "provider": "openai",
+    "traceId": "req_336bd4e6e9084538beee0f545e22be05",
+    "sourceHash": "16fbe691a512a6f6d6a4307e3ba9868f4e39fa4f21d9e6a1030dd348e43cba1a",
+    "durationMs": 2492,
+    "amountCents": 14400
+  },
+  "final": {
+    "claimedCents": 21600,
+    "creditedCents": 14400,
+    "remainingCents": 7200,
+    "status": "partial"
+  },
+  "cleanup": {
+    "status": 200,
+    "succeeded": true
+  },
+  "browserErrors": [],
+  "liveRequestsInSuccessfulRun": 2,
+  "recordingDisclosure": "Fictional documents, normal account, real inference. Setup off camera. Actual captured screens and recorded actions with holds for narration. Not sample replay or a latency benchmark.",
+  "video": {
+    "path": "deliverables/remainder-demo-final.mp4",
+    "sha256": "d338d465f4c7b18252ac9375451ba96e8ad8ecddc488413b9eb69c1350f9caf1",
+    "durationSeconds": 170.88,
+    "width": 1920,
+    "height": 1080,
+    "videoCodec": "H.264",
+    "audioCodec": "AAC",
+    "sampleRate": 48000,
+    "sizeBytes": 9282913,
+    "captionCues": 44,
+    "integratedLoudnessLUFS": -16.7,
+    "truePeakDBFS": -1.4,
+    "fullDecodePassed": true,
+    "representativeFramesInspected": 16,
+    "speechSpedUp": false
+  },
+  "voice": {
+    "model": "gpt-4o-mini-tts",
+    "stockVoice": "cedar",
+    "disclosure": "AI-generated presenter voice. No real-person imitation."
+  },
+  "earlierAttempt": "An earlier normal-speed capture passed its first analysis but failed the expected-credit assertion. The script did not preserve that raw credit response before cleanup, so its cause is unconfirmed. The instrumented fresh-account run above preserved its response and passed. The successful film does not establish perfect provider reliability."
+}

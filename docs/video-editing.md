@@ -1,58 +1,35 @@
-# Finish the Remainder demo video
+# Remainder: final video and reproduction
 
-The prepared master is **`deliverables/remainder-walkthrough-silent.mp4`**, exactly **2 minutes 50 seconds**, 1920×1080, H.264, with no audio track. It is actual Chromium footage of the working sample case, with editorial title/caption cards. The recording preserves the fictional sample labels. Its separate live-integration card summarizes two verified Gemini tests; it does not pretend the sample replay invoked the provider.
+## Final files
 
-The public product is [remainder-apex.onrender.com](https://remainder-apex.onrender.com). The existing 170-second master remains accurate and does not need rerecording merely to add the URL; use the video description or a small final-frame link.
+- [Final narrated and captioned MP4](../deliverables/remainder-demo-final.mp4): 1920 × 1080, H.264 video, AAC narration, maximum three-minute requirement met.
+- [SRT captions](../deliverables/remainder-demo.srt) and [WebVTT captions](../deliverables/remainder-demo.vtt).
+- [Verbatim script](video-script.md).
+- [YouTube title and description](youtube.md).
 
-The remaining human contribution is Shivam's voice. Read [the supplied narration](video-script.md) in a quiet room, then place it over this master. The script credits Shivam and makes no invented customer or supplier claims. At approximately 350 words, a calm 130–140 words per minute leaves room for the visual pauses. Record once for practice and once cleanly; avoid speeding speech up to fit.
+The previous [silent master](../deliverables/remainder-walkthrough-silent.mp4) is retained as an earlier artifact. It uses sample replay and is not the new film.
 
-## Editing sequence
+## Editorial boundaries
 
-1. Import the silent MP4 into any video editor. Keep the project at 1920×1080 and the master at its original speed.
-2. Record the verbatim narration, keeping the opening story over the title and early app views. Start within the first second. Use the cues below; natural phrasing matters more than hitting every second exactly.
-3. Split the voice track at paragraph boundaries and align each section. Remove accidental long pauses or repeat a paragraph if necessary. Avoid cutting off a sentence at 2:50.
-4. The card at 2:08 explicitly separates the real Gemini checks from sample footage. Keep the provider wording in the current script. If replacing this card with footage of a fresh successful request, name the actual provider and keep its provenance visible without keys or private account details.
-5. Keep the final title from 2:42 to 2:50. The event allows at most three minutes, including all credits. There is ten seconds of margin, but do not add a long logo animation or extra introduction.
-6. Export an H.264 MP4 with AAC audio. Watch it completely with headphones and verify that text is readable, the voice is audible, the ending is complete, and the duration remains below 3:00.
-7. Put [the live app](https://remainder-apex.onrender.com) and [public repository](https://github.com/shi1720/evorozen) in the video description. Upload to the selected public or unlisted video host. Test its link in a signed-out window. Add the verified URL to Devpost and the submission file. This repository's silent MP4 is a prepared asset, not a claim that a final narrated video has been uploaded.
+The new film uses fictional Northstar evidence in a normal account with actual OpenAI requests. Setup occurs off camera to keep login credentials and recovery keys out of the recording. Screenshots and recorded actions are held for narration. No result is fabricated, and no sample replay is described as a new model response. The film is edited for explanation, not a provider latency benchmark.
 
-## Actual master timeline
+The narration is an AI-generated stock presenter voice. It does not say "I'm Shivam" or imitate a real person. Shivam Gupta receives the builder credit. The disclosure remains visible in the caption area. No music masks the speech.
 
-| Time | What the recording shows | Narration emphasis |
-| --- | --- | --- |
-| 0:00–0:08 | Title: “We'll credit you.” But how much? | Cafe delivery and missing stock. |
-| 0:08–0:25 | Landing page, isolated sample overview | Introduce Shivam, Remainder, and the fictional case. |
-| 0:25–0:51 | Case, invoice quotation, receiving-note quotation | Explain the document comparison. |
-| 0:51–1:09 | Shortage findings and explicit selection | $144 + $72 = $216; owner reviews the evidence. |
-| 1:09–1:23 | Confirmation and claim draft | Review and prepare the supplier request. |
-| 1:23–1:32 | Actual PDF and email-draft downloads | Owner controls what is sent. The PDF download itself is real; this master does not open a separate PDF viewer. |
-| 1:32–1:51 | Add CN-208, match and inspect its evidence | Credit covers only $144. |
-| 1:51–2:08 | Verification and the updated case balance | $72 remains. Credit-note verification is distinct from applied credit or cash. |
-| 2:08–2:24 | Separate Gemini validation card | Two live synthetic checks passed; sponsor inference was unavailable. |
-| 2:24–2:33 | First-customer validation plan | Independent operators and hospitality bookkeepers. |
-| 2:33–2:42 | $29 pricing hypothesis and finite allowance | Measure request and support costs before expanding. |
-| 2:42–2:50 | Remainder closing title | State the goal and close with Shivam's name. |
+Captions occupy a dedicated 120-pixel lower strip, outside the application image. Approved wording is aligned to independently transcribed word timestamps. Names and small recognizer errors are corrected to match the narration script. The closing address is written as `remainder-desk.web.app`.
 
-## Simple audio merge
+## Reproduce the optional media
 
-If the recorded narration already matches the master timing, place it at `deliverables/shivam-voiceover.wav`. Confirm it is no longer than 170 seconds before using the following command; it intentionally fixes the final duration at 170 seconds. Otherwise align it in an editor first rather than truncating speech.
+These are artifact-generation tools, not part of the application's build or deployment. Install ffmpeg and Python with Pillow, and use the repository's Node dependencies and Playwright Chromium. Keep a valid `OPENAI_API_KEY` in the ignored local `.env`; never put it in a command argument or a client environment variable.
 
-```sh
-ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1 deliverables/shivam-voiceover.wav
-ffmpeg -i deliverables/remainder-walkthrough-silent.mp4 -i deliverables/shivam-voiceover.wav -map 0:v:0 -map 1:a:0 -c:v copy -c:a aac -b:a 192k -af apad -t 170 -movflags +faststart deliverables/remainder-demo-final.mp4
-```
+1. Run `node scripts/narrate-demo.mjs --generate`. This explicitly spends speech API quota and caches matching generated segments locally. The script refuses to assemble narration above 176 seconds.
+2. Run `node scripts/narrate-demo.mjs --transcribe`. This explicitly spends transcription quota and preserves word timestamps locally.
+3. Start an isolated application on port 3224 with a persistent local test database, `AI_PROVIDER=openai`, `OPENAI_MODEL=gpt-5.4-mini`, and fallbacks and optional memory disabled. Use `ALLOW_LOCAL_DATABASE=1` if running a production build locally. Never point this recording setup at production data.
+4. Run `node scripts/record-live-demo.mjs`. It creates a disposable normal account, prepares fictional source records, films two live analyses, verifies the final amounts, downloads exports, and deletes the account. Provider requests consume quota. `--fast-debug` captures the same real steps without narration holds for diagnosis.
+5. Run `python3 scripts/render-narrated-demo.py` using a Python installation with Pillow. It reads the verified recording, narration, and timestamp files and assembles the MP4 plus SRT/VTT captions. It refuses a failed workflow capture.
+6. Verify full decode, audio levels, representative frames, beginning and ending, captions, and playback after any edit. Upload the completed SRT to YouTube in addition to the visible captions.
 
-No artificial narration or impersonation has been added. Keep raw recordings private until Shivam approves the final video.
+Generated working files, audio segments, exports, and sanitized workflow evidence are in `.artifacts/live-video`, which is ignored by Git. No authentication credentials or recovery keys are written into those artifacts.
 
-## Reproduce or update the master
+## Release check
 
-The capture script requires the repository's Playwright Chromium and `ffmpeg`. Start a stable local server with an isolated data directory; leave provider keys empty because the replay should not spend provider quota. Then run:
-
-```sh
-python3 scripts/render-video-proof.py
-REMAINDER_DEMO_URL=http://localhost:3210 node scripts/record-demo.mjs
-```
-
-The proof-card renderer uses Pillow and the licensed fonts in `assets/fonts`. See [asset reproduction](reproduce-assets.md) for optional dependencies and runtime settings. The recorder makes a fresh isolated demo workspace, performs actual UI actions, verifies final integer totals, captures screenshots, and renders the master. It applies `live-proof.png` only if the card exists. Update that card only from verified evidence. The current capture used a separate stable server on port 3214 so concurrent development did not interrupt the recording.
-
-The sample source PDFs are under `public/samples`; their wording matches the canonical TXT files. The actual claim PDF downloaded during this recording is `deliverables/sample-claim-evidence.pdf`.
+The publishing owner must verify that the final Firebase app link and public YouTube watch page load in a signed-out browser. Local render success does not establish public publication. Confirm the real upload result before adding a YouTube URL to Devpost.

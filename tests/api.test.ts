@@ -139,6 +139,7 @@ describe('authentication and boundaries', () => {
   });
   it('registers a real isolated account with hashed password, token, and recovery secret', async () => {
     const auth = await register();
+    expect(auth.cookie).toMatch(/^__session=[a-f0-9]{64}$/);
     expect(auth.headers.get('set-cookie')).toContain('HttpOnly');
     expect(auth.headers.get('set-cookie')).toContain('SameSite=Lax');
     expect(auth.body.user).not.toHaveProperty('password_hash');
@@ -319,6 +320,54 @@ describe('evidence-to-credit workflow', () => {
       else process.env.AI_MAX_DAILY_CALLS = savedBudget;
       customAnalyze = undefined;
     }
+  });
+  it('uses cached evidence by default but allows an explicit fresh analysis', async () => {
+    const auth = await demo();
+    let calls = 0;
+    customAnalyze = async (input) => {
+      calls += 1;
+      return analyzeDocuments(input);
+    };
+    const cached = await api(caseRoute(auth.case, '/analyze'), 'POST', {}, auth.cookie);
+    expect(cached.body.cached).toBe(true);
+    expect(calls).toBe(0);
+    const fresh = await api(caseRoute(auth.case, '/analyze'), 'POST', { force: true }, auth.cookie);
+    expect(fresh.status).toBe(200);
+    expect(calls).toBe(1);
+    expect(fresh.body.case.analysis.findings).toHaveLength(2);
+    expect(fresh.body.case.version).toBeGreaterThan(auth.case.version);
+    expect(
+      (await api(caseRoute(auth.case, '/analyze'), 'POST', { force: 'yes' }, auth.cookie)).status,
+    ).toBe(400);
+  });
+  it('keeps approved evidence and amounts when a fresh credit pass omits old findings', async () => {
+    const auth = await demo();
+    const chosen = await api(
+      caseRoute(auth.case),
+      'PATCH',
+      {
+        version: auth.case.version,
+        acceptedFindingIds: auth.case.analysis!.findings.map((finding) => finding.id),
+      },
+      auth.cookie,
+    );
+    expect(chosen.status).toBe(200);
+    const approved = await api(caseRoute(auth.case, '/claim'), 'POST', {}, auth.cookie);
+    expect(approved.status).toBe(200);
+    customAnalyze = async (input) => ({
+      ...(await analyzeDocuments(input)),
+      findings: [],
+      summary: 'No new shortage findings.',
+    });
+    const fresh = await api(caseRoute(auth.case, '/analyze'), 'POST', { force: true }, auth.cookie);
+    expect(fresh.status).toBe(200);
+    expect(fresh.body.case.analysis.findings).toEqual(approved.body.case.analysis.findings);
+    expect(fresh.body.case.analysis.summary).toContain('2 reviewed shortage findings retained');
+    expect(fresh.body.case).toMatchObject({
+      status: 'approved',
+      claimedCents: 21600,
+      remainingCents: 21600,
+    });
   });
   it('uses optimistic versions and cannot jump directly to resolved', async () => {
     const auth = await demo();

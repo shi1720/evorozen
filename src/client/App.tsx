@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
 import {
   Link,
   NavLink,
@@ -26,7 +26,7 @@ import {
   Sparkles,
   X,
 } from 'lucide-react';
-import { api, errorMessage, post } from './api';
+import { api, errorMessage, post, RequestError } from './api';
 import { ErrorBanner, Loading, Logo } from './ui';
 import { Landing } from './Landing';
 import { Auth } from './Auth';
@@ -61,8 +61,41 @@ function Shell({
   logout: () => void;
 }) {
   const [menu, setMenu] = useState(false);
+  const sidebarRef = useRef<HTMLElement>(null);
+  const menuRef = useRef<HTMLButtonElement>(null);
   const loc = useLocation();
   useEffect(() => setMenu(false), [loc.pathname]);
+  useEffect(() => {
+    if (!menu) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const links = () =>
+      Array.from(
+        sidebarRef.current?.querySelectorAll<HTMLElement>('a[href], button:not(:disabled)') || [],
+      );
+    links()[0]?.focus();
+    function onKey(event: KeyboardEvent) {
+      if (event.key === 'Escape') setMenu(false);
+      if (event.key === 'Tab') {
+        const items = links(),
+          first = items[0],
+          last = items[items.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
+        }
+      }
+    }
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', onKey);
+      menuRef.current?.focus();
+    };
+  }, [menu]);
   const nav = [
     { to: '/app', icon: LayoutDashboard, label: 'Overview', end: true },
     { to: '/app/cases', icon: FileStack, label: 'Recovery cases' },
@@ -83,8 +116,20 @@ function Shell({
             aria-label="Close navigation"
           />
         )}
-        <aside className={`sidebar ${menu ? 'open' : ''}`}>
+        <aside
+          id="workspace-navigation"
+          ref={sidebarRef}
+          className={`sidebar ${menu ? 'open' : ''}`}
+          aria-label="Workspace sidebar"
+        >
           <Logo />
+          <button
+            className="icon-button mobile-nav-close"
+            aria-label="Close navigation"
+            onClick={() => setMenu(false)}
+          >
+            <X size={20} />
+          </button>
           <div className="workspace-switch">
             <div className="workspace-avatar">{user.workspaceName.slice(0, 1).toUpperCase()}</div>
             <div>
@@ -148,6 +193,9 @@ function Shell({
           <header className="app-topbar">
             <button
               className="icon-button mobile-menu"
+              ref={menuRef}
+              aria-expanded={menu}
+              aria-controls="workspace-navigation"
               onClick={() => setMenu(true)}
               aria-label="Open navigation"
             >
@@ -201,14 +249,30 @@ export function App() {
   const [user, setUser] = useState<User | null>(null),
     [ready, setReady] = useState(false),
     [busy, setBusy] = useState(false),
-    [error, setError] = useState('');
+    [error, setError] = useState(''),
+    [authError, setAuthError] = useState(''),
+    [authAttempt, setAuthAttempt] = useState(0),
+    [sessionExpired, setSessionExpired] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   useEffect(() => {
+    setReady(false);
+    setAuthError('');
     api<{ user: User }>('/auth/me')
       .then((r) => setUser(r.user))
-      .catch(() => {})
+      .catch((error) => {
+        if (!(error instanceof RequestError && error.status === 401))
+          setAuthError(errorMessage(error));
+      })
       .finally(() => setReady(true));
+  }, [authAttempt]);
+  useEffect(() => {
+    function expired() {
+      setSessionExpired(true);
+      setUser(null);
+    }
+    window.addEventListener('remainder:session-expired', expired);
+    return () => window.removeEventListener('remainder:session-expired', expired);
   }, []);
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -219,6 +283,8 @@ export function App() {
     setError('');
     try {
       const r = await post<{ user: User }>('/auth/demo');
+      setAuthError('');
+      setSessionExpired(false);
       setUser(r.user);
       navigate('/app');
     } catch (e) {
@@ -252,7 +318,18 @@ export function App() {
           <Route
             key={mode}
             path={`/${mode}`}
-            element={<Auth mode={mode} onUser={setUser} onDemo={demo} demoBusy={busy} />}
+            element={
+              <Auth
+                mode={mode}
+                onUser={(value) => {
+                  setSessionExpired(false);
+                  setAuthError('');
+                  setUser(value);
+                }}
+                onDemo={demo}
+                demoBusy={busy}
+              />
+            }
           />
         ))}
         <Route path="/privacy" element={<LegalPage type="privacy" />} />
@@ -262,10 +339,23 @@ export function App() {
           element={
             !ready ? (
               <Loading />
+            ) : authError ? (
+              <div className="auth-unavailable">
+                <Logo />
+                <h1>Let’s reconnect your workspace.</h1>
+                <ErrorBanner>{authError}</ErrorBanner>
+                <button className="button" onClick={() => setAuthAttempt((attempt) => attempt + 1)}>
+                  Try again
+                </button>
+              </div>
             ) : user ? (
               <Shell user={user} setUser={setUser} logout={logout} />
             ) : (
-              <Navigate to="/login" replace />
+              <Navigate
+                to="/login"
+                replace
+                state={{ sessionExpired, returnTo: location.pathname + location.search }}
+              />
             )
           }
         >

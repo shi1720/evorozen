@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, CheckCheck, Copy, KeyRound, ShieldCheck } from 'lucide-react';
 import { api, errorMessage, post } from './api';
 import { Button, ErrorBanner, Logo, Success } from './ui';
@@ -21,6 +21,12 @@ export function Auth({
     [copied, setCopied] = useState(false),
     [recovered, setRecovered] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const returnTo =
+    typeof location.state?.returnTo === 'string' &&
+    /^\/app(?:\/|\?|$)/.test(location.state.returnTo)
+      ? location.state.returnTo
+      : '/app';
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setBusy(true);
@@ -38,7 +44,7 @@ export function Auth({
         );
         onUser(result.user);
         if (result.recoveryCode) setCode(result.recoveryCode);
-        else navigate('/app');
+        else navigate(returnTo);
       }
     } catch (e) {
       setError(errorMessage(e));
@@ -101,6 +107,7 @@ export function Auth({
                   <Copy size={18} />
                 </button>
               </div>
+              {error && <ErrorBanner>{error}</ErrorBanner>}
               {copied && <Success>Copied to clipboard.</Success>}
               <Button onClick={() => navigate(recovered ? '/login' : '/app')}>
                 {recovered ? 'Back to log in' : 'I saved my key. Open workspace.'}
@@ -138,6 +145,9 @@ export function Auth({
                     ? 'Use the recovery key you saved when you signed up.'
                     : 'Your paperwork has a place. Let’s get back to it.'}
               </p>
+              {mode === 'login' && location.state?.sessionExpired && (
+                <Success>Your session ended. Sign in to continue where you left off.</Success>
+              )}
               {error && <ErrorBanner>{error}</ErrorBanner>}
               <form onSubmit={submit}>
                 {mode === 'signup' && (
@@ -205,10 +215,10 @@ export function Auth({
                   <label>
                     Workspace currency
                     <select name="currency" defaultValue="USD">
-                      <option value="USD">USD — US Dollar</option>
-                      <option value="INR">INR — Indian Rupee</option>
-                      <option value="GBP">GBP — British Pound</option>
-                      <option value="EUR">EUR — Euro</option>
+                      <option value="USD">USD · US Dollar</option>
+                      <option value="INR">INR · Indian Rupee</option>
+                      <option value="GBP">GBP · British Pound</option>
+                      <option value="EUR">EUR · Euro</option>
                     </select>
                     <span className="field-hint">
                       All cases in this workspace use this currency.

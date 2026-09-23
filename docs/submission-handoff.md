@@ -1,62 +1,48 @@
-# Devpost submission handoff
+# Submission publication record
 
 Prepared for Shivam Gupta on 23 September 2026.
 
-## Current status
+## Verified status
 
-**No Devpost draft was created, and no submission was published.** There is no draft URL or submission receipt to report.
+The working application is **https://remainder-desk.web.app**. The repository is **https://github.com/shi1720/evorozen**, with `main` as its default branch.
 
-The first attempt to inspect Safari through native computer control returned: “The Mac is locked and automatic unlock could not unlock it.” No browser tab, logged-in account, project editor, or eligibility form was inspected. No credentials or personal information were entered. Chrome was not used.
+The existing Devpost entry was opened while signed in and updated successfully:
 
-The public [event overview](https://evorozen-apex.devpost.com/) was readable independently. It currently exposes **Log in**, **Join hackathon**, and **My projects**. Those are verified public navigation labels. The signed-in project editor, its save controls, required fields, and draft visibility could not be verified; the steps below do not imply that a draft has been saved.
+- Project name: **Remainder**.
+- Elevator pitch: **Turn short deliveries into source-backed supplier claims. Match partial credit notes and keep every unpaid remainder visible.**
+- Save and continue opened the project-details editor and showed **Draft, 2/4 steps done**.
+- Project URL displayed by Devpost: **https://devpost.com/software/remainder-vldh27**. This is an observed project URL, not evidence of a published entry.
+- [Continue the existing draft](https://devpost.com/submit-to/30744-evorozen-apex-nextgen-ai-buildathon/manage/submissions/1193859-remainder/project_details/edit).
 
-## Resume in Safari
+The remaining story, technology tags, links, gallery, and video fields have **not** been verified as saved. No final submission receipt exists. Browser automation lost reliable access after the overview save: the browser connection reports `unsupported Codex auth method: apikey`, and the native Chrome accessibility tree returns stale YouTube menu data even after navigation and a fresh window. Do not treat attempted actions as saved fields.
 
-1. Unlock the Mac when convenient. Open a fresh Safari tab at [the official event page](https://evorozen-apex.devpost.com/), leaving unrelated account and service-setup tabs alone.
-2. Use **Log in** if the page is not already signed in. Complete any user-only authentication challenge. Confirm that the account belongs to Shivam before editing a project.
-3. Open **My projects** and inspect existing entries before creating anything. If Remainder already exists, continue that entry to avoid a duplicate. If the event requires joining first, inspect **Join hackathon** and complete eligibility questions only with Shivam's confirmed facts.
-4. Inspect the available new-project and draft-save controls. Create or update **Remainder** only through a flow that clearly preserves an unpublished draft. The exact signed-in button labels remain unverified.
-5. Populate the matching fields from the mapping below and [submission copy](submission.md). Save the draft if the interface supports it, reopen it, and verify the saved text and links. Record its actual URL here. If there is no clearly unpublished save flow, stop before publication.
-6. Add the final narrated-video link once available. Review the complete preview, required fields, eligibility, and governing deadline before final submission. Retain the platform's actual confirmation receipt; saving a draft is not submission.
+## Finished video and copy
 
-## Ready-to-enter content
+The final [narrated video](../deliverables/remainder-demo-final.mp4) is **170.88 seconds**, 1920 by 1080, with audible narration and visible captions. It records actual OpenAI analysis in a normal account using fictional documents. The voice is an explicitly disclosed AI presenter. [Video validation](validation-video.md)
 
-| Field or content block | Prepared value |
+The signed-in YouTube Studio channel was verified as **Shivam Gupta**, channel ID `UCLPUcp65Khk_8n_T1UjQiSQ`. No YouTube upload or public YouTube watch URL has been verified. The deployment also includes a standalone narrated player at https://remainder-desk.web.app/demo/, to be checked after the final release. The browser-control problem currently prevents completing publication.
+
+| Field | Ready content |
 | --- | --- |
-| Project name | Remainder |
-| Short description | A supplier-credit desk that keeps partial credits from becoming forgotten money. |
+| About the project | [Project story](project-story.md), from Inspiration through What's next for Remainder |
+| Built with | React, TypeScript, Vite, Express, PostgreSQL, PGlite, OpenAI, Evorozen Neural Pulse, Firebase, Cloud Run, PDF.js, Tesseract.js |
+| Try it out | https://remainder-desk.web.app |
+| Source | https://github.com/shi1720/evorozen |
 | Track, if offered | Autonomous B2B SaaS |
-| Working product | https://remainder-apex.onrender.com |
-| Source repository | https://github.com/shi1720/evorozen |
-| Inspiration, what it does, how it is built | Copy the corresponding public sections of [submission.md](submission.md). |
-| Challenges, usefulness, next steps, GTM | Use “The hardest design choice,” “What makes the project useful,” “What comes next,” and “Go-to-market and pricing” from [submission.md](submission.md), adapting only to the actual editor fields. |
-| Technologies | React, TypeScript, Vite, Express, PostgreSQL, PGlite, Gemini, Evorozen Neural Pulse adapter, structured AI extraction, PDF evidence exports. |
-| Creator / assistance disclosure | Created by Shivam Gupta, with AI-assisted research, design, and engineering. |
-| Video URL | **Pending.** No publicly hosted narrated video URL has been verified. |
-| Traction, if requested | Pre-launch. Do not enter fictional demo activity as users, revenue, recovered money, or customer validation. |
+| Testing instructions | [Judge testing instructions](testing-instructions.md) |
+| YouTube title and description | [Final video metadata](youtube.md) |
+| Video file | [remainder-demo-final.mp4](../deliverables/remainder-demo-final.mp4) |
+| Optional closed-caption upload | [remainder-demo.srt](../deliverables/remainder-demo.srt) |
+| Cover image | [Devpost thumbnail, 1200 by 800](../public/media/devpost-thumbnail.png) |
+| Additional gallery images | [Dashboard](../public/media/dashboard-desktop.png), [case review](../public/media/case-desktop.png), [mobile case](../public/media/case-mobile.png) |
 
-Do not paste the internal release gates or directions to the submitter into the public project story. Keep the distinction between verified Gemini inference and verified Evorozen signed memory; the sponsor's chat inference route did not pass the recorded live check.
+## Remaining publication sequence
 
-## Prepared supporting files
+1. Restore reliable browser control and continue the existing YouTube Studio account. Upload the exact final MP4 above. Enter the prepared metadata and publish with **Public** visibility as requested. Upload the SRT when the caption editor is available. Verify audible playback and visibility while signed out; preserve the actual watch URL.
+2. Continue the existing Devpost draft. Paste the prepared story, add the technologies and app/repository links, upload the thumbnail and product screenshots, then enter the verified YouTube URL. Save and reopen to confirm the contents.
+3. Inspect the final step. Student status, age eligibility, jurisdiction, and any required guardian consent have not been established. Do not invent these facts or attest them on the user's behalf. The user has accepted YouTube and Devpost terms in this conversation; that does not establish eligibility.
+4. Record the platform's actual completion status and receipt. A saved draft is not a submitted entry.
 
-- [Silent 170-second walkthrough](../deliverables/remainder-walkthrough-silent.mp4): add Shivam's narration using the [editing instructions](video-editing.md), then upload the final version to the chosen supported public or unlisted video host. Keep the final runtime under three minutes and verify the link while signed out.
-- Screenshots: [dashboard](../public/media/dashboard-desktop.png), [case](../public/media/case-desktop.png), [landing page](../public/media/landing-desktop.png), and [mobile case](../public/media/case-mobile.png). Select only those appropriate to the actual upload fields.
-- [Product brief](../deliverables/remainder-brief.pdf), [pitch deck](../deliverables/remainder-pitch.pptx), and [sample evidence PDF](../deliverables/sample-claim-evidence.pdf) are available if optional supporting links or uploads are accepted.
+The signed-in editor showed eight days remaining. The public event overview gives September 30, 2026 at 11:45 PM PKT, equivalent to October 1 at 00:15 IST; an older rules body stated September 20. Preserve this discrepancy if eligibility or timing is disputed rather than claiming the two dates agree.
 
-## Facts still requiring Shivam or the organizer
-
-- Student status, age eligibility, jurisdiction, and any required guardian consent have not been established. Do not infer or attest them.
-- The official [overview](https://evorozen-apex.devpost.com/) lists September 30, 2026 at 11:45 PM PKT, equivalent to October 1 at 00:15 IST. The [rules body](https://evorozen-apex.devpost.com/rules) states an earlier September 20 cutoff. The contradiction remains unresolved; an accessible event page does not prove the governing submission window is open.
-- A final narrated-video URL remains outstanding.
-- The signed-in editor's actual required fields, unpublished-save behavior, draft URL, and final submission receipt remain unverified because the Mac was locked.
-
-## Completion record
-
-| Item | Verified result |
-| --- | --- |
-| Devpost draft created | No |
-| Draft URL | None |
-| Eligibility confirmed | No |
-| Final narrated video hosted | No |
-| Final entry submitted | No |
-| Submission receipt | None |
+No customer revenue, active customers, or recovered business money is claimed. Fictional demonstration records are excluded from traction claims.

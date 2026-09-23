@@ -1,0 +1,133 @@
+WEBVTT
+
+00:00:00.040 --> 00:00:02.490
+A cafe is missing part of its delivery.
+
+00:00:03.400 --> 00:00:07.430
+The supplier says, "We will credit you." Days later, a credit arrives.
+
+00:00:07.440 --> 00:00:09.570
+But it covers only the oat milk.
+
+00:00:10.480 --> 00:00:15.520
+Meet Remainder, built by Shivam Gupta: a supplier-credit desk for independent
+
+00:00:15.520 --> 00:00:20.500
+businesses. This demonstration uses fictional documents and real OpenAI
+
+00:00:20.500 --> 00:00:21.310
+analysis.
+
+00:00:22.300 --> 00:00:27.090
+The invoice bills twelve cases of oat milk and ten cases of tomatoes.
+
+00:00:27.420 --> 00:00:31.890
+Every document lives in one case, with text the owner can review.
+
+00:00:32.690 --> 00:00:36.910
+The receiving record shows eight oat-milk cases and seven tomato cases.
+
+00:00:37.420 --> 00:00:40.870
+A confirmed supplier alias connects the different names for the same oat drink.
+
+00:00:41.770 --> 00:00:44.650
+Now the owner starts a real OpenAI request.
+
+00:00:44.980 --> 00:00:46.890
+The model interprets the documents.
+
+00:00:47.220 --> 00:00:52.030
+Remainder checks quoted evidence, units, prices, and supplier identity
+
+00:00:52.240 --> 00:00:54.090
+before an amount can enter a claim.
+
+00:00:55.120 --> 00:00:58.750
+Four missing cases at $36 make $144.
+
+00:00:59.780 --> 00:01:02.610
+Three tomato cases at $24 make $72.
+
+00:01:03.280 --> 00:01:06.030
+Together, the shortage is $216.
+
+00:01:07.100 --> 00:01:08.890
+Each finding links to its source.
+
+00:01:09.320 --> 00:01:13.880
+Nothing starts approved. The owner reviews the evidence and explicitly selects the supported
+
+00:01:13.880 --> 00:01:14.850
+shortages.
+
+00:01:15.800 --> 00:01:18.710
+Preparing the claim locks its amount and evidence.
+
+00:01:19.040 --> 00:01:22.410
+A later credit cannot rewrite what was originally requested.
+
+00:01:22.960 --> 00:01:25.410
+This claim is for $216.
+
+00:01:26.620 --> 00:01:30.450
+The owner downloads an evidence PDF and an email draft.
+
+00:01:31.280 --> 00:01:35.420
+Remainder fits the existing email workflow, and the owner decides what actually gets
+
+00:01:35.420 --> 00:01:36.070
+sent.
+
+00:01:37.320 --> 00:01:39.090
+Here is the supplier credit note.
+
+00:01:39.440 --> 00:01:44.670
+It names the same invoice, but credits only $144 for the oat milk.
+
+00:01:45.410 --> 00:01:47.760
+A second live analysis matches the credit.
+
+00:01:47.760 --> 00:01:50.950
+The owner inspects its source before verification.
+
+00:01:52.000 --> 00:01:54.970
+Duplicate checks prevent the same note from being counted twice.
+
+00:01:55.840 --> 00:01:59.810
+$216 claimed. $144 in a verified credit note.
+
+00:02:00.160 --> 00:02:03.230
+$72 still outstanding. The case stays open.
+
+00:02:03.840 --> 00:02:06.370
+A credit note is distinct from cash received.
+
+00:02:06.970 --> 00:02:12.140
+The follow-up draft acknowledges the credit already issued and asks only about the
+
+00:02:12.140 --> 00:02:17.530
+remaining $72. That is the point: a partial credit stays partial.
+
+00:02:18.780 --> 00:02:23.130
+Separately verified Evorozen memory stores approved product aliases.
+
+00:02:24.020 --> 00:02:28.010
+Financial checks and durable balances stay in application code.
+
+00:02:29.200 --> 00:02:32.570
+Start with independent operators and hospitality bookkeepers.
+
+00:02:33.140 --> 00:02:38.030
+Measure review time and repeat use, then test $29 per location per month.
+
+00:02:38.620 --> 00:02:40.310
+Customer traction is not yet claimed.
+
+00:02:41.260 --> 00:02:44.300
+Try Remainder at remainder-desk.web.app.
+
+00:02:44.300 --> 00:02:47.910
+Built by Shivam Gupta for Evorozen Apex.
+
+00:02:48.580 --> 00:02:50.270
+Know exactly what is still outstanding.

@@ -1,0 +1,39 @@
+{
+  "kind": "scheduled_backup_restore_rehearsal",
+  "passed": true,
+  "project": "gen-lang-client-0444960702",
+  "job": "remainder-database-backup",
+  "execution": "remainder-database-backup-8cvhk",
+  "object": "gs://remainder-backups-359201230061/postgres/2026/09/23/20260923T052114Z-21ef633a69be.dump",
+  "bytes": 18808,
+  "sha256": "b0ea0e55bb2a18ca843e8ae2ff071ed4d9beb5aa11abf832f3fabccf7f5c5505",
+  "archiveEntries": 41,
+  "restoredToIsolatedBranch": "br-flat-wave-b2rtvjpv",
+  "productionOverwritten": false,
+  "counts": {
+    "schemaVersions": [
+      1,
+      2,
+      3
+    ],
+    "tableCount": 8,
+    "users": 1,
+    "sessions": 1,
+    "suppliers": 1,
+    "cases": 1,
+    "verifiedCredits": 0,
+    "activities": 2
+  },
+  "cleanup": {
+    "isolatedBranchDeletionAccepted": true,
+    "isolatedBranchPendingState": "storage_deleted",
+    "localDumpRemoved": true
+  },
+  "verifiedAt": "2026-09-23T05:25:26Z",
+  "schedulerExecution": "remainder-database-backup-fnd7l",
+  "schedulerExecutionSucceeded": true,
+  "anonymousDownloadStatus": 403,
+  "runtimeBucketRole": "roles/storage.objectCreator",
+  "operatorAccessScopedToBucket": true,
+  "temporaryProjectRecoveryGrantRemoved": true
+}

@@ -13,3 +13,7 @@ deliverables/private/
 .artifacts/
 output/
 .chart-data-*/
+.firebase/
+
+firebase-public/demo/remainder-demo.mp4
+firebase-public/demo/remainder-demo.vtt

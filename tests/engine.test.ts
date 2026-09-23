@@ -79,9 +79,12 @@ function reply(output: unknown, status = 200) {
         new Response(
           JSON.stringify({
             id: 'openai-trace-a',
+            status: 'completed',
             output: [
               {
                 type: 'message',
+                role: 'assistant',
+                status: 'completed',
                 content: [
                   {
                     type: 'output_text',
@@ -430,9 +433,12 @@ describe('live provider and evidence boundary', () => {
           new Response(
             JSON.stringify({
               id: 'openai-trace',
+              status: 'completed',
               output: [
                 {
                   type: 'message',
+                  role: 'assistant',
+                  status: 'completed',
                   content: [{ type: 'output_text', text: JSON.stringify(liveOutput(docs())) }],
                 },
               ],

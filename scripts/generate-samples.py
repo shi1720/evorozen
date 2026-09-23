@@ -42,7 +42,7 @@ def draw_pdf(stem, source_name):
     lines = source.splitlines()
     target = SAMPLES / f'{stem}.pdf'
     c = canvas.Canvas(str(target), pagesize=A4, pageCompression=1)
-    c.setTitle(lines[2] + ' — fictional Remainder sample')
+    c.setTitle(lines[2] + ': fictional Remainder sample')
     c.setAuthor('Shivam Gupta · Remainder')
     c.setSubject('Fictional document for testing. Not a real commercial document.')
     c.setFillColor(FOREST); c.rect(0, H-9, W, 9, fill=1, stroke=0)

@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import type { Queryable } from './db';
 import type { Activity, RecoveryCase, Supplier, User } from '../shared/types';
+import { memoryConfiguration } from './memory';
 
 export class ApiError extends Error {
   constructor(
@@ -234,5 +235,10 @@ export function engineStatus() {
     preference === 'auto'
       ? (['evorozen', 'openai', 'gemini'].find((name) => available[name]) ?? 'unconfigured')
       : preference;
-  return { provider, configured: !!available[provider], memoryEnabled: true };
+  const memory = memoryConfiguration();
+  return {
+    provider,
+    configured: !!available[provider],
+    memoryEnabled: memory.enabled && memory.configured,
+  };
 }

@@ -4,6 +4,9 @@ import type { RecoveryCase } from '../shared/types';
 import { buildClaim, observedProductLabel } from './engine';
 
 const TABLE = 'remainder_review_memory_v1';
+// A cold recall can need schema + select. Keep optional memory under ten network
+// seconds so it leaves room for inference within Firebase Hosting's 60-second limit.
+const MEMORY_REQUEST_TIMEOUT_MS = 5_000;
 const aliasSchema = z
   .object({
     canonical: z.string().min(3).max(200),
@@ -101,7 +104,7 @@ async function request(
         prompt: 'Execute a deterministic workspace-scoped reviewed-product memory operation.',
         data_payload,
       }),
-      signal: AbortSignal.timeout(15_000),
+      signal: AbortSignal.timeout(MEMORY_REQUEST_TIMEOUT_MS),
     });
     if (!response.ok)
       throw new MemoryError(

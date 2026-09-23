@@ -53,6 +53,13 @@ test('sample recovery stays open after a partial credit and produces the correct
     expect(r.ok()).toBeTruthy();
     expect(r.headers()['content-disposition']).toContain('attachment');
   }
+  await page.setViewportSize({ width: 320, height: 900 });
+  await page.goto('/app');
+  await expect(page.locator('.metric-card.green')).toContainText('$144.00');
+  await expect(page.locator('.loop-legend')).toContainText('$72.00');
+  expect(
+    await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
+  ).toBeTruthy();
 });
 
 test('signup, persistence, empty state, and new case are usable without AI', async ({ page }) => {

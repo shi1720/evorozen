@@ -1,4 +1,4 @@
-# Remainder — independent judge review
+# Remainder: independent judge review
 
 **Review date:** 23 September 2026. **Reviewer:** a separate AI judge agent, requested by Shivam Gupta. **Scope:** the local working app at `http://localhost:3210`, source code, tests, research, commercial plan, submission copy, script, deck, brief, preserved live integration results, and public deployment-link checks. This is a skeptical internal review, not an organizer score or prediction of winning.
 
