@@ -27,8 +27,9 @@
     "restoreEvidence": "scheduled-backup-restore.json"
   },
   "publication": {
-    "youtube": "not published; browser connection blocked",
-    "devpost": "existing draft, name and elevator pitch saved, 2/4 steps"
+    "youtube": "published Public: https://www.youtube.com/watch?v=gRbLdG4Wa4U",
+    "devpost": "submitted: https://devpost.com/software/remainder-vldh27",
+    "evidence": "publication.json"
   },
   "scope": "This identifies the deployed application commit. Later documentation commits add verification evidence without changing runtime source."
 }

@@ -1,48 +1,43 @@
 # Submission publication record
 
-Prepared for Shivam Gupta on 23 September 2026.
+Verified for Shivam Gupta on 23 September 2026 through the Codex internal browser.
 
-## Verified status
+## Published destinations
 
-The working application is **https://remainder-desk.web.app**. The repository is **https://github.com/shi1720/evorozen**, with `main` as its default branch.
+- **Application:** https://remainder-desk.web.app
+- **Public YouTube demo:** https://www.youtube.com/watch?v=gRbLdG4Wa4U
+- **Submitted Devpost entry:** https://devpost.com/software/remainder-vldh27
+- **Source:** https://github.com/shi1720/evorozen, default branch `main`.
+- **Standalone captioned player:** https://remainder-desk.web.app/demo/
 
-The existing Devpost entry was opened while signed in and updated successfully:
+## Devpost confirmation
 
-- Project name: **Remainder**.
-- Elevator pitch: **Turn short deliveries into source-backed supplier claims. Match partial credit notes and keep every unpaid remainder visible.**
-- Save and continue opened the project-details editor and showed **Draft, 2/4 steps done**.
-- Project URL displayed by Devpost: **https://devpost.com/software/remainder-vldh27**. This is an observed project URL, not evidence of a published entry.
-- [Continue the existing draft](https://devpost.com/submit-to/30744-evorozen-apex-nextgen-ai-buildathon/manage/submissions/1193859-remainder/project_details/edit).
+Devpost displayed **Project submitted!** and the public page lists **Submitted to: Evorozen Apex: NextGen AI Buildathon**. The receipt allows editing until **September 30, 2026 at 02:45 PM EDT**, equivalent to **October 1 at 00:15 IST**.
 
-The remaining story, technology tags, links, gallery, and video fields have **not** been verified as saved. No final submission receipt exists. Browser automation lost reliable access after the overview save: the browser connection reports `unsupported Codex auth method: apikey`, and the native Chrome accessibility tree returns stale YouTube menu data even after navigation and a fresh window. Do not treat attempted actions as saved fields.
+The saved and rendered entry includes Remainder's name and elevator pitch, custom project thumbnail, full Markdown story, judge testing instructions, eight technology tags, live app and GitHub links, four captioned gallery images, and the public YouTube video. The embedded film played with English captions. The form has no separate testing-instructions or track field; testing instructions are included in the story, and the video description identifies Autonomous B2B SaaS.
 
-## Finished video and copy
+Creator credit is **Shivam Gupta**, with the contribution: “Project owner and builder, with AI-assisted research, implementation, testing, and release preparation.”
 
-The final [narrated video](../deliverables/remainder-demo-final.mp4) is **170.88 seconds**, 1920 by 1080, with audible narration and visible captions. It records actual OpenAI analysis in a normal account using fictional documents. The voice is an explicitly disclosed AI presenter. [Video validation](validation-video.md)
+## YouTube confirmation
 
-The signed-in YouTube Studio channel was verified as **Shivam Gupta**, channel ID `UCLPUcp65Khk_8n_T1UjQiSQ`. No YouTube upload or public YouTube watch URL has been verified. A standalone narrated player is live at https://remainder-desk.web.app/demo/. Signed-out playback, seeking, 44 caption cues, file integrity, and layouts from 320 to 1440 pixels passed. This public player does not substitute for the requested YouTube publication. The browser-control problem currently prevents completing publication.
+YouTube Studio confirmed **Video published** on the **Shivam Gupta** channel, ID `UCLPUcp65Khk_8n_T1UjQiSQ`. The persisted visibility is **Public**, and SD and HD processing are complete. Copyright and Community Guidelines checks found no issues.
 
-| Field | Ready content |
-| --- | --- |
-| About the project | [Project story](project-story.md), from Inspiration through What's next for Remainder |
-| Built with | React, TypeScript, Vite, Express, PostgreSQL, PGlite, OpenAI, Evorozen Neural Pulse, Firebase, Cloud Run, PDF.js, Tesseract.js |
-| Try it out | https://remainder-desk.web.app |
-| Source | https://github.com/shi1720/evorozen |
-| Track, if offered | Autonomous B2B SaaS |
-| Testing instructions | [Judge testing instructions](testing-instructions.md) |
-| YouTube title and description | [Final video metadata](youtube.md) |
-| Video file | [remainder-demo-final.mp4](../deliverables/remainder-demo-final.mp4) |
-| Optional closed-caption upload | [remainder-demo.srt](../deliverables/remainder-demo.srt) |
-| Cover image | [Devpost thumbnail, 1200 by 800](../public/media/devpost-thumbnail.png) |
-| Additional gallery images | [Dashboard](../public/media/dashboard-desktop.png), [case review](../public/media/case-desktop.png), [mobile case](../public/media/case-mobile.png) |
+The [final film](../deliverables/remainder-demo-final.mp4) is **170.88 seconds**, 1920 by 1080, with narrated real OpenAI analysis on fictional records. Its SHA-256 is `6f3d62515bbcf0c26d31eb9e5a44303495eb07b580dcc23bf4e006226aaa1dca`. The [44-cue English caption track](../deliverables/remainder-demo.srt), [custom thumbnail](../public/media/youtube-thumbnail.png), and [title and description](youtube.md) are saved. The AI presenter voice is disclosed in the film, description, and YouTube's AI-use setting.
 
-## Remaining publication sequence
+The watch page played with English captions and 1080p selected. The Devpost embed also played with captions. These YouTube checks used the authenticated browser. Independent signed-out playback, seeking, file integrity, captions, and responsive checks were performed on the separate Firebase player; do not relabel those as a signed-out YouTube test.
 
-1. Restore reliable browser control and continue the existing YouTube Studio account. Upload the exact final MP4 above. Enter the prepared metadata and publish with **Public** visibility as requested. Upload the SRT when the caption editor is available. Verify audible playback and visibility while signed out; preserve the actual watch URL.
-2. Continue the existing Devpost draft. Paste the prepared story, add the technologies and app/repository links, upload the thumbnail and product screenshots, then enter the verified YouTube URL. Save and reopen to confirm the contents.
-3. Inspect the final step. Student status, age eligibility, jurisdiction, and any required guardian consent have not been established. Do not invent these facts or attest them on the user's behalf. The user has accepted YouTube and Devpost terms in this conversation; that does not establish eligibility.
-4. Record the platform's actual completion status and receipt. A saved draft is not a submitted entry.
+## Organizer inconsistencies to preserve
 
-The signed-in editor showed eight days remaining. The public event overview gives September 30, 2026 at 11:45 PM PKT, equivalent to October 1 at 00:15 IST; an older rules body stated September 20. Preserve this discrepancy if eligibility or timing is disputed rather than claiming the two dates agree.
+The final reminder calls Neural Pulse integration and three social posts mandatory. The [Official Rules](https://evorozen-apex.devpost.com/rules), sections 2.1 and 4.2, allow any AI provider and describe social posts as optional. The rules body also retains a September 20 deadline, while the editor and successful receipt show September 30 at 14:45 EDT. These discrepancies were observed, not silently resolved by inventing compliance.
 
-No customer revenue, active customers, or recovered business money is claimed. Fictional demonstration records are excluded from traction claims.
+The submission accurately describes OpenAI inference and separately verified Evorozen supplier-alias memory. It makes no false sponsor-inference, social-post, customer, revenue, or recovered-money claims. Platform submission is confirmed; organizer eligibility and judging acceptance are not adjudicated here. No outreach messages were sent.
+
+## Evidence and reusable materials
+
+- [Machine-readable publication record](validation/publication.json)
+- [Project story](project-story.md) and [complete testing instructions](testing-instructions.md)
+- [Narrated video validation](validation-video.md)
+- [Pitch deck](../deliverables/remainder-pitch.pptx) and [one-page brief](../deliverables/remainder-brief.pdf)
+- [Application release record](validation/firebase-release.json)
+
+The previous browser-control blocker is resolved. All requested publication fields are saved and the entry is submitted.

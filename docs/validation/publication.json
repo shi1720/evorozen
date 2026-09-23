@@ -1,0 +1,79 @@
+{
+  "recordedAt": "2026-09-23T06:14:08Z",
+  "verificationMethod": "Observed UI through the authenticated Codex internal browser; no platform API mutations.",
+  "applicationUrl": "https://remainder-desk.web.app",
+  "youtube": {
+    "url": "https://www.youtube.com/watch?v=gRbLdG4Wa4U",
+    "videoId": "gRbLdG4Wa4U",
+    "channel": "Shivam Gupta",
+    "channelId": "UCLPUcp65Khk_8n_T1UjQiSQ",
+    "visibility": "Public",
+    "receipt": "Video published",
+    "publishDateShown": "Sep 23, 2026",
+    "filename": "remainder-demo-final.mp4",
+    "durationSeconds": 170.88,
+    "sha256": "6f3d62515bbcf0c26d31eb9e5a44303495eb07b580dcc23bf4e006226aaa1dca",
+    "copyrightCheck": "No issues found",
+    "communityGuidelinesCheck": "No issues found",
+    "hdProcessing": "complete",
+    "watchPageQualitySelected": "1080p HD",
+    "captions": {
+      "language": "English",
+      "source": "deliverables/remainder-demo.srt",
+      "cueCount": 44,
+      "savedInStudio": true,
+      "visibleDuringPlayback": true
+    },
+    "thumbnail": "public/media/youtube-thumbnail.png",
+    "aiVoiceDisclosed": true,
+    "independentSignedOutYouTubePlaybackVerified": false,
+    "playbackScope": "Authenticated watch page and Devpost embed played. Public visibility is confirmed by Studio; signed-out playback evidence is separately available for the Firebase player."
+  },
+  "devpost": {
+    "url": "https://devpost.com/software/remainder-vldh27",
+    "submissionId": "1193859",
+    "status": "submitted",
+    "receipt": "Project submitted! Continue to edit your project until the hackathon deadline: September 30, 2026 at 02:45pm EDT.",
+    "event": "Evorozen Apex: NextGen AI Buildathon",
+    "savedFields": [
+      "name",
+      "elevator pitch",
+      "project thumbnail",
+      "full Markdown story",
+      "testing instructions",
+      "eight technology tags",
+      "application URL",
+      "GitHub URL",
+      "four gallery images with captions",
+      "YouTube URL",
+      "creator contribution"
+    ],
+    "embeddedVideoPlayed": true,
+    "embeddedVideoCaptionsVisible": true,
+    "technologyTags": [
+      "react",
+      "typescript",
+      "openai",
+      "firebase",
+      "postgresql",
+      "express.js",
+      "evorozen",
+      "google-cloud-run"
+    ],
+    "galleryPhotoIds": [
+      "5369385",
+      "5369386",
+      "5369387",
+      "5369388"
+    ],
+    "creator": "Shivam Gupta",
+    "contribution": "Project owner and builder, with AI-assisted research, implementation, testing, and release preparation.",
+    "noSeparateTestingOrTrackField": true,
+    "eligibilityAdjudicated": false
+  },
+  "organizerDiscrepancies": [
+    "The final reminder calls Neural Pulse integration and three social posts mandatory. Official Rules sections 2.1 and 4.2 allow any AI provider and describe social posts as optional.",
+    "The rules body still says September 20, 2026. The editor and submission receipt give September 30, 2026 at 14:45 EDT, equivalent to October 1 at 00:15 IST."
+  ],
+  "scope": "A submitted status is a platform receipt, not confirmation of organizer eligibility, judging acceptance, customer traction, or a prize. No external outreach or fabricated social proof was created."
+}

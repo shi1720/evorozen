@@ -1,5 +1,6 @@
 # YouTube demo metadata
 
+Published publicly on 23 September 2026: [watch the demo](https://www.youtube.com/watch?v=gRbLdG4Wa4U). Studio confirmed **Video published**, **Public** visibility, and completed HD processing. The watch page played with English captions and 1080p selected. The same video plays in the submitted Devpost entry. The 44-cue SRT and custom thumbnail are saved. These browser checks used the signed-in account; the separate Firebase player has independent signed-out playback evidence.
 
 ## Title
 
@@ -32,7 +33,7 @@ Primary track: Autonomous B2B SaaS
 
 #EvorozenApex #Buildathon #SmallBusiness #AI
 
-## Upload and playback checks
+## Release checklist
 
 - Visibility is **Public**, and the published watch page plays in a signed-out browser.
 - The final export is at most **3:00**, with clear narration and no clipped words or silent narration gaps.

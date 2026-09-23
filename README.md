@@ -1,6 +1,6 @@
 # Remainder
 
-[Open the live app](https://remainder-desk.web.app) · [Watch the narrated demo](https://remainder-desk.web.app/demo/) · [CI checks](https://github.com/shi1720/evorozen/actions/workflows/ci.yml)
+[Open the live app](https://remainder-desk.web.app) · [Watch the narrated demo](https://www.youtube.com/watch?v=gRbLdG4Wa4U) · [Devpost submission](https://devpost.com/software/remainder-vldh27) · [CI checks](https://github.com/shi1720/evorozen/actions/workflows/ci.yml)
 
 **The supplier promised a credit. Make sure it does not disappear.**
 
@@ -52,11 +52,11 @@ A real workspace needs one server-side provider key to analyze documents. Docume
 
 Edit `.env`, then restart the server. Keep keys out of source control and out of `VITE_*` variables. `AI_PROVIDER=auto` uses the order below; set `AI_PROVIDER=gemini`, `openai`, or `evorozen` to select a configured provider directly. The Firebase release selects OpenAI with `gpt-5.4-mini` directly.
 
-| Provider | Configuration | Behavior |
-| --- | --- | --- |
-| Evorozen Neural Pulse | `EVOROZEN_API_KEY` | Selected first when configured. Uses the documented `chat` action at `https://pulse.evorozen.com/api/neural`. |
-| OpenAI | `OPENAI_API_KEY`, optionally `OPENAI_MODEL` | Selected when Evorozen is absent. Defaults to `gpt-5.4-mini` with strict Responses API output and `store:false`. |
-| Gemini | `GEMINI_API_KEY`, optionally `GEMINI_MODEL` | Selected when Evorozen and OpenAI are absent. Defaults to `gemini-3.5-flash-lite`. |
+| Provider              | Configuration                               | Behavior                                                                                                         |
+| --------------------- | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Evorozen Neural Pulse | `EVOROZEN_API_KEY`                          | Selected first when configured. Uses the documented `chat` action at `https://pulse.evorozen.com/api/neural`.    |
+| OpenAI                | `OPENAI_API_KEY`, optionally `OPENAI_MODEL` | Selected when Evorozen is absent. Defaults to `gpt-5.4-mini` with strict Responses API output and `store:false`. |
+| Gemini                | `GEMINI_API_KEY`, optionally `GEMINI_MODEL` | Selected when Evorozen and OpenAI are absent. Defaults to `gemini-3.5-flash-lite`.                               |
 
 Obtain an Evorozen key from the [Neural Pulse service](https://pulse.evorozen.com/). Google provides key creation through [Google AI Studio and its API-key guide](https://ai.google.dev/gemini-api/docs/api-key); use a current key with access to the configured model. OpenAI's [API quickstart](https://developers.openai.com/api/docs/quickstart) explains creating a server-side API key. Provider eligibility, free allowances, and availability vary; no paid plan is required to explore the demo.
 

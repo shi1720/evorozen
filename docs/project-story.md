@@ -4,7 +4,6 @@
 
 **Primary track:** Autonomous B2B SaaS
 
-
 ## Inspiration
 
 A café receives its morning delivery. Four cases of oat milk and three cases of tomatoes are missing. The supplier says, "We'll credit you."
@@ -78,3 +77,15 @@ We will test a **$29 per location per month** pricing hypothesis after observing
 Before onboarding confidential customer records, we will confirm appropriate provider data terms, backup operations, and hosting availability. Broader document layouts, better intake, and bookkeeper handoffs come next. Accounting integrations and automatic supplier outreach will follow only if the pilot shows they are worth building.
 
 **The goal is simple: when a supplier says, "We'll credit you," the business can see exactly what remains outstanding.**
+
+## Testing instructions
+
+Open [Remainder](https://remainder-desk.web.app). No payment or API key is needed for the isolated sample.
+
+1. Select **Explore the sample demo** and open **A delivery that came up short**. This path is visibly labeled as fictional sample replay.
+2. Inspect the source links in **Findings**. Include the **$144** oat-milk shortage and **$72** tomato shortage in the claim.
+3. Select **Prepare claim**, confirm the review, and export the evidence PDF or email draft. The approved claim is **$216**.
+4. Select **Add credit note**, load the **$144 sample credit note**, and save its reviewed text. In **Findings**, select **Match new credit**, then inspect and **Verify credit**.
+5. Confirm **$216 claimed**, **$144 credit-note verified**, and **$72 outstanding**. The case stays open, and the next email draft asks only for the remainder.
+
+For real OpenAI analysis, create your own **USD** workspace and follow the [normal-account testing guide](https://github.com/shi1720/evorozen/blob/main/docs/testing-instructions.md), including its fictional PDFs and supplier-alias setup. No shared login credentials are needed. Save the recovery key shown during signup.
