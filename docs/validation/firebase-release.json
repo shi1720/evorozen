@@ -1,0 +1,34 @@
+{
+  "recordedAt": "2026-09-23T05:55:01.542321+00:00",
+  "applicationUrl": "https://remainder-desk.web.app",
+  "videoUrl": "https://remainder-desk.web.app/demo/",
+  "sourceCommit": "bb57baf32a47edd79c37f0852b0ad2d298f103d1",
+  "cloudRunRevision": "remainder-00004-kfb",
+  "trafficPercent": 100,
+  "containerDigest": "sha256:5b9b64b4a80f8d5b8a61855952c5e85dc42e7c74fced2509345269c1d94e959b",
+  "cloudBuildId": "07051b95-abca-4e15-94cd-2a987bcdc50a",
+  "ciUrl": "https://github.com/shi1720/evorozen/actions/runs/35824129185",
+  "ciConclusion": "success",
+  "checks": {
+    "applicationTests": 118,
+    "browserTests": 15,
+    "backupConfigurationTests": 2,
+    "health": "ok",
+    "database": "ok"
+  },
+  "provider": "openai",
+  "configuredModel": "gpt-5.4-mini",
+  "videoSha256": "6f3d62515bbcf0c26d31eb9e5a44303495eb07b580dcc23bf4e006226aaa1dca",
+  "backup": {
+    "schedule": "03:00 UTC daily",
+    "schedulerState": "ENABLED",
+    "lastVerifiedExecution": "remainder-database-backup-fnd7l",
+    "lastVerifiedExecutionResult": "EXECUTION_SUCCEEDED",
+    "restoreEvidence": "scheduled-backup-restore.json"
+  },
+  "publication": {
+    "youtube": "not published; browser connection blocked",
+    "devpost": "existing draft, name and elevator pitch saved, 2/4 steps"
+  },
+  "scope": "This identifies the deployed application commit. Later documentation commits add verification evidence without changing runtime source."
+}

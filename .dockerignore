@@ -10,3 +10,6 @@ test-results
 playwright-report
 deliverables
 *.log
+
+firebase-public/demo/remainder-demo.mp4
+firebase-public/demo/remainder-demo.vtt

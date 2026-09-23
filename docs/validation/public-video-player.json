@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-23T05:40:40.056Z",
+  "timestamp": "2026-09-23T05:54:04.752Z",
   "url": "https://remainder-desk.web.app/demo/",
   "passed": true,
   "metadata": {
@@ -34,8 +34,8 @@
       "accessibilityViolations": 0
     }
   ],
-  "sha256": "d338d465f4c7b18252ac9375451ba96e8ad8ecddc488413b9eb69c1350f9caf1",
-  "bytes": 9282913,
+  "sha256": "6f3d62515bbcf0c26d31eb9e5a44303495eb07b580dcc23bf4e006226aaa1dca",
+  "bytes": 13629656,
   "rangeStatus": 206,
   "playback": "Advanced normally, then sought to 165 seconds without a media error.",
   "browserErrors": [],

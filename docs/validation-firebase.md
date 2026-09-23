@@ -2,7 +2,9 @@
 
 App: [remainder-desk.web.app](https://remainder-desk.web.app)
 
-The hosted application was tested through Firebase Hosting against Cloud Run revision `remainder-00002-d9d` on September 23, 2026. This was a normal disposable account using fictional documents, not the sample replay. All normal test accounts were deleted through the password-confirmed API after testing. Credentials and recovery keys were kept only in process memory.
+The final hosted follow-up **passed** on Cloud Run revision `remainder-00004-kfb`, serving source commit `bb57baf32a47edd79c37f0852b0ad2d298f103d1`, through Firebase Hosting on September 23, 2026. Password recovery, login, persistence, deletion, responsive layout, accessibility checks, and deliberate sample reanalysis all passed with zero additional live model requests. The [sanitized final report](validation/firebase-followup.json) records the result.
+
+The earlier real-AI workflow was tested against revision `remainder-00002-d9d` on the same date. This was a normal disposable account using fictional documents, not the sample replay. All normal test accounts were deleted through the password-confirmed API after testing. Credentials and recovery keys were kept only in process memory.
 
 ## Real hosted workflow completed
 
@@ -29,19 +31,19 @@ The dashboard's recovery-loop legend created a minimum grid width after a partia
 
 The mobile grid now allows its column to shrink, and the recovery ring stacks above the two balance labels on the narrowest screens. The full recovery browser regression now checks the USD 144 credited / USD 72 remaining dashboard at 320 pixels. That test passed locally. The correction was subsequently verified on Cloud Run revision `remainder-00003-cpz` through Firebase. Landing, dashboard, case, and settings all fit at 320, 390, 768, and 1440 pixels. Automated WCAG 2 A/AA checks passed at 320 and 390 pixels, and no browser JavaScript errors were recorded. The [sanitized layout report](validation/firebase-sample-layout.json) also confirms that an explicit `force: true` sample rerun preserved the approved USD 216 claim, USD 144 credit, and USD 72 remainder. This follow-up used zero live model requests.
 
-## Recovery follow-up and final gate
+## Recovery correction verified on the final release
 
-The hosted password recovery check confirmed that the server rotated the recovery key and revoked an existing session. It then found a separate UI issue: switching from the recovery-key screen to login retained the old React component state. The application now keys each Auth screen by mode so login mounts fresh. All 15 local browser tests passed, including a new complete recovery, login, and account-deletion regression. Hosted confirmation of that final one-line correction is pending the next deployment. The affected disposable account was deleted successfully, and no additional model calls were made.
+The hosted password recovery check confirmed that the server rotated the recovery key and revoked an existing session. It then found a separate UI issue: switching from the recovery-key screen to login retained the old React component state. The application now keys each Auth screen by mode so login mounts fresh. All 15 local browser tests passed, including a new complete recovery, login, and account-deletion regression. The correction then passed on the final hosted revision `remainder-00004-kfb`. The browser returned to a fresh login form, accepted the new password, reopened the saved case through a direct link and a reload, and exported the workspace. The disposable normal account was deleted through the correct-password API, and subsequent session and login checks returned HTTP 401. No additional live model calls were made.
 
-Run after the Auth correction is published:
+To reproduce the final verification:
 
 ```sh
 node scripts/verify-hosted-followup.mjs --live --base=https://remainder-desk.web.app
 ```
 
-This follow-up makes **zero live model requests**. It verifies password recovery, key rotation, revocation of an existing Firebase session, login, persistence, deletion of a disposable normal account, and the same partial-credit layout using a clearly labeled sample replay. It checks landing, dashboard, case, and settings at 320, 390, 768, and 1440 pixels, with automated mobile accessibility checks. Its sanitized result is written to `docs/validation/firebase-followup.json`.
+This follow-up completed successfully and makes **zero live model requests**. It verifies password recovery, key rotation, revocation of an existing Firebase session, login, persistence, deletion of a disposable normal account, and the same partial-credit layout using a clearly labeled sample replay. It checks landing, dashboard, case, and settings at 320, 390, 768, and 1440 pixels, with automated mobile accessibility checks. All 16 page/viewport combinations passed without page overflow. Automated WCAG 2 A/AA checks passed for all four pages at both 320 and 390 pixels, and no browser JavaScript errors were recorded. Its sanitized result is written to `docs/validation/firebase-followup.json`.
 
-The sample workspace is logged out and its ID is reported for immediate administrative cleanup. If it is not removed administratively, the application's seven-day demo expiry applies. Sample workspaces are not reported as real customer traction.
+The final sample workspace was logged out, and its ID is reported for immediate administrative cleanup. If it is not removed administratively, the application's seven-day demo expiry applies. Sample workspaces are not reported as real customer traction.
 
 The complete live workflow can be repeated explicitly with:
 

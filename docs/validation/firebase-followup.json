@@ -1,20 +1,135 @@
 {
-  "timestamp": "2026-09-23T05:39:55.355Z",
+  "timestamp": "2026-09-23T05:53:54.811Z",
   "base": "https://remainder-desk.web.app",
   "kind": "hosted_recovery_and_demo_layout_followup",
-  "passed": false,
+  "passed": true,
   "liveModelRequests": 0,
   "checks": [
-    "recovery rotates the key and revokes an existing Firebase session"
+    "recovery rotates the key and revokes an existing Firebase session",
+    "recovered browser login, persistent case deep link, reload, and workspace export",
+    "normal test account deleted through the correct-password API",
+    "labeled sample reproduces the partial-credit state without live inference",
+    "16 hosted viewport/page combinations fit without overflow; mobile axe checks are clean",
+    "fresh-analysis UI submits force:true and preserves the approved sample claim"
   ],
-  "responsive": [],
+  "responsive": [
+    {
+      "page": "landing",
+      "width": 320,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "dashboard",
+      "width": 320,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "case",
+      "width": 320,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "settings",
+      "width": 320,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "landing",
+      "width": 390,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "dashboard",
+      "width": 390,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "case",
+      "width": 390,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "settings",
+      "width": 390,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "landing",
+      "width": 768,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "dashboard",
+      "width": 768,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "case",
+      "width": 768,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "settings",
+      "width": 768,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "landing",
+      "width": 1440,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "dashboard",
+      "width": 1440,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "case",
+      "width": 1440,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "settings",
+      "width": 1440,
+      "overflow": false,
+      "accessibilityViolations": []
+    }
+  ],
   "browserErrors": [],
   "cleanup": {
     "normalAccount": {
       "deleted": true,
       "sessionRejected": true,
       "loginRejected": true
+    },
+    "demo": {
+      "sessionRevoked": true,
+      "workspaceExpiryDays": 7,
+      "workspaceId": "b38f02ac-bfd1-4b72-aebb-0de2255644a5",
+      "administrativelyDeleted": true,
+      "deletedAt": "2026-09-23T05:55:58.410Z"
     }
   },
-  "error": "locator.fill: Timeout 25000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Email address', { exact: true })\u001b[22m\n"
+  "demoWorkspaceId": "b38f02ac-bfd1-4b72-aebb-0de2255644a5",
+  "sampleTotals": {
+    "claimedCents": 21600,
+    "creditedCents": 14400,
+    "remainingCents": 7200,
+    "provider": "demo"
+  }
 }
