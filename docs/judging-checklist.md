@@ -72,8 +72,8 @@ Suggested scoring anchors: **0** absent, **1** claimed without evidence, **2** p
 | --- | --- | --- |
 | Student eligibility, age, and geography | Shivam verifies against full rules, including any guardian requirement. | Unverified; do not infer eligibility. |
 | Event deadline | Verify submission availability and seek clarification. [Header](https://evorozen-apex.devpost.com/): Sep 30, 2026, 11:45 PM PKT = Oct 1, 00:15 IST. [Rules sections 1.2-1.3](https://evorozen-apex.devpost.com/rules): Sep 20, 11:45 PM PDT. | Direct conflict between official pages, observed Sep 23. The later date remains unconfirmed as the governing cutoff. |
-| Public app | Deploy, smoke test, and capture the final URL. | No deployment claimed by these documents. |
-| Live AI | Run the configured provider successfully and preserve redacted evidence. | Two synthetic Gemini 3.5 Flash-Lite packs passed; sponsor inference was unavailable. See [validation](validation-ai.md). |
+| Public app | Finish the deployed workflow smoke test and retain evidence. | [Live preview](https://remainder-apex.onrender.com) is deployed on Render + Neon; homepage and database health return 200. |
+| Live AI | Run the configured provider successfully and preserve redacted evidence. | Two Gemini synthetic packs and signed Evorozen memory module passed live. Sponsor inference was unavailable. See [validation](validation-ai.md). |
 | Public video | Add narration, finalize below three minutes, upload and verify access. | Silent 170-second actual walkthrough, script and editing guide prepared. Shivam’s voice and public URL remain. |
 | Actual traction | Obtain real external use and verifiable metrics, or accurately submit as pre-launch. | No traction claimed. |
 | Devpost submission | Complete fields and links, review the final preview, submit before the confirmed deadline, retain receipt. | Preparation is not submission. |
@@ -86,4 +86,4 @@ For each review, record the revision, test date, reviewer, criterion score, exac
 | --- | --- | --- | --- | --- |
 | Uncommitted local build / 23 Sep 2026 | All | Independent review: 16.5/25; complete sample and account checks pass; live-provider and final-deployment evidence absent | See [full findings and deductions](judge-review.md) | Supplier grounding and partial follow-up fixes retested; release gates remain |
 
-Follow-up review: **18.5/25**, with two verified synthetic Gemini checks, 62 passing tests, complete documentation, and a 170-second silent product walkthrough. Final production checks, human narration, eligibility and public submission remain separate gates. See [the full evidence](judge-review.md).
+Follow-up review: **18.5/25**, with two verified synthetic Gemini checks, signed Evorozen memory, 82 automated tests and 6 browser tests confirmed passing, a Render + Neon live preview, and a 170-second silent walkthrough. Final deployed-workflow checks, human narration, eligibility and submission remain separate gates. See [the full evidence](judge-review.md).

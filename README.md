@@ -1,5 +1,7 @@
 # Remainder
 
+[Open the live app](https://remainder-apex.onrender.com) · [Watch the silent walkthrough](deliverables/remainder-walkthrough-silent.mp4) · [CI checks](https://github.com/shi1720/evorozen/actions/workflows/ci.yml)
+
 **The supplier promised a credit. Make sure it does not disappear.**
 
 Remainder is an evidence-first supplier credit recovery desk for independent cafés, bakeries, and food businesses. It connects what was invoiced, what arrived, what was requested, and what was actually credited. A partial credit stays partial until the remaining amount is accounted for.
@@ -101,6 +103,8 @@ flowchart LR
 ```
 
 The AI interprets language; it does not authorize users, execute tools, send messages, or determine balances. Financial transitions and credit ledgers are transactional. Source changes invalidate review-stage analysis. An analysis lease blocks overlapping work; version checks prevent stale edits. See [architecture](docs/architecture.md), [security and operating limits](docs/security.md), and the [API contract](docs/implementation-contract.md).
+
+The public preview uses Gemini’s unpaid service. Use fictional or non-confidential, redacted documents. Google’s unpaid-service data terms permit product improvement using submissions; real customer onboarding needs privacy-appropriate provider terms, verified backups, and suitable hosting availability. See [Google’s terms](https://ai.google.dev/gemini-api/terms) and the [deployment guide](docs/deployment.md).
 
 ## Production deployment
 

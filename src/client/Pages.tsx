@@ -1047,6 +1047,17 @@ export function LegalPage({ type }: { type: 'privacy' | 'terms' }) {
               That memory does not include the original document text, invoice references, or
               financial amounts.
             </p>
+            <p>
+              This public preview uses Gemini’s unpaid service. Google may use submitted content and
+              responses to improve its products. Use fictional or non-confidential records; remove
+              personal information, bank details, and other confidential content before saving.
+              Customer onboarding with confidential documents requires a provider account and data
+              terms appropriate for that use. See the{' '}
+              <a href="https://ai.google.dev/gemini-api/terms" target="_blank" rel="noreferrer">
+                Gemini API data terms
+              </a>
+              .
+            </p>
             <h2>Files and evidence</h2>
             <p>
               PDF and image text extraction occurs in your browser. The application stores the

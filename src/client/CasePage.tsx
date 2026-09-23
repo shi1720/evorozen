@@ -119,6 +119,15 @@ function AddDocument({
       wide
     >
       <form className="stack-form" onSubmit={save}>
+        {!user.isDemo && (
+          <p className="field-hint">
+            Public pilot: use fictional or non-confidential, redacted records. Confirmed text is
+            sent to AI when you analyze.{' '}
+            <Link to="/privacy" target="_blank">
+              Data use details
+            </Link>
+          </p>
+        )}
         {error && <ErrorBanner>{error}</ErrorBanner>}
         <div className="form-row">
           <label>

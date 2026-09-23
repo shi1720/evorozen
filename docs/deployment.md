@@ -50,3 +50,7 @@ The account's Neon/database allowance, connection limits, backup availability, a
 8. Record the working URL, date, provider, and redacted trace evidence. Do not publish credentials or raw private records.
 
 A successful local run, a Blueprint file, or a configured provider label does not by itself establish a successful public deployment. Record the actual deployed checks before claiming the site is live.
+
+## Customer-data launch gate
+
+The deployed preview uses Gemini's unpaid service, which may use submissions and responses to improve Google products. Keep preview inputs fictional or non-confidential and redact personal and payment information. Before accepting confidential supplier records, configure a provider account with appropriate data-processing terms, review the applicable retention policy, and verify backup restoration. Google distinguishes paid and unpaid service data handling in its [Gemini API terms](https://ai.google.dev/gemini-api/terms). No billing account was activated for this preview.

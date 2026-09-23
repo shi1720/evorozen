@@ -2,6 +2,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { execFileSync } from 'node:child_process';
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
 const runtime = process.env.REMAINDER_ARTIFACT_RUNTIME || '/Users/shivamgupta/.cache/codex-runtimes/codex-primary-runtime/dependencies';
@@ -33,8 +34,8 @@ function notes(s,words){s.speakerNotes.textFrame.setText(words);}
  const s=slide(C.forest);
  text(s,'Remainder',80,210,1110,148,112,{typeface:SERIF,color:C.paper});
  text(s,'A supplier-credit desk for\nindependent food businesses',88,385,870,108,36,{color:C.mint});
- foot(s,1,'Shivam Gupta / Evorozen Apex 2026',true);
- notes(s,'Created by Shivam Gupta with AI-assisted research, design, and engineering. This deck presents a pre-launch product and commercial plan. It makes no claim of real customer traction or verified deployment.');
+ foot(s,1,'Shivam Gupta / remainder-apex.onrender.com',true);
+ notes(s,'Created by Shivam Gupta with AI-assisted research, design, and engineering. This deck presents a pre-launch product and commercial plan. Live preview: https://remainder-apex.onrender.com on Render with Neon PostgreSQL. Public source: https://github.com/shi1720/evorozen . Homepage and health endpoint checked September 23. No real customer traction is claimed.');
 }
 // 2. The problem is a handoff, made concrete without fabricated statistics.
 {
@@ -69,10 +70,10 @@ function notes(s,words){s.speakerNotes.textFrame.setText(words);}
 // 4. Readable architecture roles with no decorative UI or invented screenshot.
 {
  const s=slide();title(s,'Every amount has a source');
- const rows=[['AI interpretation','Gemini passed two live synthetic cases.\nAI proposes matching line items.'],['Human review','The user checks exact source quotations\nbefore approving a claim.'],['Deterministic checks','Integer-cent arithmetic and duplicate controls\nkeep the credit balance consistent.']];
+ const rows=[['AI interpretation','Gemini passed two live synthetic cases.\nAI proposes matching line items.'],['Human review','The owner checks source quotations.\nSigned Evorozen aliases aid later cases.'],['Deterministic checks','Integer-cent arithmetic and duplicate controls\nkeep the credit balance consistent.']];
  rows.forEach(([a,b],i)=>{const y=244+i*124;text(s,a,80,y,380,48,29,{bold:true,color:C.forest});text(s,b,505,y,690,98,27);});
- foot(s,4,'Gemini live checks passed on 2 synthetic packs. Sample walkthrough uses replay.');
- notes(s,'Architecture: docs/architecture.md. Validation: docs/validation-ai.md. Gemini 3.5 Flash-Lite passed live synthetic USD 216/144/72 and independent GBP 63.55/18.75/44.80 packs on 23 September 2026. This is integration evidence, not an accuracy benchmark or real customer traction. Evorozen chat adapter is implemented; sponsor inference was unavailable during testing. Separate VirtualDB CRUD probes do not prove sponsor extraction worked. Application code owns authorization, arithmetic, workflow state, and tenant-specific supplier aliases.');
+ foot(s,4,'Gemini extraction + signed Evorozen memory verified. Sample footage uses replay.');
+ notes(s,'Architecture: docs/architecture.md. Validation: docs/validation-ai.md. Gemini 3.5 Flash-Lite passed live synthetic USD 216/144/72 and independent GBP 63.55/18.75/44.80 packs on 23 September 2026. This is integration evidence, not an accuracy benchmark or real customer traction. Evorozen chat adapter is implemented; sponsor inference was unavailable during testing. A five-request live check of the production Evorozen memory module verified a signed alias write, HMAC-validated recall, scoped deletion and absent recall afterward. This is optional sponsor memory integration, not sponsor extraction. Public validation artifacts: docs/validation-ai.md. Explicit inference selection for the deployment is Gemini. Application code owns authorization, arithmetic, workflow state, and tenant-specific supplier aliases.');
 }
 // 5. Specific customer and competitive context.
 {
@@ -99,12 +100,14 @@ function notes(s,words){s.speakerNotes.textFrame.setText(words);}
  text(s,'Seeking five\ndesign partners',80,96,1090,180,67,{typeface:SERIF,color:C.paper});
  text(s,'Independent operators and hospitality bookkeepers',84,309,1105,60,31,{color:C.mint});
  text(s,'Observe a recent case.\nMeasure review time and corrections.\nAsk for a concrete paid commitment.',84,413,1060,138,31,{color:C.paper});
- foot(s,7,'Pre-launch plan / github.com/shi1720/evorozen',true);
- notes(s,'Five design partners is a recruitment target, not existing users or commitments. Seven-day launch plan and outreach drafts: docs/go-to-market.md. Creator: Shivam Gupta, with AI-assisted engineering. Repository: https://github.com/shi1720/evorozen . No customer outcomes or paid revenue have been established in this deck.');
+ text(s,'remainder-apex.onrender.com →',84,584,1080,44,28,{bold:true,color:C.mint});
+ foot(s,7,'Public source / github.com/shi1720/evorozen',true);
+ notes(s,'Five design partners is a recruitment target, not existing users or commitments. Seven-day launch plan and outreach drafts: docs/go-to-market.md. Creator: Shivam Gupta, with AI-assisted engineering. Repository: https://github.com/shi1720/evorozen . The live preview is deployed on Render with Neon PostgreSQL. No customer outcomes or paid revenue have been established in this deck. Click the app CTA to open https://remainder-apex.onrender.com .');
 }
 
 const candidate=path.join(tmp,'candidate.pptx');
 await (await PresentationFile.exportPptx(p)).save(candidate);
+execFileSync(path.join(runtime,'python/bin/python3'),[path.join(root,'scripts/link-deck-ctas.py'),candidate],{stdio:'inherit'});
 const revisionDir=path.join(root,'.artifacts/remainder-exports');
 await fs.mkdir(revisionDir,{recursive:true});
 const finalPath=path.join(revisionDir,`remainder-pitch-${Date.now()}.pptx`);
