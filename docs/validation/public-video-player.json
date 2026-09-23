@@ -1,0 +1,43 @@
+{
+  "timestamp": "2026-09-23T05:40:40.056Z",
+  "url": "https://remainder-desk.web.app/demo/",
+  "passed": true,
+  "metadata": {
+    "duration": 170.88,
+    "width": 1920,
+    "height": 1080,
+    "source": "https://remainder-desk.web.app/demo/remainder-demo.mp4"
+  },
+  "captions": {
+    "count": 44,
+    "language": "en"
+  },
+  "responsive": [
+    {
+      "width": 320,
+      "overflow": false,
+      "accessibilityViolations": 0
+    },
+    {
+      "width": 390,
+      "overflow": false,
+      "accessibilityViolations": 0
+    },
+    {
+      "width": 768,
+      "overflow": false,
+      "accessibilityViolations": 0
+    },
+    {
+      "width": 1440,
+      "overflow": false,
+      "accessibilityViolations": 0
+    }
+  ],
+  "sha256": "d338d465f4c7b18252ac9375451ba96e8ad8ecddc488413b9eb69c1350f9caf1",
+  "bytes": 9282913,
+  "rangeStatus": 206,
+  "playback": "Advanced normally, then sought to 165 seconds without a media error.",
+  "browserErrors": [],
+  "youtubePublished": false
+}

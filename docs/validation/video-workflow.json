@@ -1,13 +1,13 @@
 {
   "kind": "fictional_normal_account_live_video_workflow",
-  "recordedAt": "2026-09-23T05:21:36.512Z",
+  "recordedAt": "2026-09-23T05:46:30.845Z",
   "provider": "openai",
   "configuredModel": "gpt-5.4-mini",
   "initial": {
     "provider": "openai",
-    "traceId": "req_0b8cdfb8d40e46daa1bd7f2777e44f85",
-    "sourceHash": "5df6958d0af0bc2d20c7c022ed98e52580438baaace8e298cd58ef045b8e5bad",
-    "durationMs": 2139,
+    "traceId": "req_f43c3cae45cd4836b55ce322fc02f9b4",
+    "sourceHash": "026507eba5ef3389b3ce50d6933a140acd2bf44b7c4cdb0443e5dcdc61f035c9",
+    "durationMs": 3664,
     "findings": [
       {
         "product": "OAT BARISTA 6X1L",
@@ -23,10 +23,12 @@
   },
   "credit": {
     "provider": "openai",
-    "traceId": "req_336bd4e6e9084538beee0f545e22be05",
-    "sourceHash": "16fbe691a512a6f6d6a4307e3ba9868f4e39fa4f21d9e6a1030dd348e43cba1a",
-    "durationMs": 2492,
-    "amountCents": 14400
+    "traceId": "req_2c9222086a174afb9b22484cd44dd020",
+    "sourceHash": "5478d9a5891541b4752e210e38c7bcd772035309b30daf78b7cd35c46581910f",
+    "durationMs": 5570,
+    "amountCents": 14400,
+    "summary": "The approved claim is unchanged. 2 reviewed shortage findings retained. 1 credit notes matched for separate verification.",
+    "retainedFindings": 2
   },
   "final": {
     "claimedCents": 21600,
@@ -43,25 +45,30 @@
   "recordingDisclosure": "Fictional documents, normal account, real inference. Setup off camera. Actual captured screens and recorded actions with holds for narration. Not sample replay or a latency benchmark.",
   "video": {
     "path": "deliverables/remainder-demo-final.mp4",
-    "sha256": "d338d465f4c7b18252ac9375451ba96e8ad8ecddc488413b9eb69c1350f9caf1",
+    "sha256": "6f3d62515bbcf0c26d31eb9e5a44303495eb07b580dcc23bf4e006226aaa1dca",
     "durationSeconds": 170.88,
     "width": 1920,
     "height": 1080,
     "videoCodec": "H.264",
     "audioCodec": "AAC",
     "sampleRate": 48000,
-    "sizeBytes": 9282913,
+    "sizeBytes": 13629656,
     "captionCues": 44,
     "integratedLoudnessLUFS": -16.7,
     "truePeakDBFS": -1.4,
     "fullDecodePassed": true,
     "representativeFramesInspected": 16,
-    "speechSpedUp": false
+    "speechSpedUp": false,
+    "postCreditSummaryVerifiedAtSeconds": 120,
+    "postCreditSummary": "The approved claim is unchanged. 2 reviewed shortage findings retained. 1 credit notes matched for separate verification.",
+    "aacStreamUnchanged": true
   },
   "voice": {
     "model": "gpt-4o-mini-tts",
     "stockVoice": "cedar",
     "disclosure": "AI-generated presenter voice. No real-person imitation."
   },
-  "earlierAttempt": "An earlier normal-speed capture passed its first analysis but failed the expected-credit assertion. The script did not preserve that raw credit response before cleanup, so its cause is unconfirmed. The instrumented fresh-account run above preserved its response and passed. The successful film does not establish perfect provider reliability."
+  "earlierAttempt": "An earlier normal-speed capture passed its first analysis but failed the expected-credit assertion. The script did not preserve that raw credit response before cleanup, so its cause is unconfirmed. The instrumented fresh-account run above preserved its response and passed. The successful film does not establish perfect provider reliability.",
+  "revisionReason": "Recaptured the real normal-account workflow on the corrected app so the post-credit summary describes the two retained approved findings. Narration and caption files are byte-for-byte unchanged.",
+  "previousVideoSha256": "d338d465f4c7b18252ac9375451ba96e8ad8ecddc488413b9eb69c1350f9caf1"
 }

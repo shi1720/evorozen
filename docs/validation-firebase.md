@@ -27,11 +27,13 @@ The sanitized [browser-workflow report](validation/firebase-browser-workflow.jso
 
 The dashboard's recovery-loop legend created a minimum grid width after a partial credit. At 320 pixels, the dashboard expanded to 326 pixels. Earlier empty-balance layout tests had not exposed it.
 
-The mobile grid now allows its column to shrink, and the recovery ring stacks above the two balance labels on the narrowest screens. The full recovery browser regression now checks the USD 144 credited / USD 72 remaining dashboard at 320 pixels. That test passed locally. The final hosted layout check is pending deployment of this correction.
+The mobile grid now allows its column to shrink, and the recovery ring stacks above the two balance labels on the narrowest screens. The full recovery browser regression now checks the USD 144 credited / USD 72 remaining dashboard at 320 pixels. That test passed locally. The correction was subsequently verified on Cloud Run revision `remainder-00003-cpz` through Firebase. Landing, dashboard, case, and settings all fit at 320, 390, 768, and 1440 pixels. Automated WCAG 2 A/AA checks passed at 320 and 390 pixels, and no browser JavaScript errors were recorded. The [sanitized layout report](validation/firebase-sample-layout.json) also confirms that an explicit `force: true` sample rerun preserved the approved USD 216 claim, USD 144 credit, and USD 72 remainder. This follow-up used zero live model requests.
 
-## Final hosted follow-up
+## Recovery follow-up and final gate
 
-Run after the corrected revision is published:
+The hosted password recovery check confirmed that the server rotated the recovery key and revoked an existing session. It then found a separate UI issue: switching from the recovery-key screen to login retained the old React component state. The application now keys each Auth screen by mode so login mounts fresh. All 15 local browser tests passed, including a new complete recovery, login, and account-deletion regression. Hosted confirmation of that final one-line correction is pending the next deployment. The affected disposable account was deleted successfully, and no additional model calls were made.
+
+Run after the Auth correction is published:
 
 ```sh
 node scripts/verify-hosted-followup.mjs --live --base=https://remainder-desk.web.app

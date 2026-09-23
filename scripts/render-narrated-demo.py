@@ -8,7 +8,8 @@ import difflib
 import json
 import re
 import subprocess
-from PIL import Image, ImageDraw, ImageFont
+import statistics
+from PIL import Image, ImageChops, ImageDraw, ImageFont, ImageStat
 
 ROOT = Path(__file__).resolve().parent.parent
 WORK = ROOT / '.artifacts/live-video'
@@ -126,6 +127,36 @@ def caption_image(text, filename, waiting_shortened=False):
         y += 43
     image.save(filename)
 
+
+# Playwright video timestamps start at the first captured frame, after page creation.
+# Calibrate that small offset against actual scene screenshots so transitions align.
+if 'videoClockOffsetSeconds' not in recording:
+    calibration_dir = WORK / 'calibration'
+    calibration_dir.mkdir(exist_ok=True)
+    offsets = []
+    for mark in recording['marks']:
+        if mark['id'] not in ['title', 'intro', 'invoice', 'receiving', 'findings', 'export', 'remainder', 'architecture']:
+            continue
+        target = mark.get('screenshotAt', mark['end'])
+        window = max(0, target - .65)
+        pattern = calibration_dir / f"{mark['id']}-%03d.png"
+        for old in calibration_dir.glob(f"{mark['id']}-*.png"):
+            old.unlink()
+        run(['-ss', str(window), '-i', recording['source'], '-t', '0.8', '-vf', 'fps=25,scale=160:80', str(pattern)])
+        expected = Image.open(WORK / 'frames' / f"{mark['id']}.png").convert('RGB').resize((160, 80))
+        scores = []
+        for frame in calibration_dir.glob(f"{mark['id']}-*.png"):
+            n = int(frame.stem.rsplit('-', 1)[1])
+            actual = Image.open(frame).convert('RGB')
+            difference = sum(ImageStat.Stat(ImageChops.difference(expected, actual)).mean)
+            scores.append((difference, window + (n - 1) / 25))
+        if scores:
+            _, matched = min(scores)
+            offsets.append(target - matched)
+    assert offsets, 'No screenshot/video clock calibration could be established.'
+    recording['videoClockOffsetSeconds'] = round(statistics.median(offsets), 4)
+    recording['calibration'] = {'method': 'Median image-match offset from eight scene screenshots', 'offsets': offsets}
+    (WORK / 'recording.json').write_text(json.dumps(recording, indent=2))
 
 shortened = set()
 for mark, scene in zip(recording['marks'], manifest['scenes']):

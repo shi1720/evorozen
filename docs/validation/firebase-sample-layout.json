@@ -1,0 +1,127 @@
+{
+  "timestamp": "2026-09-23T05:41:52.024Z",
+  "base": "https://remainder-desk.web.app",
+  "kind": "hosted_recovery_and_demo_layout_followup",
+  "passed": true,
+  "liveModelRequests": 0,
+  "checks": [
+    "labeled sample reproduces the partial-credit state without live inference",
+    "16 hosted viewport/page combinations fit without overflow; mobile axe checks are clean",
+    "fresh-analysis UI submits force:true and preserves the approved sample claim"
+  ],
+  "responsive": [
+    {
+      "page": "landing",
+      "width": 320,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "dashboard",
+      "width": 320,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "case",
+      "width": 320,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "settings",
+      "width": 320,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "landing",
+      "width": 390,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "dashboard",
+      "width": 390,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "case",
+      "width": 390,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "settings",
+      "width": 390,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "landing",
+      "width": 768,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "dashboard",
+      "width": 768,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "case",
+      "width": 768,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "settings",
+      "width": 768,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "landing",
+      "width": 1440,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "dashboard",
+      "width": 1440,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "case",
+      "width": 1440,
+      "overflow": false,
+      "accessibilityViolations": []
+    },
+    {
+      "page": "settings",
+      "width": 1440,
+      "overflow": false,
+      "accessibilityViolations": []
+    }
+  ],
+  "browserErrors": [],
+  "cleanup": {
+    "demo": {
+      "sessionRevoked": true,
+      "workspaceExpiryDays": 7,
+      "workspaceId": "8f53095c-4fc0-43f8-a166-dd5b6ab17b69",
+      "administrativelyDeleted": true,
+      "deletedAt": "2026-09-23T05:44:12.187Z"
+    }
+  },
+  "demoWorkspaceId": "8f53095c-4fc0-43f8-a166-dd5b6ab17b69",
+  "sampleTotals": {
+    "claimedCents": 21600,
+    "creditedCents": 14400,
+    "remainingCents": 7200,
+    "provider": "demo"
+  }
+}

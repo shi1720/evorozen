@@ -30,9 +30,10 @@ async function scene(id, work) {
   console.log(`Recording ${id}`);
   await work();
   await page.screenshot({ path: path.join(dir, 'frames', `${id}.png`) });
+  const screenshotAt = (Date.now() - clock) / 1000;
   const remaining = item.duration - (Date.now() - clock) / 1000 + start;
   if (remaining > 0 && !process.argv.includes('--fast-debug')) await page.waitForTimeout(remaining * 1000);
-  marks.push({ id, start, end: (Date.now() - clock) / 1000, requestedDuration: item.duration });
+  marks.push({ id, start, screenshotAt, end: (Date.now() - clock) / 1000, requestedDuration: item.duration });
 }
 async function removeCard() { await page.evaluate(() => document.querySelector('#video-title-card')?.remove()); }
 async function card(kicker, headline, lines, footnote) {
@@ -79,6 +80,7 @@ try {
     const response = page.waitForResponse(r => r.url().endsWith(`/api/cases/${id}/analyze`) && r.request().method() === 'POST', { timeout: 100000 });
     await page.getByRole('button', { name: 'Analyze documents', exact: true }).first().click();
     const result = await (await response).json();
+    await fs.writeFile(path.join(dir, 'live-initial-response.json'), JSON.stringify(result, null, 2));
     if (!result.case) throw new Error(`Live analysis failed: ${result.error?.code || 'unknown'}`);
     const a = result.case.analysis;
     if (a.provider !== 'openai') throw new Error('The analysis did not use OpenAI.');
@@ -130,7 +132,8 @@ try {
     await fs.writeFile(path.join(dir, 'live-credit-response.json'), JSON.stringify(result, null, 2));
     const a = result.case?.analysis;
     if (a?.provider !== 'openai' || a.credits.length !== 1 || a.credits[0].amountCents !== 14400) throw new Error('Live credit extraction failed: ' + JSON.stringify({ error: result.error, provider: a?.provider, credits: a?.credits, warnings: a?.warnings }));
-    proof.credit = { provider: a.provider, traceId: a.traceId, sourceHash: a.sourceHash, durationMs: a.durationMs, amountCents: a.credits[0].amountCents };
+    if (!a.summary.includes('2 reviewed shortage findings retained')) throw new Error('Approved-claim summary does not preserve the two reviewed findings.');
+    proof.credit = { provider: a.provider, traceId: a.traceId, sourceHash: a.sourceHash, durationMs: a.durationMs, amountCents: a.credits[0].amountCents, summary: a.summary, retainedFindings: a.findings.length };
     await page.getByRole('button', { name: 'Inspect evidence', exact: true }).click();
     await page.waitForTimeout(1800);
     await page.getByRole('button', { name: 'Close dialog' }).click();

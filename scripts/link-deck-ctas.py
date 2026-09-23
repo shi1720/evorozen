@@ -15,7 +15,7 @@ for name,data in list(files.items()):
  changed=False
  for shape in root.findall('.//p:sp',NS):
   value=''.join(shape.xpath('.//a:t/text()',namespaces=NS))
-  url='https://remainder-apex.onrender.com' if 'remainder-apex.onrender.com' in value else 'https://github.com/shi1720/evorozen' if 'github.com/shi1720/evorozen' in value else None
+  url='https://remainder-desk.web.app' if 'remainder-desk.web.app' in value else 'https://github.com/shi1720/evorozen' if 'github.com/shi1720/evorozen' in value else None
   if not url:continue
   rid='rIdRemainderLink'+str(count+1)
   rel=E.SubElement(rels,'{'+REL+'}Relationship',Id=rid,Type=NS['r']+'/hyperlink',Target=url,TargetMode='External')

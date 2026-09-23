@@ -20,7 +20,7 @@ The remaining story, technology tags, links, gallery, and video fields have **no
 
 The final [narrated video](../deliverables/remainder-demo-final.mp4) is **170.88 seconds**, 1920 by 1080, with audible narration and visible captions. It records actual OpenAI analysis in a normal account using fictional documents. The voice is an explicitly disclosed AI presenter. [Video validation](validation-video.md)
 
-The signed-in YouTube Studio channel was verified as **Shivam Gupta**, channel ID `UCLPUcp65Khk_8n_T1UjQiSQ`. No YouTube upload or public YouTube watch URL has been verified. The deployment also includes a standalone narrated player at https://remainder-desk.web.app/demo/, to be checked after the final release. The browser-control problem currently prevents completing publication.
+The signed-in YouTube Studio channel was verified as **Shivam Gupta**, channel ID `UCLPUcp65Khk_8n_T1UjQiSQ`. No YouTube upload or public YouTube watch URL has been verified. A standalone narrated player is live at https://remainder-desk.web.app/demo/. Signed-out playback, seeking, 44 caption cues, file integrity, and layouts from 320 to 1440 pixels passed. This public player does not substitute for the requested YouTube publication. The browser-control problem currently prevents completing publication.
 
 | Field | Ready content |
 | --- | --- |

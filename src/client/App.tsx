@@ -320,6 +320,7 @@ export function App() {
             path={`/${mode}`}
             element={
               <Auth
+                key={mode}
                 mode={mode}
                 onUser={(value) => {
                   setSessionExpired(false);

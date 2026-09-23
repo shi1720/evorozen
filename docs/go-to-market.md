@@ -30,6 +30,24 @@ The trial must answer whether the customer has enough cases, whether Remainder i
 
 ## Unit economics: assumptions exposed
 
+The deployed primary model is OpenAI `gpt-5.4-mini`. Standard text pricing checked on 23 September 2026 is **$0.75 per million input tokens and $4.50 per million output tokens**. The following estimates assume uncached input and include reasoning tokens in the output allowance. They are planning scenarios, not measured customer usage or a provider invoice. [Official model pricing](https://developers.openai.com/api/docs/models/gpt-5.4-mini)
+
+At 100 cases, two analyses per case, and a 10% retry allowance, the plan budgets **220 inference requests per month**. Using the hosting, support, and processing assumptions listed below gives $4.67 of other monthly variable cost:
+
+| Assumed tokens per request | AI cost per request | AI cost at 220 requests | Contribution from $29 before excluded costs |
+| --- | ---: | ---: | ---: |
+| 4,000 input + 1,500 output | $0.00975 | $2.15 | $22.18, about 76.5% |
+| 12,000 input + 3,000 output | $0.02250 | $4.95 | $19.38, about 66.8% |
+| 30,000 input + 6,000 output | $0.04950 | $10.89 | $13.44, about 46.3% |
+
+Compute each request as `(input_tokens × 0.75 + output_tokens × 4.50) / 1,000,000`. These estimates exclude optional sponsor-memory requests, onboarding, acquisition, salaries, taxes, and other costs identified below. Longer documents and review corrections can materially change contribution. Observe real token usage, failure rate, support time, and retention before offering the allowance commercially.
+
+The public pilot currently permits **100 attempted AI calls per UTC day globally and 10 per workspace**. These are enforced request limits, not a dollar spending cap or a subscription plan. Twenty-five fully used 100-case accounts would require around 5,500 monthly calls under this scenario, beyond the current shared pilot limit. Fund and raise capacity deliberately before selling that volume.
+
+### Optional sponsor-inference scenarios
+
+The remaining tables examine the implemented optional Evorozen inference adapter. They are separate from the deployed OpenAI cost scenarios above.
+
 No paid Evorozen per-call price has been verified. The public offer is the **first 50 calls free**, not a renewable production budget. Confirm paid capacity and terms before committing to customer service levels. [Provider offer](https://pulse.evorozen.com/dashboard)
 
 The following sensitivity model evaluates one fully used $29 account. It deliberately replaces an unknown API tariff with three hypothetical rates. It is not a provider quotation, measured cost, or promised margin. The base case assumes one outbound request per analysis. The Evorozen adapter now splits longer inputs into bounded extraction windows because of its observed 2,000-character prompt limit; each window consumes another call. Therefore, this base case is not a measured cost estimate for the sponsor integration.
@@ -69,11 +87,11 @@ At these assumptions, preserving a 70% contribution before excluded costs requir
 
 Measure actual calls, input size, retries, latency, successful analyses, and support minutes before finalizing the plan. If the economics fail, reduce the included allowance, raise price, improve caching or extraction, or change the provider with explicit disclosure. Do not silently downgrade real accounts to fictional results.
 
-## A finite 50-call launch budget
+## Optional sponsor-key allowance
 
 Optional signed Evorozen memory adds storage requests for schema setup, recall, writes and deletion. These can consume the same sponsor-key allowance as inference. The implementation applies separate conservative memory caps, but those are application safeguards rather than a provider balance meter. Include actual memory traffic in the measured cost and remaining-call ledger; the base-case tables above exclude it.
 
-The allocation below is an initial budget for one 50-call provider allowance. Replace it with the real remaining balance after integration work; failed requests may also consume capacity. Do not create repeated accounts or keys to evade provider limits.
+The allocation below is a historical planning budget for one 50-call sponsor allowance, not the OpenAI deployment budget. Replace it with the real remaining balance after integration work; failed requests may also consume capacity. Do not create repeated accounts or keys to evade provider limits.
 
 | Activity | Maximum planned calls | Expected use |
 | --- | ---: | --- |
@@ -170,4 +188,4 @@ The potential moat is a trusted recurring workflow, tenant-specific confirmed su
 - “Our pricing hypothesis is $29 per location per month. Our first validation channel is independent operators and hospitality bookkeepers.”
 - “We distinguish credit-note evidence from accounting application and cash recovery.”
 
-The [public preview](https://remainder-apex.onrender.com) is deployed, and [synthetic live integration results](validation-ai.md) are recorded. This does not establish customer adoption. Only add a customer quote, usage count, or commercial outcome after it exists and can be checked. Public evidence and competitive context are documented in [the research note](research.md).
+The [Firebase app](https://remainder-desk.web.app) and [narrated demonstration](https://remainder-desk.web.app/demo/) are deployed. The [hosted workflow](validation-firebase.md), [OpenAI evaluation](validation/model-eval-openai-results.json), and separate [signed-memory results](validation-ai.md) record the integration evidence. This does not establish customer adoption. Only add a customer quote, usage count, or commercial outcome after it exists and can be checked. Public evidence and competitive context are documented in [the research note](research.md).

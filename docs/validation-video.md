@@ -8,19 +8,19 @@ A disposable normal account used fictional Northstar source records on the produ
 
 | Stage | Live trace | Observed result |
 | --- | --- | --- |
-| Initial evidence analysis | `req_0b8cdfb8d40e46daa1bd7f2777e44f85` | Two supported shortages totaling USD 216.00 |
-| Added credit-note analysis | `req_336bd4e6e9084538beee0f545e22be05` | One matched USD 144.00 credit note |
+| Initial evidence analysis | `req_f43c3cae45cd4836b55ce322fc02f9b4` | Two supported shortages totaling USD 216.00 |
+| Added credit-note analysis | `req_2c9222086a174afb9b22484cd44dd020` | One matched USD 144.00 credit note |
 | Owner verification | Application transaction | USD 216.00 claimed, USD 144.00 verified, USD 72.00 remaining; status `partial` |
 
 The owner selection and approval controls were exercised. PDF and email exports downloaded successfully. The decoded follow-up email acknowledged the credit and requested USD 72.00. No supplier email was sent. No uncaught page errors occurred in the successful capture. Password-confirmed account deletion returned HTTP 200 afterward.
 
-An earlier capture passed initial analysis but failed the expected-credit assertion. Its script did not preserve the credit response before account cleanup, so that cause is unconfirmed. The instrumented fresh-account run above retained its response and passed. This is evidence of a successful integration workflow, not a claim of perfect provider reliability. The final film uses this successful run.
+An earlier capture passed initial analysis but failed the expected-credit assertion. Its script did not preserve the credit response before account cleanup, so that cause is unconfirmed. The instrumented fresh-account run above retained its response and passed. This is evidence of a successful integration workflow, not a claim of perfect provider reliability. The final film uses the later successful recapture on the corrected application. At 120 seconds, its summary states that the approved claim is unchanged and two reviewed shortage findings are retained. The narration, SRT, and VTT files and the encoded AAC audio stream are unchanged from the prior approved edit.
 
 [Sanitized machine-readable evidence](validation/video-workflow.json).
 
 ## Presentation and audio checks
 
-All 16 representative scene frames were visually inspected after final rendering. The title, source documents, live provider label, both shortages, approval, credit, remainder, exported follow-up excerpt, commercial plan, and closing URL appear in the intended order. Captions sit outside the application image rather than covering its controls.
+All 16 representative scene frames were visually inspected after the refreshed final rendering, including a full-resolution check at 120 seconds. The title, source documents, live provider label, both shortages, approval, credit, remainder, exported follow-up excerpt, commercial plan, and closing URL appear in the intended order. Captions sit outside the application image rather than covering its controls.
 
 Narration uses OpenAI's stock `cedar` voice with `gpt-4o-mini-tts`. The film discloses the AI-generated presenter voice on the title and closing cards and throughout the caption strip. It does not impersonate Shivam Gupta. Speech was not accelerated. Word-level transcription supplied caption timings; approved script spelling corrects automatic transcription of names and minor recognizer errors.
 
@@ -29,8 +29,8 @@ Measured final integrated loudness is **-16.7 LUFS**, loudness range **3.1 LU**,
 ## Final file identity
 
 - File: `deliverables/remainder-demo-final.mp4`
-- Size: **9,282,913 bytes**
+- Size: **13,629,656 bytes**
 - Duration: **170.880 seconds**
-- SHA-256: `d338d465f4c7b18252ac9375451ba96e8ad8ecddc488413b9eb69c1350f9caf1`
+- SHA-256: `6f3d62515bbcf0c26d31eb9e5a44303495eb07b580dcc23bf4e006226aaa1dca`
 
 Local verification does not establish YouTube publication. Preserve the actual public watch URL and verify signed-out playback after uploading this exact file. Firebase hosting verification is a separate deployment check.

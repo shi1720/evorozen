@@ -19,13 +19,14 @@ Scope: the landing page, authenticated workspace, account flows, document intake
 | Empty document searches looked like an unused workspace. | The empty state now identifies a search with no matches. List and settings failures provide a retry action. |
 | Provider privacy copy incorrectly assumed every deployment used unpaid Gemini. | The notice follows the configured provider and keeps the unpaid-Gemini conditions explicitly conditional. No unverified OpenAI retention or training claim is made. |
 | Deliberate reanalysis reused a cached response when the evidence was unchanged. | Existing analyses now explicitly request a fresh pass, with clear AI-request usage copy and an accurately labeled demo replay. First analysis remains unforced. |
+| Completing password recovery left the recovery-key screen visible after navigating to login. | Auth screens are keyed by mode, so the login form mounts fresh. The browser regression completes recovery, logs in with the new password, and deletes its test account. |
 | Client copy contained em dashes. | All em dashes were removed from client source copy. |
 
 Additional refinements include blocking dismissal of forms while their mutations are pending, showing clipboard-copy failures beside recovery keys, distinguishing unavailable provider status from an unconfigured provider, and rejecting unexpected non-JSON API responses as recoverable errors.
 
 ## Verification
 
-- All 14 Playwright browser tests passed. Eight new regression scenarios complement the six existing end-to-end, PDF-upload, deletion, and accessibility checks.
+- All 15 Playwright browser tests passed. Nine new regression scenarios complement the six existing end-to-end, PDF-upload, deletion, and accessibility checks.
 - TypeScript type checking and formatting checks passed.
 - Landing, dashboard, case detail, and settings were inspected at 320, 390, 768, 1024, and 1440 pixels: 20 page/viewport combinations.
 - All 20 combinations stayed inside the page viewport. Wide tables retain their own horizontal scroll areas.

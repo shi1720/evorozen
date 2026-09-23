@@ -1,6 +1,6 @@
 # Firebase release and operations
 
-The canonical application address is **https://remainder-desk.web.app**.
+The canonical application address is **https://remainder-desk.web.app**. The narrated public demonstration is **https://remainder-desk.web.app/demo/**.
 
 Firebase Hosting forwards the application and API to the dedicated `remainder` Cloud Run service in `europe-west1`. The app serves its own security headers, static files, and deep links. Neon PostgreSQL remains the durable database. Runtime secrets are stored in Google Secret Manager, accessible only through the dedicated `remainder-runtime` service account and existing authorized operators.
 

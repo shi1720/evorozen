@@ -1,0 +1,20 @@
+{
+  "timestamp": "2026-09-23T05:39:55.355Z",
+  "base": "https://remainder-desk.web.app",
+  "kind": "hosted_recovery_and_demo_layout_followup",
+  "passed": false,
+  "liveModelRequests": 0,
+  "checks": [
+    "recovery rotates the key and revokes an existing Firebase session"
+  ],
+  "responsive": [],
+  "browserErrors": [],
+  "cleanup": {
+    "normalAccount": {
+      "deleted": true,
+      "sessionRejected": true,
+      "loginRejected": true
+    }
+  },
+  "error": "locator.fill: Timeout 25000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Email address', { exact: true })\u001b[22m\n"
+}

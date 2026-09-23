@@ -205,3 +205,41 @@ test('deliberately rerunning an existing analysis requests a fresh review', asyn
   ).toBeVisible();
   await expect(page.locator('.finding-card')).toHaveCount(2);
 });
+
+test('password recovery returns to a fresh login form and restores the workspace', async ({
+  page,
+}) => {
+  const email = `recovery-ui-${Date.now()}@example.com`;
+  const oldPassword = 'old-recovery-ui-password-2026';
+  const nextPassword = 'new-recovery-ui-password-2026';
+  const registered = await page.request.post('/api/auth/register', {
+    data: {
+      name: 'Recovery UI Reviewer',
+      workspaceName: 'Recovery UI Cafe',
+      email,
+      password: oldPassword,
+      currency: 'USD',
+    },
+  });
+  expect(registered.status()).toBe(201);
+  const { recoveryCode } = await registered.json();
+  await page.goto('/recover');
+  await page.getByLabel('Email address', { exact: true }).fill(email);
+  await page.getByLabel('Recovery key', { exact: true }).fill(recoveryCode);
+  await page.getByLabel('New password', { exact: true }).fill(nextPassword);
+  await page.getByRole('button', { name: 'Reset password', exact: true }).click();
+  await expect(page.getByText('Keep your recovery key safe.')).toBeVisible();
+  await expect(page.locator('.recovery-code code')).not.toHaveText(recoveryCode);
+  expect((await page.request.get('/api/auth/me')).status()).toBe(401);
+  await page.getByRole('button', { name: 'Back to log in', exact: true }).click();
+  await expect(page).toHaveURL('/login');
+  await expect(page.getByLabel('Email address', { exact: true })).toBeVisible();
+  await expect(page.locator('.recovery-code')).toHaveCount(0);
+  await page.getByLabel('Email address', { exact: true }).fill(email);
+  await page.getByLabel('Password', { exact: true }).fill(nextPassword);
+  await page.getByRole('button', { name: 'Log in', exact: true }).click();
+  await expect(page.getByText('Let’s put your first credit in sight.')).toBeVisible();
+  expect(
+    (await page.request.delete('/api/account', { data: { password: nextPassword } })).status(),
+  ).toBe(200);
+});

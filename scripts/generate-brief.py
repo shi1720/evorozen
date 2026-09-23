@@ -49,7 +49,7 @@ rule(418)
 line(44,447,'THE PRODUCT',font='SansBold',size=10,color=FOREST)
 para(44,461,235,'Bring invoice and receiving evidence into one case. Review AI-proposed findings with source quotations. Export the claim and evidence PDF. Match a later credit note and keep the remainder open.',size=10.8,leading=16)
 line(318,447,'THE AI BOUNDARY',font='SansBold',size=10,color=FOREST)
-para(318,461,232,'Gemini passed two live synthetic cases. Optional Evorozen memory stores signed, reviewed aliases; its production module passed a live round-trip. Code validates evidence and money. Sponsor inference was unavailable during testing.',size=10.8,leading=16)
+para(318,461,232,'OpenAI gpt-5.4-mini proposes findings. Code validates evidence and money. The film shows two real AI requests. Optional signed Evorozen memory was verified separately; it recalls reviewed supplier aliases.',size=10.8,leading=16)
 
 line(44,578,'THE FIRST CUSTOMERS',font='SansBold',size=10,color=FOREST)
 para(44,592,235,'Independent cafes and hospitality bookkeepers. Begin with recent, redacted cases and measure review time, corrections, repeat use, and paid commitments.',size=10.8,leading=16)
@@ -57,11 +57,11 @@ line(318,578,'THE BUSINESS HYPOTHESIS',font='SansBold',size=10,color=FOREST)
 para(318,592,232,'$29 per location per month for 100 claim packs with a defined request budget. A guided trial comes first. Provider cost and support time determine a viable allowance.',size=10.8,leading=16)
 
 rule(701)
-para(44,716,507,'Live preview on Render + Neon PostgreSQL. Integration checks use synthetic data, not customers or cash recovery. Evorozen offers the first 50 calls free: a finite allowance shared across any sponsor inference and memory requests.',size=8.8,leading=12,color=MUTED)
-line(44,770,'Evidence: docs/validation-ai.md and docs/research.md',size=8,color=MUTED)
+para(44,716,507,'Live on Firebase Hosting + Cloud Run + Neon PostgreSQL. Six fixed synthetic model cases passed. The narrated film follows a real two-stage account workflow with fictional documents. No customer traction or cash recovery is claimed.',size=8.8,leading=12,color=MUTED)
+line(44,770,'Evidence: docs/validation-ai.md and docs/validation-video.md',size=8,color=MUTED)
 c.linkURL('https://github.com/shi1720/evorozen/blob/main/docs/validation-ai.md',(44,H-774,410,H-760),relative=0,thickness=0)
-line(44,791,'Open the live app: remainder-apex.onrender.com',font='SansBold',size=11,color=FOREST)
-c.linkURL('https://remainder-apex.onrender.com',(44,H-795,440,H-779),relative=0,thickness=0)
+line(44,791,'Open the live app: remainder-desk.web.app',font='SansBold',size=11,color=FOREST)
+c.linkURL('https://remainder-desk.web.app',(44,H-795,440,H-779),relative=0,thickness=0)
 line(44,817,'github.com/shi1720/evorozen',font='SansBold',size=10,color=FOREST)
 c.linkURL('https://github.com/shi1720/evorozen',(44,H-821,300,H-805),relative=0,thickness=0)
 line(428,817,'23 September 2026',size=8.5,color=MUTED)
@@ -69,6 +69,8 @@ c.showPage();c.save()
 reader=PdfReader(str(OUT))
 assert len(reader.pages)==1
 text=reader.pages[0].extract_text()
-for expected in ['$216','$144','$72','Shivam Gupta','first 50']:
+for expected in ['$216','$144','$72','Shivam Gupta','gpt-5.4-mini','remainder-desk.web.app']:
     assert expected in text,expected
+for stale in ['onrender.com','Gemini','\u2014']:
+    assert stale not in text,stale
 print(OUT)
