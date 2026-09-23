@@ -1,11 +1,12 @@
 """Render a separately labeled integration-evidence card for the silent walkthrough."""
 from pathlib import Path
+import os
 from PIL import Image,ImageDraw,ImageFont
 root=Path(__file__).resolve().parent.parent
 out=root/'.artifacts/video/live-proof.png';out.parent.mkdir(parents=True,exist_ok=True)
-fonts=Path('/System/Library/Fonts/Supplemental')
-f=lambda size,bold=False:ImageFont.truetype(str(fonts/('Arial Bold.ttf' if bold else 'Arial.ttf')),size)
-serif=ImageFont.truetype(str(fonts/'Georgia.ttf'),78)
+fonts=Path(os.environ.get('REMAINDER_FONT_DIR',root/'assets/fonts'))
+f=lambda size,bold=False:ImageFont.truetype(str(fonts/('NotoSans-Bold.ttf' if bold else 'NotoSans-Regular.ttf')),size)
+serif=ImageFont.truetype(str(fonts/'NotoSerif-Regular.ttf'),78)
 im=Image.new('RGB',(1920,1080),'#f7f8f5');d=ImageDraw.Draw(im)
 def text(x,y,t,font,color='#194d3b'):d.text((x,y),t,font=font,fill=color)
 text(150,112,'INTEGRATION EVIDENCE  /  VERIFIED SEPARATELY',f(21,True))

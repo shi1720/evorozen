@@ -167,12 +167,18 @@ deliverables/         Pitch deck, product brief, silent walkthrough and evidence
 - [Demo recording runbook](docs/demo-runbook.md)
 - [Silent 2:50 walkthrough](deliverables/remainder-walkthrough-silent.mp4) and [voiceover/editing instructions](docs/video-editing.md)
 - [AI integration validation](docs/validation-ai.md)
+- [Six-case live model evaluation](docs/validation-model-eval.md)
+- [Public deployment and restore verification](docs/validation-deployment.md)
+- [Final submission handoff](docs/submission-handoff.md)
+- [Operating and backup guide](docs/operations.md)
+- [Optional artifact reproduction](docs/reproduce-assets.md)
 - [Independent judge review](docs/judge-review.md)
 - [Go-to-market plan and commercial assumptions](docs/go-to-market.md)
 - [Research and source notes](docs/research.md)
 - [Judging checklist](docs/judging-checklist.md)
 - [Pitch deck](deliverables/remainder-pitch.pptx)
 - [Product brief](deliverables/remainder-brief.pdf)
+- [Optional asset reproduction](docs/reproduce-assets.md)
 - [Example evidence pack](deliverables/sample-claim-evidence.pdf)
 
 Revenue, active customers, and retention are not claimed without evidence. Workspace metrics are derived from stored events and records; fictional demo use is marked separately. Proposed pricing and distribution plans are hypotheses for the pilot, not achieved traction.

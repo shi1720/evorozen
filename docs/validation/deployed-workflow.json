@@ -1,0 +1,53 @@
+{
+  "kind": "deployed_synthetic_workflow_verification",
+  "timestamp": "2026-09-23T04:41:19.907Z",
+  "url": "https://remainder-apex.onrender.com",
+  "analysisCommit": "45c45d17fa50b2b025138bd8d359bdeafb433a11",
+  "persistenceVerifiedAfterCommit": "01570e9177fbc56dde90bab0a9c39e68e152d209",
+  "provider": "gemini",
+  "traceId": "3lazaunTF9aX3boP8JmV4A0",
+  "sourceHash": "1c08641c1881a0ac8b794d1dcc48a6b8d26fbd1d3e84884cec10cbdd92491905",
+  "actualDurationMs": 5744,
+  "currency": "GBP",
+  "claimedCents": 6355,
+  "creditedCents": 1875,
+  "remainingCents": 4480,
+  "status": "partial",
+  "memoryTrace": "39ec7cd2-2a5e-49a3-9881-4190f0eb42a1",
+  "checks": [
+    "HTTPS signup with Secure HttpOnly cookie",
+    "Real workspace creation",
+    "Supplier aliases and all three synthetic documents saved",
+    "Live Gemini analysis through deployed API",
+    "Explicit reviewed approval",
+    "Partial credit remains open at GBP44.80",
+    "All four downloads return real files; follow-up asks only GBP44.80",
+    "Persistent account session and GBP44.80 survive service redeploy",
+    "Actual HTTPS browser renders case with zero uncaught JavaScript errors",
+    "Password-confirmed deletion removes synthetic account and revokes session"
+  ],
+  "deletedWorkspaceRows": {
+    "users": 0,
+    "sessions": 0,
+    "suppliers": 0,
+    "recovery_cases": 0,
+    "verified_credits": 0,
+    "activities": 0
+  },
+  "restore": {
+    "passed": true,
+    "method": "PostgreSQL custom-format pg_dump and pg_restore into a separate disposable schema-only Neon branch",
+    "databaseVersion": "17",
+    "clientVersion": "18.6",
+    "restoredSyntheticCase": {
+      "currency": "GBP",
+      "claimedCents": 6355,
+      "creditedCents": 1875,
+      "remainingCents": 4480
+    },
+    "backupBytes": 22032,
+    "productionDatabaseModified": false,
+    "automaticBackupScheduleConfigured": false
+  },
+  "disclaimer": "All business documents and account details were fictional. This is technical verification, not customer traction or cash recovery."
+}

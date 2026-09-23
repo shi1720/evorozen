@@ -36,7 +36,7 @@ The public preview explicitly selects Gemini for inference. The application also
 
 The architecture supports an explicitly configured alternative provider. The interface must accurately identify the provider used. Fixture replay is reserved for labeled demo workspaces. Real accounts without an available provider receive an actionable error.
 
-The two live Gemini checks produced the expected totals: USD 216.00 claimed, 144.00 verified credit, 72.00 remaining; and GBP 63.55 claimed, 18.75 verified credit, 44.80 remaining. These are fictional integration fixtures, not customers or an accuracy benchmark. See [AI validation](validation-ai.md) for evidence and limits.
+The two live Gemini checks produced the expected totals: USD 216.00 claimed, 144.00 verified credit, 72.00 remaining; and GBP 63.55 claimed, 18.75 verified credit, 44.80 remaining. These are fictional integration fixtures, not customers or an accuracy benchmark. See [AI validation](validation-ai.md), the [six-case evaluation](validation-model-eval.md), and the [hosted workflow verification](validation-deployment.md) for evidence and limits.
 
 ## The hardest design choice
 
@@ -75,7 +75,7 @@ Created by **Shivam Gupta**, with AI-assisted research, design, and engineering.
 | Field | Current value or action |
 | --- | --- |
 | GitHub | [Public source repository](https://github.com/shi1720/evorozen) |
-| Public working app | [Remainder live preview](https://remainder-apex.onrender.com) — Render + Neon PostgreSQL. Homepage and database health returned HTTP 200 on September 23. Final workflow checks are recorded by the release owner. |
+| Public working app | [Remainder live preview](https://remainder-apex.onrender.com) — Render + Neon PostgreSQL. Homepage and database health returned HTTP 200 on September 23. The [hosted real-AI workflow, redeploy persistence, cleanup and restore rehearsal](validation-deployment.md) passed using fictional records. |
 | Video | Silent 170-second walkthrough prepared in `deliverables/remainder-walkthrough-silent.mp4`; add Shivam’s narration and the verified public/unlisted URL. |
 | Live AI evidence | Gemini 3.5 Flash-Lite: two synthetic extraction packs passed. Evorozen: signed production memory module passed live. See [validation](validation-ai.md). |
 | Traction | Add only measured non-demo usage. Otherwise retain the pre-launch statement. |
@@ -90,3 +90,7 @@ Created by **Shivam Gupta**, with AI-assisted research, design, and engineering.
 - **Live service:** The public preview is deployed and its health endpoint responds. Preserve the final production smoke-test record, verify provider capacity, and check all links again before submission. A healthy endpoint alone is not a complete workflow test.
 - **Traction:** No real users, customers, revenue, or recovered money are asserted by this package. Optional traction bonus requires actual evidence.
 - **Final submission:** Verify all attachments and links, review the final preview, and retain the confirmation receipt after submission. A prepared entry is not a submitted entry.
+
+## Final technical evidence for the submitter
+
+[Deployment validation](validation-deployment.md) records the real hosted workflow, signed memory, exports, redeploy persistence, and database restore. [Six-case evaluation](validation-model-eval.md) records three correct supported shortages and three safely blocked problematic cases. These are fictional integration tests, not customer traction. The public preview uses unpaid Gemini data terms; use non-confidential records and complete the documented customer-data launch gates before onboarding real businesses.

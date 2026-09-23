@@ -5,10 +5,11 @@ import { pathToFileURL } from 'node:url';
 import { execFileSync } from 'node:child_process';
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
-const runtime = process.env.REMAINDER_ARTIFACT_RUNTIME || '/Users/shivamgupta/.cache/codex-runtimes/codex-primary-runtime/dependencies';
+const runtime = process.env.REMAINDER_ARTIFACT_RUNTIME;
+const skill = process.env.REMAINDER_PRESENTATIONS_SKILL;
+if (!runtime || !skill) throw new Error('Set REMAINDER_ARTIFACT_RUNTIME and REMAINDER_PRESENTATIONS_SKILL to your installed artifact runtime and presentation helpers. See docs/reproduce-assets.md.');
 process.env.RUNTIME_NODE_MODULES = path.join(runtime, 'node/node_modules');
 process.env.RUNTIME_NODE = path.join(runtime, 'node/bin/node');
-const skill = process.env.REMAINDER_PRESENTATIONS_SKILL || '/Users/shivamgupta/.codex/plugins/cache/openai-primary-runtime/presentations/26.904.11930/skills/presentations';
 const tmp = path.join(root, '.artifacts/remainder');
 const out = path.join(root, 'deliverables');
 await fs.mkdir(tmp, {recursive:true});

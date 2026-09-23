@@ -10,8 +10,7 @@ from reportlab.lib.styles import ParagraphStyle
 from pypdf import PdfReader
 
 ROOT = Path(__file__).resolve().parents[1]
-RUNTIME = Path(os.environ.get('REMAINDER_ARTIFACT_RUNTIME', '/Users/shivamgupta/.cache/codex-runtimes/codex-primary-runtime/dependencies'))
-FONTS = RUNTIME / 'native/libreoffice-headless/libreoffice/LibreOfficeDev.app/Contents/Resources/fonts/truetype'
+FONTS = Path(os.environ.get('REMAINDER_FONT_DIR', ROOT / 'assets/fonts'))
 for name, filename in [('Sans','NotoSans-Regular.ttf'),('SansBold','NotoSans-Bold.ttf'),('Serif','NotoSerif-Regular.ttf')]:
     pdfmetrics.registerFont(TTFont(name,str(FONTS/filename)))
 OUT = ROOT/'deliverables/remainder-brief.pdf'

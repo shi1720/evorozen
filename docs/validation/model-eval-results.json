@@ -1,0 +1,350 @@
+{
+  "kind": "small_synthetic_live_pipeline_evaluation",
+  "model": "gemini-3.5-flash-lite",
+  "startedAt": "2026-09-23T04:37:02.406Z",
+  "completedAt": "2026-09-23T04:37:14.695Z",
+  "fixturesSha256": "7968e983f3b641e7b825385aa28d53b7947afb3e969ab9387eb4dd7b7026b1e8",
+  "requestCount": 6,
+  "results": [
+    {
+      "id": "inr-csv-tins",
+      "label": "INR CSV: three missing lentil tins; a second item fully received",
+      "currency": "INR",
+      "expected": [
+        {
+          "product": "RED LENTIL TIN 3KG",
+          "amountCents": 55650
+        }
+      ],
+      "timestamp": "2026-09-23T04:37:02.407Z",
+      "provider": "gemini",
+      "model": "gemini-3.5-flash-lite",
+      "traceId": "b1ezat2SFrLmqfkPnbfc-Q4",
+      "sourceHash": "9938b4cd6816db6bd38972d15521b6951c0ceb0a8c31828aefb003d1206e99b7",
+      "requestCount": 1,
+      "durationMs": 2445,
+      "emittedFindings": 1,
+      "supportedFindings": 1,
+      "matchedFindings": 1,
+      "blockedFindings": 0,
+      "wrongSupportedFindings": 0,
+      "missedExpectedFindings": 0,
+      "supportedAmountCents": 55650,
+      "expectedAmountCents": 55650,
+      "passed": true,
+      "findings": [
+        {
+          "id": "finding-10d40aa5f870e1118e81",
+          "product": "RED LENTIL TIN 3KG",
+          "kind": "shortage",
+          "invoicedQuantity": 12,
+          "receivedQuantity": 9,
+          "unitPriceCents": 18550,
+          "amountCents": 55650,
+          "unit": "tins",
+          "explanation": "Invoiced 12 tins of RED LENTIL TIN 3KG but only 9 tins were received according to the delivery note.",
+          "confidence": "high",
+          "evidence": [
+            {
+              "documentId": "inr-csv-tins-0",
+              "quote": "RED LENTIL TIN 3KG,12,tins,INR 185.50,INR 2226.00"
+            },
+            {
+              "documentId": "inr-csv-tins-1",
+              "quote": "RED LENTIL TIN 3KG,9,tins"
+            },
+            {
+              "documentId": "inr-csv-tins-0",
+              "quote": "Item,Qty,Unit,Unit Price,Total"
+            },
+            {
+              "documentId": "inr-csv-tins-1",
+              "quote": "Item,Received,Unit"
+            }
+          ],
+          "accepted": false,
+          "needsReview": false
+        }
+      ],
+      "warnings": []
+    },
+    {
+      "id": "eur-markdown-alias",
+      "label": "EUR Markdown tables: two flour bags missing with an explicit supplier naming equivalence",
+      "currency": "EUR",
+      "expected": [
+        {
+          "product": "STONEGROUND FLOUR 10KG",
+          "amountCents": 3470
+        }
+      ],
+      "timestamp": "2026-09-23T04:37:04.860Z",
+      "provider": "gemini",
+      "model": "gemini-3.5-flash-lite",
+      "traceId": "cVezaoXcF9O0g8UPitDV2Q0",
+      "sourceHash": "66a67a704581355fb81ac0c36fc69ec8d70278d7cca3c9110eadd5f38ea85b6e",
+      "requestCount": 1,
+      "durationMs": 2048,
+      "emittedFindings": 1,
+      "supportedFindings": 1,
+      "matchedFindings": 1,
+      "blockedFindings": 0,
+      "wrongSupportedFindings": 0,
+      "missedExpectedFindings": 0,
+      "supportedAmountCents": 3470,
+      "expectedAmountCents": 3470,
+      "passed": true,
+      "findings": [
+        {
+          "id": "finding-580f566cb4d430973328",
+          "product": "STONEGROUND FLOUR 10KG",
+          "kind": "shortage",
+          "invoicedQuantity": 6,
+          "receivedQuantity": 4,
+          "unitPriceCents": 1735,
+          "amountCents": 3470,
+          "unit": "bags",
+          "explanation": "Invoiced 6 bags of STONEGROUND FLOUR 10KG, but only 4 brown flour sacks were received according to the delivery note. The supplier confirmed that brown flour sack refers to STONEGROUND FLOUR 10KG.",
+          "confidence": "high",
+          "evidence": [
+            {
+              "documentId": "eur-markdown-alias-0",
+              "quote": "| STONEGROUND FLOUR 10KG | 6 | bags | EUR 17.35 | EUR 104.10 |"
+            },
+            {
+              "documentId": "eur-markdown-alias-1",
+              "quote": "| brown flour sack | 4 | bags |"
+            },
+            {
+              "documentId": "eur-markdown-alias-0",
+              "quote": "| Item | Qty | Unit | Unit Price | Total |"
+            },
+            {
+              "documentId": "eur-markdown-alias-1",
+              "quote": "| Item | Received | Unit |"
+            }
+          ],
+          "accepted": false,
+          "needsReview": false
+        }
+      ],
+      "warnings": []
+    },
+    {
+      "id": "usd-aligned-fractional",
+      "label": "USD aligned text: 0.375 kg shortage at a price per kilogram",
+      "currency": "USD",
+      "expected": [
+        {
+          "product": "VANILLA PASTE",
+          "amountCents": 1800
+        }
+      ],
+      "timestamp": "2026-09-23T04:37:06.910Z",
+      "provider": "gemini",
+      "model": "gemini-3.5-flash-lite",
+      "traceId": "c1ezap2oGe2kqfkPoLD26Q8",
+      "sourceHash": "1dc19439fefbdb0b436022b9c49d9814114a28cb3f638d498033b0c7e9ea850d",
+      "requestCount": 1,
+      "durationMs": 1730,
+      "emittedFindings": 1,
+      "supportedFindings": 1,
+      "matchedFindings": 1,
+      "blockedFindings": 0,
+      "wrongSupportedFindings": 0,
+      "missedExpectedFindings": 0,
+      "supportedAmountCents": 1800,
+      "expectedAmountCents": 1800,
+      "passed": true,
+      "findings": [
+        {
+          "id": "finding-0e031e70d42e756348fd",
+          "product": "VANILLA PASTE",
+          "kind": "shortage",
+          "invoicedQuantity": 1.25,
+          "receivedQuantity": 0.875,
+          "unitPriceCents": 4800,
+          "amountCents": 1800,
+          "unit": "kg",
+          "explanation": "Invoiced 1.250 kg of VANILLA PASTE but received only 0.875 kg.",
+          "confidence": "high",
+          "evidence": [
+            {
+              "documentId": "usd-aligned-fractional-0",
+              "quote": "VANILLA PASTE  1.250  kg  USD 48.00  USD 60.00"
+            },
+            {
+              "documentId": "usd-aligned-fractional-1",
+              "quote": "VANILLA PASTE  0.875  kg"
+            },
+            {
+              "documentId": "usd-aligned-fractional-0",
+              "quote": "Item  Qty  Unit  Unit Price  Total"
+            },
+            {
+              "documentId": "usd-aligned-fractional-1",
+              "quote": "Product  Received  Unit"
+            }
+          ],
+          "accepted": false,
+          "needsReview": false
+        }
+      ],
+      "warnings": []
+    },
+    {
+      "id": "wrong-delivery-issuer",
+      "label": "Wrong supplier on the receiving record despite identical invoice reference and product",
+      "currency": "USD",
+      "expected": [],
+      "timestamp": "2026-09-23T04:37:08.641Z",
+      "provider": "gemini",
+      "model": "gemini-3.5-flash-lite",
+      "traceId": "dVezaqOLBtaiqfkPkOTbgQ8",
+      "sourceHash": "c674e8b58d4eef39eb701ba4b57c09882674d148d00c67388ff925342c9db04d",
+      "requestCount": 1,
+      "durationMs": 1855,
+      "emittedFindings": 1,
+      "supportedFindings": 0,
+      "matchedFindings": 0,
+      "blockedFindings": 1,
+      "wrongSupportedFindings": 0,
+      "missedExpectedFindings": 0,
+      "supportedAmountCents": 0,
+      "expectedAmountCents": 0,
+      "passed": true,
+      "findings": [
+        {
+          "id": "finding-a3651f08f2434ae82cb1",
+          "product": "ROLLED OATS 5KG",
+          "kind": "shortage",
+          "invoicedQuantity": 12,
+          "receivedQuantity": 8,
+          "unitPriceCents": 1900,
+          "amountCents": 7600,
+          "unit": "bags",
+          "explanation": "Invoiced 12 bags of ROLLED OATS 5KG but only 8 bags were received.",
+          "confidence": "low",
+          "evidence": [
+            {
+              "documentId": "wrong-delivery-issuer-0",
+              "quote": "ROLLED OATS 5KG | Quantity: 12 bags | Unit price: USD 19.00 | Line total: USD 228.00"
+            },
+            {
+              "documentId": "wrong-delivery-issuer-1",
+              "quote": "ROLLED OATS 5KG | Received: 8 bags"
+            }
+          ],
+          "accepted": false,
+          "needsReview": true
+        }
+      ],
+      "warnings": [
+        "Some findings lack sufficient grounded support. They cannot be included in a claim until the evidence is corrected and reanalyzed."
+      ]
+    },
+    {
+      "id": "ambiguous-units",
+      "label": "Cases invoiced, bottles received; no documented conversion or total case count",
+      "currency": "GBP",
+      "expected": [],
+      "timestamp": "2026-09-23T04:37:10.497Z",
+      "provider": "gemini",
+      "model": "gemini-3.5-flash-lite",
+      "traceId": "d1ezatVH87ODxQ_Vqp6oAw",
+      "sourceHash": "6035ecd0c483b320687008dccde2c391663615d2850c4263826ec2355f79a135",
+      "requestCount": 1,
+      "durationMs": 2046,
+      "emittedFindings": 1,
+      "supportedFindings": 0,
+      "matchedFindings": 0,
+      "blockedFindings": 1,
+      "wrongSupportedFindings": 0,
+      "missedExpectedFindings": 0,
+      "supportedAmountCents": 0,
+      "expectedAmountCents": 0,
+      "passed": true,
+      "findings": [
+        {
+          "id": "finding-fd385fb583a8366cb64e",
+          "product": "SPARKLING WATER",
+          "kind": "unmatched",
+          "invoicedQuantity": 12,
+          "receivedQuantity": 6,
+          "unitPriceCents": 1440,
+          "amountCents": 0,
+          "unit": "cases",
+          "explanation": "Invoiced in cases while delivery note reports received quantity in bottles without a conversion factor.",
+          "confidence": "low",
+          "evidence": [
+            {
+              "documentId": "ambiguous-units-0",
+              "quote": "SPARKLING WATER | Quantity: 12 cases | Unit price: GBP 14.40 | Line total: GBP 172.80"
+            },
+            {
+              "documentId": "ambiguous-units-1",
+              "quote": "SPARKLING WATER | Received: 6 bottles"
+            }
+          ],
+          "accepted": false,
+          "needsReview": true
+        }
+      ],
+      "warnings": [
+        "Some findings lack sufficient grounded support. They cannot be included in a claim until the evidence is corrected and reanalyzed."
+      ]
+    },
+    {
+      "id": "no-shortage",
+      "label": "One item fully received and one overdelivered; no claimable shortage",
+      "currency": "EUR",
+      "expected": [],
+      "timestamp": "2026-09-23T04:37:12.546Z",
+      "provider": "gemini",
+      "model": "gemini-3.5-flash-lite",
+      "traceId": "eVezaqKvBJ61g8UP0dvB4Q0",
+      "sourceHash": "85c5a7400f5c52f57a81d9738a229e800c0c19f40437bc3ed8298fedd8e82912",
+      "requestCount": 1,
+      "durationMs": 2148,
+      "emittedFindings": 1,
+      "supportedFindings": 0,
+      "matchedFindings": 0,
+      "blockedFindings": 1,
+      "wrongSupportedFindings": 0,
+      "missedExpectedFindings": 0,
+      "supportedAmountCents": 0,
+      "expectedAmountCents": 0,
+      "passed": true,
+      "findings": [
+        {
+          "id": "finding-f01e0adc81bab6af0e53",
+          "product": "BREAKFAST TEA",
+          "kind": "unmatched",
+          "invoicedQuantity": 3,
+          "receivedQuantity": 4,
+          "unitPriceCents": 1125,
+          "amountCents": 0,
+          "unit": "boxes",
+          "explanation": "Invoiced quantity is 3 boxes, but 4 boxes were delivered. Since an extra quantity arrived, it's treated as unmatched/discrepant per standard validation rules.",
+          "confidence": "low",
+          "evidence": [
+            {
+              "documentId": "no-shortage-0",
+              "quote": "BREAKFAST TEA | Quantity: 3 boxes | Unit price: EUR 11.25 | Line total: EUR 33.75"
+            },
+            {
+              "documentId": "no-shortage-1",
+              "quote": "BREAKFAST TEA | Received: 4 boxes | Condition: good"
+            }
+          ],
+          "accepted": false,
+          "needsReview": true
+        }
+      ],
+      "warnings": [
+        "Some findings lack sufficient grounded support. They cannot be included in a claim until the evidence is corrected and reanalyzed."
+      ]
+    }
+  ],
+  "disclaimer": "Six curated synthetic cases, one sample per case, one model configuration. This evaluates the combined model and deterministic evidence controls; it is not a statistically representative accuracy benchmark or customer traction."
+}

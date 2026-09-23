@@ -1,7 +1,7 @@
 """Build the fictional source pack from canonical TXT, preserving all source wording.
 
-Run with Python + reportlab + pypdf. Optionally set REMAINDER_FONT_DIR and
-REMAINDER_PDFTOPPM if the bundled Codex runtime is unavailable. Original TXT files
+Run with Python + reportlab + pypdf and Poppler. Optionally set
+REMAINDER_FONT_DIR or REMAINDER_PDFTOPPM to override local assets/tools. Original TXT files
 remain the canonical sample inputs; PDFs add layout, not business facts.
 """
 from pathlib import Path
@@ -10,6 +10,7 @@ import json
 import os
 import re
 import subprocess
+import shutil
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.colors import HexColor
@@ -23,9 +24,10 @@ ROOT = Path(__file__).resolve().parent.parent
 SAMPLES = ROOT / 'public/samples'
 QA = ROOT / '.artifacts/samples'
 QA.mkdir(parents=True, exist_ok=True)
-RUNTIME = Path.home() / '.cache/codex-runtimes/codex-primary-runtime/dependencies'
-FONTS = Path(os.environ.get('REMAINDER_FONT_DIR', RUNTIME / 'native/libreoffice-headless/libreoffice/LibreOfficeDev.app/Contents/Resources/fonts/truetype'))
-PDFTOPPM = os.environ.get('REMAINDER_PDFTOPPM', str(RUNTIME / 'bin/override/pdftoppm'))
+FONTS = Path(os.environ.get('REMAINDER_FONT_DIR', ROOT / 'assets/fonts'))
+PDFTOPPM = os.environ.get('REMAINDER_PDFTOPPM') or shutil.which('pdftoppm')
+if not PDFTOPPM:
+    raise SystemExit('Install Poppler (pdftoppm) or set REMAINDER_PDFTOPPM. See docs/reproduce-assets.md.')
 for name, fn in [('Sans', 'NotoSans-Regular.ttf'), ('SansBold', 'NotoSans-Bold.ttf')]:
     pdfmetrics.registerFont(TTFont(name, str(FONTS / fn)))
 

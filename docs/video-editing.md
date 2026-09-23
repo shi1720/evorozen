@@ -53,6 +53,6 @@ python3 scripts/render-video-proof.py
 REMAINDER_DEMO_URL=http://localhost:3210 node scripts/record-demo.mjs
 ```
 
-The proof-card renderer uses Pillow and the supplied local font paths; adjust those paths on another machine. The recorder makes a fresh isolated demo workspace, performs actual UI actions, verifies final integer totals, captures screenshots, and renders the master. It applies `live-proof.png` only if the card exists. Update that card only from verified evidence. The current capture used a separate stable server on port 3214 so concurrent development did not interrupt the recording.
+The proof-card renderer uses Pillow and the licensed fonts in `assets/fonts`. See [asset reproduction](reproduce-assets.md) for optional dependencies and runtime settings. The recorder makes a fresh isolated demo workspace, performs actual UI actions, verifies final integer totals, captures screenshots, and renders the master. It applies `live-proof.png` only if the card exists. Update that card only from verified evidence. The current capture used a separate stable server on port 3214 so concurrent development did not interrupt the recording.
 
 The sample source PDFs are under `public/samples`; their wording matches the canonical TXT files. The actual claim PDF downloaded during this recording is `deliverables/sample-claim-evidence.pdf`.

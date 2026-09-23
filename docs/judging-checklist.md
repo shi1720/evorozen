@@ -87,3 +87,5 @@ For each review, record the revision, test date, reviewer, criterion score, exac
 | Uncommitted local build / 23 Sep 2026 | All | Independent review: 16.5/25; complete sample and account checks pass; live-provider and final-deployment evidence absent | See [full findings and deductions](judge-review.md) | Supplier grounding and partial follow-up fixes retested; release gates remain |
 
 Follow-up review: **18.5/25**, with two verified synthetic Gemini checks, signed Evorozen memory, 82 automated tests and 6 browser tests confirmed passing, a Render + Neon live preview, and a 170-second silent walkthrough. Final deployed-workflow checks, human narration, eligibility and submission remain separate gates. See [the full evidence](judge-review.md).
+
+Final technical verification: the hosted normal-account AI workflow, signed memory write, four exports, persistence after redeploy, and isolated PostgreSQL dump/restore passed. See [deployment validation](validation-deployment.md). The [six-case evaluation](validation-model-eval.md) separately records three supported shortages and three safely blocked cases.

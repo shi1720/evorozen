@@ -2,6 +2,8 @@
 
 On September 23, 2026, Remainder passed two live extraction checks using **Gemini `gemini-3.5-flash-lite`**, and separately passed live **Evorozen Neural Pulse VirtualDB** storage checks. All inputs were fictional. These are integration checks, not customer traction, realized savings, or a broad model-accuracy benchmark.
 
+A subsequent [six-case live evaluation](validation-model-eval.md) tested three additional legitimate shortages and three problematic document sets. Its report includes an incorrect model proposal that the application's supplier check blocked, and distinguishes model behavior from the final claimable outcome.
+
 ## Live extraction → reviewed claim → partial credit
 
 Both checks invoked the production `analyzeDocuments` engine with `isDemo: false`, made one real inference request, validated exact source quotations and quantities, calculated money using integer arithmetic, marked supported findings reviewed in the test harness, generated a claim, and verified a partial credit. Provider provenance, source hashes, quotations and totals are preserved in sanitized artifacts.

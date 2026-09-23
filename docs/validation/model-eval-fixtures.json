@@ -1,0 +1,80 @@
+{
+  "kind": "fictional_predeclared_evaluation_scenarios",
+  "createdAt": "2026-09-23",
+  "notes": "Six new synthetic scenarios. Expected supported findings were fixed before the live requests. All company names and documents are fictional.",
+  "cases": [
+    {
+      "id": "inr-csv-tins",
+      "label": "INR CSV: three missing lentil tins; a second item fully received",
+      "currency": "INR",
+      "supplierName": "Metro Pantry Wholesale",
+      "invoiceReference": "MP-3104",
+      "expected": [{ "product": "RED LENTIL TIN 3KG", "amountCents": 55650 }],
+      "documents": [
+        { "kind": "invoice", "name": "metro-invoice.csv", "text": "FICTIONAL EVALUATION DOCUMENT\nSupplier: Metro Pantry Wholesale\nInvoice: MP-3104\nCurrency: INR\nItem,Qty,Unit,Unit Price,Total\nRED LENTIL TIN 3KG,12,tins,INR 185.50,INR 2226.00\nCUMIN SEED 1KG,4,bags,INR 420.00,INR 1680.00\nInvoice total: INR 3906.00" },
+        { "kind": "delivery_note", "name": "metro-receiving.csv", "text": "FICTIONAL EVALUATION DOCUMENT\nSupplier: Metro Pantry Wholesale\nInvoice: MP-3104\nItem,Received,Unit\nRED LENTIL TIN 3KG,9,tins\nCUMIN SEED 1KG,4,bags\nReceived quantities counted at the door." }
+      ]
+    },
+    {
+      "id": "eur-markdown-alias",
+      "label": "EUR Markdown tables: two flour bags missing with an explicit supplier naming equivalence",
+      "currency": "EUR",
+      "supplierName": "River Mill Provisions",
+      "invoiceReference": "RM-8812",
+      "expected": [{ "product": "STONEGROUND FLOUR 10KG", "amountCents": 3470 }],
+      "documents": [
+        { "kind": "invoice", "name": "river-invoice.txt", "text": "FICTIONAL EVALUATION DOCUMENT\nSupplier: River Mill Provisions\nInvoice: RM-8812\nCurrency: EUR\n| Item | Qty | Unit | Unit Price | Total |\n| --- | --- | --- | --- | --- |\n| STONEGROUND FLOUR 10KG | 6 | bags | EUR 17.35 | EUR 104.10 |\nInvoice total: EUR 104.10" },
+        { "kind": "delivery_note", "name": "river-receiving.txt", "text": "FICTIONAL EVALUATION DOCUMENT\nSupplier: River Mill Provisions\nInvoice: RM-8812\n| Item | Received | Unit |\n| --- | --- | --- |\n| brown flour sack | 4 | bags |\nTwo bags absent from the delivery." },
+        { "kind": "supplier_message", "name": "river-product-mapping.txt", "text": "FICTIONAL EVALUATION DOCUMENT\nFrom: River Mill Provisions\nOur invoice product STONEGROUND FLOUR 10KG is described as brown flour sack on delivery notes.\nBoth documents count the same ten-kilogram bags." }
+      ]
+    },
+    {
+      "id": "usd-aligned-fractional",
+      "label": "USD aligned text: 0.375 kg shortage at a price per kilogram",
+      "currency": "USD",
+      "supplierName": "Juniper Ingredients",
+      "invoiceReference": "JI-6208",
+      "expected": [{ "product": "VANILLA PASTE", "amountCents": 1800 }],
+      "documents": [
+        { "kind": "invoice", "name": "juniper-invoice.txt", "text": "FICTIONAL EVALUATION DOCUMENT\nSupplier: Juniper Ingredients\nInvoice: JI-6208\nCurrency: USD\nItem  Qty  Unit  Unit Price  Total\nVANILLA PASTE  1.250  kg  USD 48.00  USD 60.00\nInvoice total: USD 60.00" },
+        { "kind": "delivery_note", "name": "juniper-receiving.txt", "text": "FICTIONAL EVALUATION DOCUMENT\nSupplier: Juniper Ingredients\nInvoice: JI-6208\nProduct  Received  Unit\nVANILLA PASTE  0.875  kg\nNet product weight measured on the receiving scale." }
+      ]
+    },
+    {
+      "id": "wrong-delivery-issuer",
+      "label": "Wrong supplier on the receiving record despite identical invoice reference and product",
+      "currency": "USD",
+      "supplierName": "Golden Field Wholesale",
+      "invoiceReference": "GF-4502",
+      "expected": [],
+      "documents": [
+        { "kind": "invoice", "name": "golden-invoice.txt", "text": "FICTIONAL EVALUATION DOCUMENT\nSupplier: Golden Field Wholesale\nInvoice: GF-4502\nCurrency: USD\nROLLED OATS 5KG | Quantity: 12 bags | Unit price: USD 19.00 | Line total: USD 228.00\nInvoice total: USD 228.00" },
+        { "kind": "delivery_note", "name": "different-supplier-receiving.txt", "text": "FICTIONAL EVALUATION DOCUMENT\nSupplier: Northern Crate Depot\nInvoice: GF-4502\nROLLED OATS 5KG | Received: 8 bags\nReceiving record issued by Northern Crate Depot." }
+      ]
+    },
+    {
+      "id": "ambiguous-units",
+      "label": "Cases invoiced, bottles received; no documented conversion or total case count",
+      "currency": "GBP",
+      "supplierName": "Seabrook Beverages",
+      "invoiceReference": "SB-5091",
+      "expected": [],
+      "documents": [
+        { "kind": "invoice", "name": "seabrook-invoice.txt", "text": "FICTIONAL EVALUATION DOCUMENT\nSupplier: Seabrook Beverages\nInvoice: SB-5091\nCurrency: GBP\nSPARKLING WATER | Quantity: 12 cases | Unit price: GBP 14.40 | Line total: GBP 172.80\nInvoice total: GBP 172.80" },
+        { "kind": "delivery_note", "name": "seabrook-partial-count.txt", "text": "FICTIONAL EVALUATION DOCUMENT\nSupplier: Seabrook Beverages\nInvoice: SB-5091\nSPARKLING WATER | Received: 6 bottles\nOnly loose bottles were counted. Sealed cases were not counted. This is not a complete receiving count. No bottles-per-case conversion is stated." }
+      ]
+    },
+    {
+      "id": "no-shortage",
+      "label": "One item fully received and one overdelivered; no claimable shortage",
+      "currency": "EUR",
+      "supplierName": "Cedar Kitchen Supply",
+      "invoiceReference": "CK-7340",
+      "expected": [],
+      "documents": [
+        { "kind": "invoice", "name": "cedar-invoice.txt", "text": "FICTIONAL EVALUATION DOCUMENT\nSupplier: Cedar Kitchen Supply\nInvoice: CK-7340\nCurrency: EUR\nCOFFEE BEANS 1KG | Quantity: 5 bags | Unit price: EUR 18.00 | Line total: EUR 90.00\nBREAKFAST TEA | Quantity: 3 boxes | Unit price: EUR 11.25 | Line total: EUR 33.75\nInvoice total: EUR 123.75" },
+        { "kind": "delivery_note", "name": "cedar-receiving.txt", "text": "FICTIONAL EVALUATION DOCUMENT\nSupplier: Cedar Kitchen Supply\nInvoice: CK-7340\nCOFFEE BEANS 1KG | Received: 5 bags | Condition: good\nBREAKFAST TEA | Received: 4 boxes | Condition: good\nAll invoiced goods arrived; one extra tea box also arrived." }
+      ]
+    }
+  ]
+}
