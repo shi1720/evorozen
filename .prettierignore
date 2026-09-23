@@ -1,0 +1,10 @@
+node_modules
+dist
+.data
+.artifacts
+output
+deliverables
+package-lock.json
+public/media
+public/samples
+docs/validation

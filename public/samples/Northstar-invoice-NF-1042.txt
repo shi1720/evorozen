@@ -1,0 +1,15 @@
+FICTIONAL DEMO DOCUMENT — not a real invoice
+NORTHSTAR FOODS
+Invoice: NF-1042
+Customer: Fern & Flour cafe
+Date: 2026-09-21
+Currency: USD
+
+OAT BARISTA 6X1L | Quantity: 12 cases | Unit price: USD 36.00 | Line total: USD 432.00
+TOMATO WHOLE 6X2.5KG | Quantity: 10 cases | Unit price: USD 24.00 | Line total: USD 240.00
+OLIVE OIL 5L | Quantity: 4 tins | Unit price: USD 32.00 | Line total: USD 128.00
+
+Subtotal: USD 800.00
+Tax: USD 0.00
+Invoice total: USD 800.00
+Payment terms: net 14 days. Please quote NF-1042 in all correspondence.

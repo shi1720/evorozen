@@ -1,0 +1,8 @@
+.settings-data-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.button.settings-delete-button { color: #91372f; border-color: #d8b8b1; background: #fff8f4; }
+.button.settings-delete-button:hover:not(:disabled) { background: #fbeae4; border-color: #bd8277; }
+.button.settings-delete-confirm { background: #91372f; border-color: #91372f; color: #fff; }
+.button.settings-delete-confirm:hover:not(:disabled) { background: #772c26; border-color: #772c26; }
+.stack-form .deletion-confirmation { display: flex; flex-direction: row; gap: 11px; align-items: flex-start; line-height: 1.6; }
+.deletion-confirmation input { width: 17px; height: 17px; margin: 3px 0 0; flex-shrink: 0; accent-color: #91372f; }
+.settings-data-note { font-size: 12px; line-height: 1.7; margin-top: 15px; }

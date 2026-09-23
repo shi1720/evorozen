@@ -1,0 +1,99 @@
+{
+  "kind": "synthetic_live_integration_check",
+  "fixture": "Fictional independent CSV/TSV evaluation case",
+  "attemptedProvider": "gemini",
+  "actualProvider": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "timestamp": "2026-09-23T04:16:45.752Z",
+  "traceId": "rlKzavegMa2yg8UPkrTD0Q8",
+  "sourceHash": "ca0b0e92ffdc1a80878e58edfa88fed4d7428c27aca1c603e04006360d3b654d",
+  "durationMs": 3701,
+  "findings": [
+    {
+      "id": "finding-e1bfdf1cafb1907a4fd3",
+      "product": "CHERRY TOMATOES 3KG",
+      "amountCents": 1875,
+      "confidence": "high",
+      "needsReview": false,
+      "evidence": [
+        {
+          "documentId": "synthetic-document-0",
+          "quote": "CHERRY TOMATOES 3KG,6,crates,GBP 18.75,GBP 112.50"
+        },
+        {
+          "documentId": "synthetic-document-1",
+          "quote": "red cherry tomatoes\t5\tcrates"
+        },
+        {
+          "documentId": "synthetic-document-0",
+          "quote": "Item,Qty,Unit,Unit Price,Total"
+        },
+        {
+          "documentId": "synthetic-document-1",
+          "quote": "Item\tReceived\tUnit"
+        }
+      ]
+    },
+    {
+      "id": "finding-5ff004805f874bbc3c50",
+      "product": "BARISTA OAT CASE 6X1L",
+      "amountCents": 4480,
+      "confidence": "high",
+      "needsReview": false,
+      "evidence": [
+        {
+          "documentId": "synthetic-document-0",
+          "quote": "BARISTA OAT CASE 6X1L,9,cases,GBP 22.40,GBP 201.60"
+        },
+        {
+          "documentId": "synthetic-document-1",
+          "quote": "barista oat milk\t7\tcases"
+        },
+        {
+          "documentId": "synthetic-document-0",
+          "quote": "Item,Qty,Unit,Unit Price,Total"
+        },
+        {
+          "documentId": "synthetic-document-1",
+          "quote": "Item\tReceived\tUnit"
+        }
+      ]
+    }
+  ],
+  "credits": [
+    {
+      "documentId": "synthetic-document-2",
+      "reference": "HP-C17",
+      "amountCents": 1875,
+      "evidence": [
+        {
+          "documentId": "synthetic-document-2",
+          "quote": "HARBOR PANTRY"
+        },
+        {
+          "documentId": "synthetic-document-2",
+          "quote": "Credit note: HP-C17\nFor invoice: HP-7001\nCurrency: GBP\nCHERRY TOMATOES 3KG | Credited quantity: 1 crate | Unit price: GBP 18.75\nCredit total: GBP 18.75"
+        }
+      ],
+      "verified": false
+    }
+  ],
+  "warnings": [],
+  "passed": true,
+  "requestCount": 1,
+  "totals": {
+    "identifiedCents": 6355,
+    "claimedCents": 6355,
+    "creditedCents": 1875,
+    "remainingCents": 4480
+  },
+  "checks": [
+    "live provider provenance",
+    "exact source grounding",
+    "deterministic shortage arithmetic",
+    "supplier and invoice match",
+    "reviewed claim generation",
+    "partial credit verification"
+  ],
+  "disclaimer": "Synthetic fixtures only. This proves a live integration run, not real users, realized savings, or independent model accuracy."
+}

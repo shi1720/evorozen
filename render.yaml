@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: remainder
+    runtime: node
+    plan: free
+    region: frankfurt
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeployTrigger: checksPass
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: 22.16.0
+      - key: TRUST_PROXY
+        value: "1"
+      - key: DATABASE_URL
+        sync: false
+      - key: APP_ORIGIN
+        sync: false
+      - key: EVOROZEN_API_KEY
+        sync: false
+      - key: AI_PROVIDER
+        value: gemini
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-3.5-flash-lite
+      - key: GEMINI_FALLBACK_ENABLED
+        value: "true"
+      - key: AI_MAX_DAILY_CALLS_PER_USER
+        value: "10"
+      - key: AI_MAX_DAILY_CALLS
+        value: "30"

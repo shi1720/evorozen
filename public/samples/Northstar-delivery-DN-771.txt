@@ -1,0 +1,14 @@
+FICTIONAL DEMO DOCUMENT — not a real delivery note
+NORTHSTAR FOODS
+Delivery note: DN-771
+Invoice: NF-1042
+Delivered to: Fern & Flour cafe
+Date received: 2026-09-21
+Currency: USD
+
+barista oat drink | Received: 8 cases | Condition: good
+TOMATO WHOLE 6X2.5KG | Received: 7 cases | Condition: good
+OLIVE OIL 5L | Received: 4 tins | Condition: good
+
+Receiving check: four cases of oat drink and three cases of tomatoes were missing.
+Received quantities above were counted at the door.

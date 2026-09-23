@@ -1,0 +1,32 @@
+{
+  "kind": "synthetic_production_module_test",
+  "provider": "evorozen",
+  "timestamp": "2026-09-23T04:23:48.406Z",
+  "passed": true,
+  "calls": 5,
+  "checks": [
+    {
+      "operation": "rememberReviewedCase",
+      "stored": true,
+      "traceId": "93302b68-70bd-46db-bd82-c33ff0564dea"
+    },
+    {
+      "operation": "recallSupplierMemory",
+      "verifiedSignedAliases": [
+        "OAT BARISTA 6X1L = barista oat drink"
+      ],
+      "traceId": "d47caee2-074f-4cd1-9be9-a8e953234106"
+    },
+    {
+      "operation": "forgetWorkspaceMemory",
+      "deleted": 1,
+      "traceId": "38174a9b-7f94-4bb6-a8bf-373caf2187af"
+    },
+    {
+      "operation": "recallAfterDeletion",
+      "aliases": [],
+      "traceId": "248ffb1d-02ea-44f7-b310-a778c7a01805"
+    }
+  ],
+  "notes": "Production memory module with a temporary signing key, HMAC-scoped synthetic workspace, exact signature verification and scoped deletion. Fixture analysis was deterministic demo replay; this is real VirtualDB memory, not a successful Evorozen inference run."
+}

@@ -1,0 +1,82 @@
+{
+  "kind": "synthetic_live_integration_check",
+  "attemptedProvider": "gemini",
+  "actualProvider": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "timestamp": "2026-09-23T04:15:06.801Z",
+  "traceId": "S1Kzavz4JJ70g8UPseKCAQ",
+  "sourceHash": "d0625b8930f9eae11673552c4701c58d2db16a5b8225af9148a34919f2d7aa25",
+  "durationMs": 3107,
+  "findings": [
+    {
+      "id": "finding-c6c9dd0142c959cab7ef",
+      "product": "OAT BARISTA 6X1L",
+      "amountCents": 14400,
+      "confidence": "high",
+      "needsReview": false,
+      "evidence": [
+        {
+          "documentId": "synthetic-document-0",
+          "quote": "OAT BARISTA 6X1L | Quantity: 12 cases | Unit price: USD 36.00 | Line total: USD 432.00"
+        },
+        {
+          "documentId": "synthetic-document-1",
+          "quote": "barista oat drink | Received: 8 cases | Condition: good"
+        }
+      ]
+    },
+    {
+      "id": "finding-f30e78a8c2f9e8d90cf4",
+      "product": "TOMATO WHOLE 6X2.5KG",
+      "amountCents": 7200,
+      "confidence": "high",
+      "needsReview": false,
+      "evidence": [
+        {
+          "documentId": "synthetic-document-0",
+          "quote": "TOMATO WHOLE 6X2.5KG | Quantity: 10 cases | Unit price: USD 24.00 | Line total: USD 240.00"
+        },
+        {
+          "documentId": "synthetic-document-1",
+          "quote": "TOMATO WHOLE 6X2.5KG | Received: 7 cases | Condition: good"
+        }
+      ]
+    }
+  ],
+  "credits": [
+    {
+      "documentId": "synthetic-document-3",
+      "reference": "CN-208",
+      "amountCents": 14400,
+      "evidence": [
+        {
+          "documentId": "synthetic-document-3",
+          "quote": "NORTHSTAR FOODS"
+        },
+        {
+          "documentId": "synthetic-document-3",
+          "quote": "Credit note: CN-208\nFor invoice: NF-1042\nCustomer: Fern & Flour cafe\nDate: 2026-09-23\nCurrency: USD\n\nOAT BARISTA 6X1L | Credited quantity: 4 cases | Unit price: USD 36.00\nCredit total: USD 144.00"
+        }
+      ],
+      "verified": false
+    }
+  ],
+  "warnings": [],
+  "passed": true,
+  "requestCount": 1,
+  "totals": {
+    "identifiedCents": 21600,
+    "claimedCents": 21600,
+    "creditedCents": 14400,
+    "remainingCents": 7200
+  },
+  "checks": [
+    "live provider provenance",
+    "exact source grounding",
+    "deterministic shortage arithmetic",
+    "supplier and invoice match",
+    "reviewed claim generation",
+    "partial credit verification"
+  ],
+  "disclaimer": "Synthetic fixtures only. This proves a live integration run, not real users, realized savings, or independent model accuracy."
+}

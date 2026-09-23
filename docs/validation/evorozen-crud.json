@@ -1,0 +1,45 @@
+{
+  "kind": "synthetic_provider_contract_test",
+  "provider": "evorozen",
+  "timestamp": "2026-09-23T04:16:11.581Z",
+  "passed": true,
+  "calls": 7,
+  "checks": [
+    {
+      "action": "create_schema",
+      "httpStatus": 200,
+      "traceId": "6066b837-b984-47e6-a796-e30d2d01d33b"
+    },
+    {
+      "action": "insert_data",
+      "httpStatus": 200,
+      "traceId": "d4bff11f-31e4-4344-959b-0d8105f17652"
+    },
+    {
+      "action": "insert_data",
+      "httpStatus": 200,
+      "traceId": "67a21729-a211-45ad-906e-bcdcf8887d0c"
+    },
+    {
+      "action": "select_data",
+      "httpStatus": 200,
+      "traceId": "ff29858f-d9de-4de1-895b-0545a5ff2502"
+    },
+    {
+      "action": "delete_data",
+      "httpStatus": 200,
+      "traceId": "63f4b868-da11-4f4d-9582-e250996d6a15"
+    },
+    {
+      "action": "select_data",
+      "httpStatus": 200,
+      "traceId": "0e9c9a9a-2953-47a1-a0a4-4f3df1916225"
+    },
+    {
+      "action": "delete_data",
+      "httpStatus": 200,
+      "traceId": "f42eba00-036e-4c36-a06e-08bd14d5231b"
+    }
+  ],
+  "notes": "Two synthetic workspaces; exact filter isolation, trace provenance, scoped deletion. No real customer data. This demonstrates virtual database operations, not a successful inference run or production memory integration."
+}
