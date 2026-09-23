@@ -30,9 +30,9 @@ The product distinguishes a verified credit note from credit applied in the acco
 
 ## How it is built
 
-The application uses React and TypeScript with an Express API. PostgreSQL provides production persistence, and a local PGlite adapter supports a simple development setup. Session authentication and workspace boundaries keep the authorization logic separate from AI.
+The public preview is deployed at [remainder-apex.onrender.com](https://remainder-apex.onrender.com) on Render with Neon PostgreSQL. The application uses React and TypeScript with an Express API; local PGlite supports a simple development setup. Session authentication and workspace boundaries keep the authorization logic separate from AI.
 
-The application supports Evorozen Neural Pulse, OpenAI, and Gemini adapters. The verified live extraction runs used Gemini 3.5 Flash-Lite on two synthetic packs, including an independent GBP case. The application validates the structured result, checks source quotations, and records the actual provider. The Evorozen `chat` adapter is implemented, but its upstream inference service failed during verification; we do not claim a successful sponsor-inference result. Deterministic code handles money in integer cents, currency checks, duplicate-credit controls, and case transitions. User-confirmed supplier aliases provide workspace-specific context on later cases.
+The public preview explicitly selects Gemini for inference. The application also supports Evorozen Neural Pulse and OpenAI adapters. The verified live extraction runs used Gemini 3.5 Flash-Lite on two synthetic packs, including an independent GBP case. The application validates the structured result, checks source quotations, and records the actual provider. The Evorozen `chat` adapter is implemented, but its upstream inference service failed during verification; we do not claim a successful sponsor-inference result. Deterministic code handles money in integer cents, currency checks, duplicate-credit controls, and case transitions. User-confirmed supplier aliases provide workspace-specific context on later cases. Optional Evorozen VirtualDB memory stores signed, reviewed product aliases and recalls them within the workspace. The production memory module passed a live five-request write/recall/delete check. It stores no raw invoices or financial amounts and cannot approve a claim. This is verified sponsor memory integration, separate from sponsor inference.
 
 The architecture supports an explicitly configured alternative provider. The interface must accurately identify the provider used. Fixture replay is reserved for labeled demo workspaces. Real accounts without an available provider receive an actionable error.
 
@@ -70,14 +70,14 @@ React, TypeScript, Vite, Express, PostgreSQL, PGlite, Gemini, Evorozen Neural Pu
 
 Created by **Shivam Gupta**, with AI-assisted research, design, and engineering. The project uses a new codebase for Evorozen Apex. Confirm repository history against the event's full rules before submission. Do not invent a list of manual implementation work or conceal AI assistance when the organizer requests disclosure.
 
-## Links to fill after verification
+## Submission links and status
 
 | Field | Current value or action |
 | --- | --- |
-| GitHub | https://github.com/shi1720/evorozen |
-| Public working app | Add the confirmed deployment URL after a production smoke test. |
+| GitHub | [Public source repository](https://github.com/shi1720/evorozen) |
+| Public working app | [Remainder live preview](https://remainder-apex.onrender.com) — Render + Neon PostgreSQL. Homepage and database health returned HTTP 200 on September 23. Final workflow checks are recorded by the release owner. |
 | Video | Silent 170-second walkthrough prepared in `deliverables/remainder-walkthrough-silent.mp4`; add Shivam’s narration and the verified public/unlisted URL. |
-| Live AI evidence | Gemini 3.5 Flash-Lite, September 23, 2026: two synthetic integration packs passed. See [validation](validation-ai.md). |
+| Live AI evidence | Gemini 3.5 Flash-Lite: two synthetic extraction packs passed. Evorozen: signed production memory module passed live. See [validation](validation-ai.md). |
 | Traction | Add only measured non-demo usage. Otherwise retain the pre-launch statement. |
 
 ## Submission gates requiring external facts or human action
@@ -87,6 +87,6 @@ Created by **Shivam Gupta**, with AI-assisted research, design, and engineering.
 - **Deadline conflict:** On September 23, the [event header](https://evorozen-apex.devpost.com/) lists **September 30, 2026, 11:45 PM PKT**, equivalent to **October 1, 00:15 IST / September 30, 18:45 UTC**. The [rules body, sections 1.2-1.3](https://evorozen-apex.devpost.com/rules), instead gives a September 15-20 window and **September 20, 11:45 PM PDT** cutoff. These are contradictory official statements. Verify that submission remains open and obtain organizer clarification before relying on the later date. The seven-day plan assumes the header applies, not that the conflict has been resolved.
 - **Repository freshness:** Confirm the earliest relevant project commit is July 17, 2026 or later and that the public repository can be inspected. Do not alter dates or manufacture history.
 - **Video:** Shivam records the supplied narration, or explicitly authorizes an appropriate alternative. Rendered slides and a script alone do not satisfy a live working-product video requirement. Keep the final runtime below three minutes.
-- **Live service:** Confirm the public app URL, production persistence, provider capacity, and a successful end-to-end smoke test before writing “deployed” or “live AI verified.”
+- **Live service:** The public preview is deployed and its health endpoint responds. Preserve the final production smoke-test record, verify provider capacity, and check all links again before submission. A healthy endpoint alone is not a complete workflow test.
 - **Traction:** No real users, customers, revenue, or recovered money are asserted by this package. Optional traction bonus requires actual evidence.
 - **Final submission:** Verify all attachments and links, review the final preview, and retain the confirmation receipt after submission. A prepared entry is not a submitted entry.

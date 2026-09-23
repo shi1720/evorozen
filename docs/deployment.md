@@ -20,12 +20,15 @@ Set these in the host's environment/secret settings:
 | `DATABASE_URL` | Persistent PostgreSQL connection string, with the database provider's required TLS options. |
 | `APP_ORIGIN` | Exact HTTPS origin shown by the deployed service. Update after its hostname is assigned. |
 | `TRUST_PROXY=1` | Correct only for the intended single trusted Render reverse-proxy hop. |
+| `AI_PROVIDER=gemini` | Selects Gemini directly even if an Evorozen key is also present. |
 | `GEMINI_API_KEY` | Server-side live model key for the configured Gemini model. |
 | `GEMINI_MODEL=gemini-3.5-flash-lite` | Model verified with synthetic inputs during development. Provider access remains account-dependent. |
 | `EVOROZEN_API_KEY` | Optional Neural Pulse integration key. No browser exposure. |
 | `GEMINI_FALLBACK_ENABLED=true` | Explicitly allows Gemini after a failed earlier configured provider. |
 | `AI_MAX_DAILY_CALLS=30` | Shared outbound analysis request budget, resetting at midnight UTC. |
 | `AI_MAX_DAILY_CALLS_PER_USER=10` | Per-workspace daily request budget. |
+
+Optional Evorozen Virtual DB memory is disabled by default. To enable it, set `EVOROZEN_MEMORY_ENABLED=true` plus a stable private `EVOROZEN_MEMORY_SIGNING_KEY` of at least 32 characters and `EVOROZEN_API_KEY`. Keep the conservative metadata caps (six reserved calls daily, twelve lifetime) while using a finite starter key. Save the signing key securely: remote cleanup depends on the same scope derivation even after the feature is disabled. Account deletion cleanup is exempt from these application caps but still depends on upstream availability.
 
 Use the actual database connection string from the database console. Never disable TLS verification to work around a connection problem. PostgreSQL schema initialization happens on application startup under a transaction and advisory lock.
 

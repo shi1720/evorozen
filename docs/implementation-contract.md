@@ -5,7 +5,7 @@ Created 23 September 2026 for Shivam Gupta / Evorozen Apex. Fresh implementation
 Stack: React 19 + Vite + TypeScript frontend; Express 5 API; Postgres via `pg` in production, `@electric-sql/pglite` persisted under .data for zero-setup local; SQL adapter query interface. Server serves Vite middleware in dev and dist/client in production. dotenv loads .env. Port default 3000. Domain model in src/shared/types.ts.
 
 HTTP JSON API (same origin, cookie session):
-- POST /api/auth/register {name,email,password,workspaceName,currency} -> {user,recoveryCode}; register is authenticated. Recovery code displayed once. Strong scrypt hashes. 
+- POST /api/auth/register {name,email,password,workspaceName,currency} -> {user,recoveryCode}; register is authenticated. Recovery code displayed once. Strong scrypt hashes.
 - POST /api/auth/login {email,password} -> {user}
 - POST /api/auth/demo {} -> {user}; unique isolated seeded demo workspace; demo fixtures unmistakably labeled.
 - POST /api/auth/logout {} -> {ok:true}; GET /api/auth/me -> {user}; 401 when unauthenticated.

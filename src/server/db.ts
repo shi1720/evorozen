@@ -4,7 +4,10 @@ import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
 
 export interface Queryable {
-  query<T = Record<string, unknown>>(sql: string, params?: unknown[]): Promise<{ rows: T[]; rowCount: number }>;
+  query<T = Record<string, unknown>>(
+    sql: string,
+    params?: unknown[],
+  ): Promise<{ rows: T[]; rowCount: number }>;
 }
 export interface Database extends Queryable {
   transaction<T>(work: (tx: Queryable) => Promise<T>): Promise<T>;
@@ -60,9 +63,13 @@ CREATE INDEX IF NOT EXISTS rate_limits_expiry_idx ON rate_limits(expires_at);
 INSERT INTO schema_migrations(version) VALUES(1),(2),(3) ON CONFLICT DO NOTHING;
 `;
 
-export async function createDatabase(options: { url?: string; dataDir?: string; memory?: boolean } = {}): Promise<Database> {
+export async function createDatabase(
+  options: { url?: string; dataDir?: string; memory?: boolean } = {},
+): Promise<Database> {
   // Explicit test/local options must never connect to an inherited production database.
-  const url = options.memory ? undefined : options.url ?? (options.dataDir ? undefined : process.env.DATABASE_URL);
+  const url = options.memory
+    ? undefined
+    : (options.url ?? (options.dataDir ? undefined : process.env.DATABASE_URL));
   let db: Database;
   if (url) {
     const pool = new pg.Pool({
@@ -91,15 +98,25 @@ export async function createDatabase(options: { url?: string; dataDir?: string; 
         } catch (error) {
           await client.query('ROLLBACK');
           throw error;
-        } finally { client.release(); }
+        } finally {
+          client.release();
+        }
       },
       close: () => pool.end(),
     };
   } else {
-    if (process.env.NODE_ENV === 'production' && !options.memory && (process.env.ALLOW_LOCAL_DATABASE !== '1' || !(options.dataDir ?? process.env.DATA_DIR))) {
-      throw new Error('Production requires DATABASE_URL for durable Postgres storage. For a persistent-volume deployment, explicitly set ALLOW_LOCAL_DATABASE=1 and DATA_DIR.');
+    if (
+      process.env.NODE_ENV === 'production' &&
+      !options.memory &&
+      (process.env.ALLOW_LOCAL_DATABASE !== '1' || !(options.dataDir ?? process.env.DATA_DIR))
+    ) {
+      throw new Error(
+        'Production requires DATABASE_URL for durable Postgres storage. For a persistent-volume deployment, explicitly set ALLOW_LOCAL_DATABASE=1 and DATA_DIR.',
+      );
     }
-    const dataDir = options.memory ? undefined : options.dataDir ?? process.env.DATA_DIR ?? path.resolve('.data/remainder');
+    const dataDir = options.memory
+      ? undefined
+      : (options.dataDir ?? process.env.DATA_DIR ?? path.resolve('.data/remainder'));
     if (dataDir) await mkdir(dataDir, { recursive: true, mode: 0o700 });
     const local = new PGlite(dataDir);
     await local.waitReady;
@@ -119,7 +136,8 @@ export async function createDatabase(options: { url?: string; dataDir?: string; 
   await db.transaction(async (tx) => {
     if (url) await tx.query('SELECT pg_advisory_xact_lock(739182640)');
     // PGlite cannot prepare multiple statements; execute migration statements separately.
-    for (const statement of schema.split(';').filter((value) => value.trim())) await tx.query(statement);
+    for (const statement of schema.split(';').filter((value) => value.trim()))
+      await tx.query(statement);
   });
   return db;
 }

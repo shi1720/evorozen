@@ -9,4 +9,10 @@ import '@fontsource/dm-sans/700.css';
 import '@fontsource/dm-serif-display/400.css';
 import '@fontsource/dm-serif-display/400-italic.css';
 import './styles.css';
-ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><BrowserRouter><App/></BrowserRouter></React.StrictMode>);
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>,
+);

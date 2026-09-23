@@ -1,25 +1,1054 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, ArrowUpRight, Check, CheckCheck, ChevronDown, ChevronRight, CircleAlert, CircleCheck, Clock3, Copy, Download, FilePlus2, FileText, Fingerprint, Link2, Loader2, Mail, MoreHorizontal, Plus, Search, ShieldCheck, Sparkles, Trash2, Upload, X } from 'lucide-react';
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  Check,
+  CheckCheck,
+  ChevronDown,
+  ChevronRight,
+  CircleAlert,
+  CircleCheck,
+  Clock3,
+  Copy,
+  Download,
+  FilePlus2,
+  FileText,
+  Fingerprint,
+  Link2,
+  Loader2,
+  Mail,
+  MoreHorizontal,
+  Plus,
+  Search,
+  ShieldCheck,
+  Sparkles,
+  Trash2,
+  Upload,
+  X,
+} from 'lucide-react';
 import { api, date, errorMessage, money, patch, post, useApi } from './api';
 import { Button, Empty, ErrorBanner, Loading, Modal, Status, Success } from './ui';
 import { useUser } from './App';
 import { extractText } from './extract';
 import { SAMPLE_CREDIT_DOCUMENT, SAMPLE_DOCUMENTS } from '../shared/samples';
-import type { Activity, Citation, DocumentKind, EvidenceDocument, Finding, RecoveryCase } from '../shared/types';
-const docNames:Record<DocumentKind,string>={invoice:'Invoice',delivery_note:'Delivery note',supplier_message:'Supplier message',credit_note:'Credit note'};
-function AddDocument({record,onClose,onSaved}:{record:RecoveryCase;onClose:()=>void;onSaved:(c:RecoveryCase)=>void}){const{user}=useUser();const finalized=['approved','sent','partial'].includes(record.status);const[kind,setKind]=useState<DocumentKind>(finalized?'credit_note':'invoice'),[name,setName]=useState(''),[text,setText]=useState(''),[busy,setBusy]=useState(false),[progress,setProgress]=useState(''),[error,setError]=useState('');const fileRef=useRef<HTMLInputElement>(null);async function file(file?:File){if(!file)return;setBusy(true);setError('');try{setName(file.name);const result=await extractText(file,setProgress);if(result.length>40000)throw new Error('This document is too long. Limit it to 40,000 characters.');setText(result);}catch(e){setError(errorMessage(e));}finally{setBusy(false);setProgress('');if(fileRef.current)fileRef.current.value='';}}async function save(e:FormEvent<HTMLFormElement>){e.preventDefault();setBusy(true);setError('');try{const result=await post<{case:RecoveryCase}>(`/cases/${record.id}/documents`,{kind,name,text});onSaved(result.case);onClose();}catch(e){setError(errorMessage(e));}finally{setBusy(false);}}function sample(credit=false){const s=credit?SAMPLE_CREDIT_DOCUMENT:SAMPLE_DOCUMENTS.find(s=>s.kind===kind)||SAMPLE_DOCUMENTS[0];setKind(s.kind);setName(s.name);setText(s.text);}return <Modal title={finalized?'A credit arrived. Let’s match it.':'Add to the paper trail.'} description="Upload a file or paste text. Review what we read before saving it as evidence." onClose={()=>{if(!busy)onClose();}} wide><form className="stack-form" onSubmit={save}>{error&&<ErrorBanner>{error}</ErrorBanner>}<div className="form-row"><label>Document type<select value={kind} onChange={e=>setKind(e.target.value as DocumentKind)}>{Object.entries(docNames).filter(([key])=>!finalized||key==='credit_note').map(([key,label])=><option key={key} value={key}>{label}</option>)}</select></label><label>Document name<input required value={name} onChange={e=>setName(e.target.value)} maxLength={160} placeholder="e.g. Northstar invoice NF-1042"/></label></div><div className="upload-zone" onDragOver={e=>e.preventDefault()} onDrop={e=>{e.preventDefault();if(!busy)void file(e.dataTransfer.files[0]);}}><Upload size={23}/><div><button className="text-button" type="button" disabled={busy} onClick={()=>fileRef.current?.click()}>Choose a file</button><span> or drop it here</span><p>PDF, TXT, CSV, PNG or JPEG · Up to 10 MB</p></div><input ref={fileRef} type="file" accept=".pdf,.txt,.csv,.md,.png,.jpg,.jpeg,.webp" className="sr-only" tabIndex={-1} onChange={e=>void file(e.target.files?.[0])}/></div>{progress&&<div className="extraction-progress" role="status"><Loader2 size={16} className="spin"/>{progress}</div>}<label>Evidence text<textarea required minLength={10} maxLength={40000} rows={10} value={text} onChange={e=>setText(e.target.value)} placeholder="Paste the document’s text here, or upload a file above…" className="document-textarea"/><span className="field-hint">Check quantities, prices, and reference numbers. Original files stay on your device; the reviewed text is saved.</span></label>{user.isDemo&&<div className="sample-shortcuts"><Sparkles size={15}/><span>For this sample case:</span><button type="button" className="text-button" onClick={()=>sample(finalized||kind==='credit_note')}>{finalized||kind==='credit_note'?'Load the $144 sample credit note':'Use a sample document'}</button></div>}<div className="form-actions"><Button type="button" className="button-secondary" onClick={onClose} disabled={busy}>Cancel</Button><Button type="submit" busy={busy} disabled={!text.trim()||!name.trim()}>Save reviewed text <Check size={16}/></Button></div></form></Modal>;}
-function EvidenceModal({doc,quote,onClose}:{doc:EvidenceDocument;quote?:string;onClose:()=>void}){const pos=quote?doc.text.indexOf(quote):-1;return <Modal title={doc.name} description={`${docNames[doc.kind]} · Added ${date(doc.createdAt,true)}`} onClose={onClose} wide><div className="evidence-note"><ShieldCheck size={16}/> This is the text saved to your case. Keep the original file in your own records.</div><pre className="evidence-text">{pos>=0?<>{doc.text.slice(0,pos)}<mark>{quote}</mark>{doc.text.slice(pos+quote!.length)}</>:doc.text}</pre><div className="hash-label"><Fingerprint size={15}/><span>Text SHA-256 <code>{doc.sha256}</code></span></div></Modal>;}
-export function CasePage(){const{id}=useParams();const[params,setParams]=useSearchParams();const{user}=useUser();const{data,error,loading,reload,setData}=useApi<{case:RecoveryCase;activities:Activity[]}>(`/cases/${id}`);const[add,setAdd]=useState(false),[busy,setBusy]=useState(''),[actionError,setActionError]=useState(''),[success,setSuccess]=useState(''),[evidence,setEvidence]=useState<{doc:EvidenceDocument;quote?:string}|null>(null),[confirm,setConfirm]=useState<'claim'|'sent'|'dismiss'|null>(null),[claimText,setClaimText]=useState(''),[exportOpen,setExportOpen]=useState(false);const record=data?.case;const tab=params.get('tab')||'findings';useEffect(()=>{if(record)setClaimText(record.claimText);},[record?.claimText]);useEffect(()=>{const docId=params.get('doc');if(docId&&record){const d=record.documents.find(d=>d.id===docId);if(d)setEvidence({doc:d});}},[params,record?.id]);function update(c:RecoveryCase){setData(prev=>prev?{...prev,case:c}:{case:c,activities:[]});reload();}async function action(name:string,fn:()=>Promise<{case:RecoveryCase}>,message?:string){setBusy(name);setActionError('');setSuccess('');try{const r=await fn();update(r.case);if(message)setSuccess(message);}catch(e){setActionError(errorMessage(e));reload();}finally{setBusy('');setConfirm(null);}}function cite(c:Citation){const doc=record?.documents.find(d=>d.id===c.documentId);if(doc)setEvidence({doc,quote:c.quote});}if(loading&&!record)return <Loading/>;if(error&&!record)return <ErrorBanner>{error} <Link to="/app/cases">Back to cases</Link></ErrorBanner>;if(!record)return null;const closed=['resolved','dismissed'].includes(record.status),finalized=['approved','sent','partial','resolved'].includes(record.status),findings=record.analysis?.findings||[];const identified=findings.filter(f=>!f.needsReview).reduce((sum,f)=>sum+f.amountCents,0);const selected=findings.filter(f=>f.accepted&&!f.needsReview).reduce((sum,f)=>sum+f.amountCents,0);const hasUnanalyzed=record.documents.some(d=>d.kind==='credit_note'&&!record.analysis?.credits.some(c=>c.documentId===d.id));const nextStep=!record.analysis?'Analyze documents':record.status==='review'?'Review & prepare claim':record.status==='approved'?'Export & send claim':record.status==='partial'?'Follow up on the remainder':record.status==='resolved'?'All credits accounted for':'Match an arriving credit';return <><Link className="back-link" to="/app/cases"><ArrowLeft size={15}/> Recovery cases</Link><div className="case-page-heading"><div><div className="case-eyebrow">{record.supplierName} <span>·</span> {record.invoiceReference||'New case'}</div><h1>{record.title}</h1><div className="case-metadata"><Status status={record.status}/><span>Created {date(record.createdAt)}</span>{record.dueDate&&<span><Clock3 size={13}/> Follow up {date(record.dueDate)}</span>}</div></div><div className="case-heading-actions"><div className="export-dropdown"><Button className="button-secondary" onClick={()=>setExportOpen(!exportOpen)}><Download size={16}/> Export <ChevronDown size={13}/></Button>{exportOpen&&<div className="dropdown-menu">{[['pdf','Evidence PDF'],['eml','Email draft'],['csv','Findings CSV'],['json','Case JSON']].map(([format,label])=><a key={format} href={`/api/cases/${record.id}/export?format=${format}`} onClick={()=>setExportOpen(false)}><FileText size={15}/>{label}</a>)}</div>}</div>{!closed&&<Button onClick={()=>setAdd(true)}><Plus size={16}/>{finalized?'Add credit note':'Add document'}</Button>}</div></div>
- {actionError&&<ErrorBanner>{actionError}</ErrorBanner>}{success&&<Success>{success}</Success>}<div className="case-workflow">{[{label:'Collect evidence',done:record.documents.length>=2},{label:'Review & prepare',done:finalized},{label:'Follow up',done:['sent','partial','resolved'].includes(record.status)},{label:'Verify credit',done:record.status==='resolved'}].map((s,i)=><div key={s.label} className={s.done?'done':''}><span>{s.done?<Check size={14}/>:String(i+1).padStart(2,'0')}</span>{s.label}{i<3&&<ChevronRight size={15}/>}</div>)}</div>
- <div className="case-summary-grid"><article><span>{finalized?'Claim amount':'Identified discrepancy'}</span><strong>{money(finalized?record.claimedCents:identified,record.currency)}</strong><small>{finalized?'Reviewed and prepared':'Review findings before claiming'}</small></article><article><span>Verified credit notes</span><strong className="green-text">{money(record.creditedCents,record.currency)}</strong><small>Issued credits, not cash received</small></article><article className={record.status==='partial'?'outstanding-highlight':''}><span>{finalized?'Still outstanding':'Your next step'}</span>{finalized?<strong>{money(record.remainingCents,record.currency)}</strong>:<b className="next-step-label">{nextStep}<ArrowUpRight size={17}/></b>}<small>{record.status==='partial'?'This case stays open until the remainder is resolved.':finalized?'Claim minus verified credit notes':'You stay in control of every claim'}</small></article></div>
- <div className="case-layout"><div className="case-primary"><div className="detail-tabs" role="tablist" aria-label="Case sections">{[['findings','Findings',findings.length],['documents','Documents',record.documents.length],['claim','Claim draft',null],['history','Activity',null]].map(([value,label,count])=><button role="tab" aria-selected={tab===value} key={value} className={tab===value?'active':''} onClick={()=>setParams({tab:String(value)})}>{label}{count!==null&&<span>{count}</span>}</button>)}</div>
- {tab==='findings'&&<div className="findings-panel">{record.analysis?<><div className="analysis-overview"><div className="analysis-symbol"><Sparkles size={21}/></div><div><h2>The paperwork, connected.</h2><p>{record.analysis.summary}</p></div></div>{record.analysis.warnings.length>0&&<div className="warnings-box"><CircleAlert size={17}/><div><b>A few things to review</b>{record.analysis.warnings.map((w,i)=><p key={i}>{w}</p>)}</div></div>}{findings.length?findings.map(f=><article className={`finding-card ${!f.accepted?'excluded':''}`} key={f.id}><div className="finding-top"><div className="finding-type"><span className={`finding-icon ${f.needsReview?'warning':''}`}>{f.needsReview?<CircleAlert size={17}/>:<Search size={17}/>}</span><div><span>{f.kind.replaceAll('_',' ')}</span><h3>{f.product}</h3></div></div><strong>{money(f.amountCents,record.currency)}</strong></div><p>{f.explanation}</p><div className="finding-math"><span>Invoiced <b>{f.invoicedQuantity} {f.unit}</b></span><ArrowRight size={15}/><span>Received <b>{f.receivedQuantity} {f.unit}</b></span><span className="math-result">{Math.max(0,f.invoicedQuantity-f.receivedQuantity)} missing × {money(f.unitPriceCents,record.currency)}</span></div><div className="finding-evidence">{f.evidence.map((c,i)=><button key={i} onClick={()=>cite(c)}><Link2 size={13}/>{docNames[record.documents.find(d=>d.id===c.documentId)?.kind||'invoice']}<ArrowUpRight size={12}/></button>)}</div><div className="finding-footer"><span className={f.needsReview?'warning-text':'muted'}>{f.needsReview?<><CircleAlert size={13}/>Needs clarification · excluded from claim</>:<><ShieldCheck size={13}/>Source-checked · {f.confidence} confidence</>}</span>{!finalized&&!closed&&<label className="finding-checkbox"><input type="checkbox" checked={f.accepted} disabled={!!busy||f.needsReview} onChange={e=>{const checked=e.target.checked;const ids=findings.filter(x=>x.id===f.id?checked:x.accepted).map(x=>x.id);setData(prev=>prev?{...prev,case:{...prev.case,analysis:prev.case.analysis?{...prev.case.analysis,findings:prev.case.analysis.findings.map(item=>item.id===f.id?{...item,accepted:checked}:item)}:null}}:prev);void action('selection',()=>patch(`/cases/${record.id}`,{version:record.version,acceptedFindingIds:ids}));}}/>Include in claim</label>}</div></article>):<Empty title="No claimable shortage found.">The documents did not establish a supported shortage. Review any warnings and keep the evidence for your records.</Empty>}
- {record.analysis.credits.length>0&&<section className="credits-section"><h2>Credits to connect</h2>{record.analysis.credits.map(credit=><article className={`credit-match ${credit.verified?'verified':''}`} key={credit.documentId}><div className="credit-match-top"><span className="credit-icon"><CheckCheck size={20}/></span><div><h3>{credit.reference}</h3><p>{credit.verified?'You verified this credit note':'Review the note before counting this credit'}</p></div><strong>{money(credit.amountCents,record.currency)}</strong></div><div className="credit-match-bottom"><button className="text-link" onClick={()=>credit.evidence[0]&&cite(credit.evidence[0])}>Inspect evidence <ArrowUpRight size={14}/></button>{credit.verified?<span className="status status-resolved"><Check size={14}/>Verified</span>:<Button className="button-small" disabled={!finalized||!!busy||closed} busy={busy===credit.documentId} onClick={()=>void action(credit.documentId,()=>post(`/cases/${record.id}/credits/verify`,{documentId:credit.documentId,version:record.version}),'Credit note verified. The outstanding balance has been updated.')}>Verify credit <Check size={15}/></Button>}</div></article>)}</section>}
- {record.status==='review'&&selected>0&&<div className="review-action"><div><strong>Evidence reviewed?</strong><p>Prepare a supplier review request for {money(selected,record.currency)}.</p></div><Button disabled={!!busy} onClick={()=>setConfirm('claim')}>Prepare claim <ArrowRight size={16}/></Button></div>}</>:<Empty title="Let’s connect the paperwork." action={<Button busy={busy==='analyze'} disabled={record.documents.length<2} onClick={()=>void action('analyze',()=>post(`/cases/${record.id}/analyze`),'Analysis complete. Review the evidence below.') }><Sparkles size={16}/>Analyze documents</Button>}>Add an invoice and delivery note, then let the intelligence layer find supported discrepancies.</Empty>}</div>}
- {tab==='documents'&&<div className="panel case-documents">{record.documents.length?record.documents.map(d=><div className="document-row" key={d.id}><span className={`doc-symbol ${d.kind}`}><FileText size={21}/></span><button onClick={()=>setEvidence({doc:d})}><strong>{d.name}</strong><span>{docNames[d.kind]} · {d.text.length.toLocaleString()} characters · {date(d.createdAt)}</span></button><button className="icon-button" onClick={()=>setEvidence({doc:d})} aria-label={`View ${d.name}`}><ArrowUpRight size={17}/></button>{!finalized&&!closed&&<button className="icon-button" disabled={!!busy} aria-label={`Remove ${d.name}`} onClick={()=>{if(window.confirm(`Remove ${d.name}? This also clears the current analysis. Your original file is not deleted.`))void action('remove',()=>api(`/cases/${record.id}/documents/${d.id}`,{method:'DELETE'}));}}><Trash2 size={16}/></button>}</div>):<Empty title="Build the paper trail.">Add your invoice first, then a delivery note or receiving record.</Empty>}{!closed&&<button className="add-document-row" onClick={()=>setAdd(true)}><Plus size={18}/>Add {finalized?'a credit note':'another document'}</button>}</div>}
- {tab==='claim'&&<section className="panel claim-panel">{record.claimText?<><div className="panel-heading"><div><h2>{record.creditedCents>0?'Original approved request':'A clear request. Ready for your review.'}</h2><p>{record.creditedCents>0?'Preserved for your records. Email export acknowledges verified credits and asks only for the remaining balance.':'No email is sent automatically.'}</p></div><Mail size={21}/></div><textarea aria-label="Claim draft" className="claim-editor" value={claimText} onChange={e=>setClaimText(e.target.value)} readOnly={!['review','approved'].includes(record.status)} rows={16}/><div className="claim-actions"><div><a className="button button-secondary" href={`/api/cases/${record.id}/export?format=eml`}><Download size={16}/>{record.creditedCents>0?'Follow-up draft':'Email draft'}</a><a className="button button-secondary" href={`/api/cases/${record.id}/export?format=pdf`}><FileText size={16}/>Evidence PDF</a></div>{claimText!==record.claimText&&<Button busy={busy==='save-claim'} onClick={()=>void action('save-claim',()=>patch(`/cases/${record.id}`,{version:record.version,claimText}),'Claim wording saved.')}>Save wording</Button>}{record.status==='approved'&&claimText===record.claimText&&<Button onClick={()=>setConfirm('sent')}>I’ve sent this claim <Check size={16}/></Button>}</div></>:<Empty title="Good claims start with good evidence." action={<Button className="button-secondary" onClick={()=>setParams({tab:'findings'})}>Review findings <ArrowRight size={16}/></Button>}>Analyze your documents, check the findings, then prepare your claim here.</Empty>}</section>}
- {tab==='history'&&<section className="panel padded"><h2>Every step, on the record.</h2><div className="case-history">{data?.activities.length?data.activities.map(a=><div key={a.id}><span className="activity-dot"><Check size={12}/></span><div><b>{a.action.replaceAll('.',' ').replaceAll('_',' ')}</b><p>{a.detail}</p><time>{new Date(a.createdAt).toLocaleString()}</time></div></div>):<p className="muted">The case activity will appear here.</p>}</div></section>}</div>
- <aside className="case-rail"><section className="panel padded"><div className="section-card-heading"><h3>Paper trail</h3><span className="count-pill">{record.documents.length}</span></div><div className="evidence-trail">{(['invoice','delivery_note','supplier_message','credit_note'] as DocumentKind[]).map(kind=>{const docs=record.documents.filter(d=>d.kind===kind);return <div key={kind} className={docs.length?'present':''}><span>{docs.length?<Check size={12}/>:<i/>}</span><div><b>{docNames[kind]}</b>{docs.length?docs.map(d=><button key={d.id} onClick={()=>setEvidence({doc:d})}>{d.name}<ArrowUpRight size={11}/></button>):<small>{kind==='credit_note'?'Add when it arrives':kind==='supplier_message'?'Optional context':'Required for shortage analysis'}</small>}</div></div>;})}</div>{!closed&&<Button className="button-secondary full-width" busy={busy==='analyze'} disabled={!!busy||record.documents.length<2} onClick={()=>void action('analyze',()=>post(`/cases/${record.id}/analyze`),'Analysis complete. Every finding is ready for inspection.') }><Sparkles size={15}/>{hasUnanalyzed?'Match new credit':record.analysis?'Run analysis again':'Analyze documents'}</Button>}</section>{record.analysis&&<section className="intelligence-card"><div><Sparkles size={16}/><b>{record.analysis.provider==='demo'?'Sample replay':record.analysis.provider==='evorozen'?'Evorozen Neural Pulse':record.analysis.provider==='gemini'?'Gemini':'OpenAI'}</b></div><p>{record.analysis.provider==='demo'?'A reproducible result for fictional sample documents. Real workspaces use live AI.':'AI interprets the paper trail. Quotes are validated and amounts calculated in code.'}</p><dl><div><dt>Processed</dt><dd>{(record.analysis.durationMs/1000).toFixed(1)}s</dd></div><div><dt>Supplier context</dt><dd>{record.analysis.memoryUsed?'Used':'No saved context'}</dd></div><div><dt>Trace</dt><dd title={record.analysis.traceId}>{record.analysis.traceId.slice(0,22)}{record.analysis.traceId.length>22?'…':''}</dd></div></dl></section>}{record.status==='partial'&&<section className="remainder-note"><span><Clock3 size={18}/>THE REMAINDER</span><h3>{money(record.remainingCents,record.currency)} still deserves an answer.</h3><p>A partial credit is progress. This case stays open so the rest doesn’t disappear.</p><a href={`/api/cases/${record.id}/export?format=eml`} className="text-link">Download follow-up context <ArrowRight size={15}/></a></section>}{!finalized&&!closed&&<button className="dismiss-link" onClick={()=>setConfirm('dismiss')}>Dismiss this case</button>}</aside></div>
- {add&&<AddDocument record={record} onClose={()=>setAdd(false)} onSaved={update}/>} {evidence&&<EvidenceModal {...evidence} onClose={()=>setEvidence(null)}/>} {confirm&&<Modal title={confirm==='claim'?'Ready to stand behind this claim?':confirm==='sent'?'Has the claim been sent?':'Dismiss this recovery case?'} onClose={()=>setConfirm(null)}><p className="confirmation-copy">{confirm==='claim'?`You’re preparing a ${money(selected,record.currency)} supplier review request. Confirm you checked the source text, quantities, and prices. Claim evidence will be locked, and you can add credit notes as they arrive.`:confirm==='sent'?'This records that you sent the request through your own email. Remainder will not send any message.':'The case will be closed without claiming a credit. Its evidence and activity will remain available.'}</p><div className="form-actions"><Button className="button-secondary" onClick={()=>setConfirm(null)}>Go back</Button><Button busy={!!busy} onClick={()=>{if(confirm==='claim')void action('claim',()=>post(`/cases/${record.id}/claim`),'Claim prepared. Open Claim draft to export and send it.');else void action(confirm,()=>patch(`/cases/${record.id}`,{version:record.version,status:confirm==='sent'?'sent':'dismissed'}),confirm==='sent'?'Marked as sent. Add the supplier’s credit note when it arrives.':'Case dismissed.');}}>{confirm==='claim'?'I reviewed it. Prepare claim.':confirm==='sent'?'Yes, mark as sent':'Dismiss case'}<Check size={16}/></Button></div></Modal>}</>;
+import type {
+  Activity,
+  Citation,
+  DocumentKind,
+  EvidenceDocument,
+  Finding,
+  RecoveryCase,
+} from '../shared/types';
+const docNames: Record<DocumentKind, string> = {
+  invoice: 'Invoice',
+  delivery_note: 'Delivery note',
+  supplier_message: 'Supplier message',
+  credit_note: 'Credit note',
+};
+function AddDocument({
+  record,
+  onClose,
+  onSaved,
+}: {
+  record: RecoveryCase;
+  onClose: () => void;
+  onSaved: (c: RecoveryCase) => void;
+}) {
+  const { user } = useUser();
+  const finalized = ['approved', 'sent', 'partial'].includes(record.status);
+  const [kind, setKind] = useState<DocumentKind>(finalized ? 'credit_note' : 'invoice'),
+    [name, setName] = useState(''),
+    [text, setText] = useState(''),
+    [busy, setBusy] = useState(false),
+    [progress, setProgress] = useState(''),
+    [error, setError] = useState('');
+  const fileRef = useRef<HTMLInputElement>(null);
+  async function file(file?: File) {
+    if (!file) return;
+    setBusy(true);
+    setError('');
+    try {
+      setName(file.name);
+      const result = await extractText(file, setProgress);
+      if (result.length > 40000)
+        throw new Error('This document is too long. Limit it to 40,000 characters.');
+      setText(result);
+    } catch (e) {
+      setError(errorMessage(e));
+    } finally {
+      setBusy(false);
+      setProgress('');
+      if (fileRef.current) fileRef.current.value = '';
+    }
+  }
+  async function save(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setBusy(true);
+    setError('');
+    try {
+      const result = await post<{ case: RecoveryCase }>(`/cases/${record.id}/documents`, {
+        kind,
+        name,
+        text,
+      });
+      onSaved(result.case);
+      onClose();
+    } catch (e) {
+      setError(errorMessage(e));
+    } finally {
+      setBusy(false);
+    }
+  }
+  function sample(credit = false) {
+    const s = credit
+      ? SAMPLE_CREDIT_DOCUMENT
+      : SAMPLE_DOCUMENTS.find((s) => s.kind === kind) || SAMPLE_DOCUMENTS[0];
+    setKind(s.kind);
+    setName(s.name);
+    setText(s.text);
+  }
+  return (
+    <Modal
+      title={finalized ? 'A credit arrived. Let’s match it.' : 'Add to the paper trail.'}
+      description="Upload a file or paste text. Review what we read before saving it as evidence."
+      onClose={() => {
+        if (!busy) onClose();
+      }}
+      wide
+    >
+      <form className="stack-form" onSubmit={save}>
+        {error && <ErrorBanner>{error}</ErrorBanner>}
+        <div className="form-row">
+          <label>
+            Document type
+            <select value={kind} onChange={(e) => setKind(e.target.value as DocumentKind)}>
+              {Object.entries(docNames)
+                .filter(([key]) => !finalized || key === 'credit_note')
+                .map(([key, label]) => (
+                  <option key={key} value={key}>
+                    {label}
+                  </option>
+                ))}
+            </select>
+          </label>
+          <label>
+            Document name
+            <input
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              maxLength={160}
+              placeholder="e.g. Northstar invoice NF-1042"
+            />
+          </label>
+        </div>
+        <div
+          className="upload-zone"
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={(e) => {
+            e.preventDefault();
+            if (!busy) void file(e.dataTransfer.files[0]);
+          }}
+        >
+          <Upload size={23} />
+          <div>
+            <button
+              className="text-button"
+              type="button"
+              disabled={busy}
+              onClick={() => fileRef.current?.click()}
+            >
+              Choose a file
+            </button>
+            <span> or drop it here</span>
+            <p>PDF, TXT, CSV, PNG or JPEG · Up to 10 MB</p>
+          </div>
+          <input
+            ref={fileRef}
+            type="file"
+            accept=".pdf,.txt,.csv,.md,.png,.jpg,.jpeg,.webp"
+            className="sr-only"
+            tabIndex={-1}
+            onChange={(e) => void file(e.target.files?.[0])}
+          />
+        </div>
+        {progress && (
+          <div className="extraction-progress" role="status">
+            <Loader2 size={16} className="spin" />
+            {progress}
+          </div>
+        )}
+        <label>
+          Evidence text
+          <textarea
+            required
+            minLength={10}
+            maxLength={40000}
+            rows={10}
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="Paste the document’s text here, or upload a file above…"
+            className="document-textarea"
+          />
+          <span className="field-hint">
+            Check quantities, prices, and reference numbers. Original files stay on your device; the
+            reviewed text is saved.
+          </span>
+        </label>
+        {user.isDemo && (
+          <div className="sample-shortcuts">
+            <Sparkles size={15} />
+            <span>For this sample case:</span>
+            <button
+              type="button"
+              className="text-button"
+              onClick={() => sample(finalized || kind === 'credit_note')}
+            >
+              {finalized || kind === 'credit_note'
+                ? 'Load the $144 sample credit note'
+                : 'Use a sample document'}
+            </button>
+          </div>
+        )}
+        <div className="form-actions">
+          <Button type="button" className="button-secondary" onClick={onClose} disabled={busy}>
+            Cancel
+          </Button>
+          <Button type="submit" busy={busy} disabled={!text.trim() || !name.trim()}>
+            Save reviewed text <Check size={16} />
+          </Button>
+        </div>
+      </form>
+    </Modal>
+  );
+}
+function EvidenceModal({
+  doc,
+  quote,
+  onClose,
+}: {
+  doc: EvidenceDocument;
+  quote?: string;
+  onClose: () => void;
+}) {
+  const pos = quote ? doc.text.indexOf(quote) : -1;
+  return (
+    <Modal
+      title={doc.name}
+      description={`${docNames[doc.kind]} · Added ${date(doc.createdAt, true)}`}
+      onClose={onClose}
+      wide
+    >
+      <div className="evidence-note">
+        <ShieldCheck size={16} /> This is the text saved to your case. Keep the original file in
+        your own records.
+      </div>
+      <pre className="evidence-text">
+        {pos >= 0 ? (
+          <>
+            {doc.text.slice(0, pos)}
+            <mark>{quote}</mark>
+            {doc.text.slice(pos + quote!.length)}
+          </>
+        ) : (
+          doc.text
+        )}
+      </pre>
+      <div className="hash-label">
+        <Fingerprint size={15} />
+        <span>
+          Text SHA-256 <code>{doc.sha256}</code>
+        </span>
+      </div>
+    </Modal>
+  );
+}
+export function CasePage() {
+  const { id } = useParams();
+  const [params, setParams] = useSearchParams();
+  const { user } = useUser();
+  const { data, error, loading, reload, setData } = useApi<{
+    case: RecoveryCase;
+    activities: Activity[];
+  }>(`/cases/${id}`);
+  const [add, setAdd] = useState(false),
+    [busy, setBusy] = useState(''),
+    [actionError, setActionError] = useState(''),
+    [success, setSuccess] = useState(''),
+    [evidence, setEvidence] = useState<{ doc: EvidenceDocument; quote?: string } | null>(null),
+    [confirm, setConfirm] = useState<'claim' | 'sent' | 'dismiss' | null>(null),
+    [claimText, setClaimText] = useState(''),
+    [exportOpen, setExportOpen] = useState(false);
+  const record = data?.case;
+  const tab = params.get('tab') || 'findings';
+  useEffect(() => {
+    if (record) setClaimText(record.claimText);
+  }, [record?.claimText]);
+  useEffect(() => {
+    const docId = params.get('doc');
+    if (docId && record) {
+      const d = record.documents.find((d) => d.id === docId);
+      if (d) setEvidence({ doc: d });
+    }
+  }, [params, record?.id]);
+  function update(c: RecoveryCase) {
+    setData((prev) => (prev ? { ...prev, case: c } : { case: c, activities: [] }));
+    reload();
+  }
+  async function action(name: string, fn: () => Promise<{ case: RecoveryCase }>, message?: string) {
+    setBusy(name);
+    setActionError('');
+    setSuccess('');
+    try {
+      const r = await fn();
+      update(r.case);
+      if (message) setSuccess(message);
+    } catch (e) {
+      setActionError(errorMessage(e));
+      reload();
+    } finally {
+      setBusy('');
+      setConfirm(null);
+    }
+  }
+  function cite(c: Citation) {
+    const doc = record?.documents.find((d) => d.id === c.documentId);
+    if (doc) setEvidence({ doc, quote: c.quote });
+  }
+  if (loading && !record) return <Loading />;
+  if (error && !record)
+    return (
+      <ErrorBanner>
+        {error} <Link to="/app/cases">Back to cases</Link>
+      </ErrorBanner>
+    );
+  if (!record) return null;
+  const closed = ['resolved', 'dismissed'].includes(record.status),
+    finalized = ['approved', 'sent', 'partial', 'resolved'].includes(record.status),
+    findings = record.analysis?.findings || [];
+  const identified = findings
+    .filter((f) => !f.needsReview)
+    .reduce((sum, f) => sum + f.amountCents, 0);
+  const selected = findings
+    .filter((f) => f.accepted && !f.needsReview)
+    .reduce((sum, f) => sum + f.amountCents, 0);
+  const hasUnanalyzed = record.documents.some(
+    (d) => d.kind === 'credit_note' && !record.analysis?.credits.some((c) => c.documentId === d.id),
+  );
+  const nextStep = !record.analysis
+    ? 'Analyze documents'
+    : record.status === 'review'
+      ? 'Review & prepare claim'
+      : record.status === 'approved'
+        ? 'Export & send claim'
+        : record.status === 'partial'
+          ? 'Follow up on the remainder'
+          : record.status === 'resolved'
+            ? 'All credits accounted for'
+            : 'Match an arriving credit';
+  return (
+    <>
+      <Link className="back-link" to="/app/cases">
+        <ArrowLeft size={15} /> Recovery cases
+      </Link>
+      <div className="case-page-heading">
+        <div>
+          <div className="case-eyebrow">
+            {record.supplierName} <span>·</span> {record.invoiceReference || 'New case'}
+          </div>
+          <h1>{record.title}</h1>
+          <div className="case-metadata">
+            <Status status={record.status} />
+            <span>Created {date(record.createdAt)}</span>
+            {record.dueDate && (
+              <span>
+                <Clock3 size={13} /> Follow up {date(record.dueDate)}
+              </span>
+            )}
+          </div>
+        </div>
+        <div className="case-heading-actions">
+          <div className="export-dropdown">
+            <Button className="button-secondary" onClick={() => setExportOpen(!exportOpen)}>
+              <Download size={16} /> Export <ChevronDown size={13} />
+            </Button>
+            {exportOpen && (
+              <div className="dropdown-menu">
+                {[
+                  ['pdf', 'Evidence PDF'],
+                  ['eml', 'Email draft'],
+                  ['csv', 'Findings CSV'],
+                  ['json', 'Case JSON'],
+                ].map(([format, label]) => (
+                  <a
+                    key={format}
+                    href={`/api/cases/${record.id}/export?format=${format}`}
+                    onClick={() => setExportOpen(false)}
+                  >
+                    <FileText size={15} />
+                    {label}
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+          {!closed && (
+            <Button onClick={() => setAdd(true)}>
+              <Plus size={16} />
+              {finalized ? 'Add credit note' : 'Add document'}
+            </Button>
+          )}
+        </div>
+      </div>
+      {actionError && <ErrorBanner>{actionError}</ErrorBanner>}
+      {success && <Success>{success}</Success>}
+      <div className="case-workflow">
+        {[
+          { label: 'Collect evidence', done: record.documents.length >= 2 },
+          { label: 'Review & prepare', done: finalized },
+          { label: 'Follow up', done: ['sent', 'partial', 'resolved'].includes(record.status) },
+          { label: 'Verify credit', done: record.status === 'resolved' },
+        ].map((s, i) => (
+          <div key={s.label} className={s.done ? 'done' : ''}>
+            <span>{s.done ? <Check size={14} /> : String(i + 1).padStart(2, '0')}</span>
+            {s.label}
+            {i < 3 && <ChevronRight size={15} />}
+          </div>
+        ))}
+      </div>
+      <div className="case-summary-grid">
+        <article>
+          <span>{finalized ? 'Claim amount' : 'Identified discrepancy'}</span>
+          <strong>{money(finalized ? record.claimedCents : identified, record.currency)}</strong>
+          <small>{finalized ? 'Reviewed and prepared' : 'Review findings before claiming'}</small>
+        </article>
+        <article>
+          <span>Verified credit notes</span>
+          <strong className="green-text">{money(record.creditedCents, record.currency)}</strong>
+          <small>Issued credits, not cash received</small>
+        </article>
+        <article className={record.status === 'partial' ? 'outstanding-highlight' : ''}>
+          <span>{finalized ? 'Still outstanding' : 'Your next step'}</span>
+          {finalized ? (
+            <strong>{money(record.remainingCents, record.currency)}</strong>
+          ) : (
+            <b className="next-step-label">
+              {nextStep}
+              <ArrowUpRight size={17} />
+            </b>
+          )}
+          <small>
+            {record.status === 'partial'
+              ? 'This case stays open until the remainder is resolved.'
+              : finalized
+                ? 'Claim minus verified credit notes'
+                : 'You stay in control of every claim'}
+          </small>
+        </article>
+      </div>
+      <div className="case-layout">
+        <div className="case-primary">
+          <div className="detail-tabs" role="tablist" aria-label="Case sections">
+            {[
+              ['findings', 'Findings', findings.length],
+              ['documents', 'Documents', record.documents.length],
+              ['claim', 'Claim draft', null],
+              ['history', 'Activity', null],
+            ].map(([value, label, count]) => (
+              <button
+                role="tab"
+                aria-selected={tab === value}
+                key={value}
+                className={tab === value ? 'active' : ''}
+                onClick={() => setParams({ tab: String(value) })}
+              >
+                {label}
+                {count !== null && <span>{count}</span>}
+              </button>
+            ))}
+          </div>
+          {tab === 'findings' && (
+            <div className="findings-panel">
+              {record.analysis ? (
+                <>
+                  <div className="analysis-overview">
+                    <div className="analysis-symbol">
+                      <Sparkles size={21} />
+                    </div>
+                    <div>
+                      <h2>The paperwork, connected.</h2>
+                      <p>{record.analysis.summary}</p>
+                    </div>
+                  </div>
+                  {record.analysis.warnings.length > 0 && (
+                    <div className="warnings-box">
+                      <CircleAlert size={17} />
+                      <div>
+                        <b>A few things to review</b>
+                        {record.analysis.warnings.map((w, i) => (
+                          <p key={i}>{w}</p>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {findings.length ? (
+                    findings.map((f) => (
+                      <article
+                        className={`finding-card ${!f.accepted ? 'excluded' : ''}`}
+                        key={f.id}
+                      >
+                        <div className="finding-top">
+                          <div className="finding-type">
+                            <span className={`finding-icon ${f.needsReview ? 'warning' : ''}`}>
+                              {f.needsReview ? <CircleAlert size={17} /> : <Search size={17} />}
+                            </span>
+                            <div>
+                              <span>{f.kind.replaceAll('_', ' ')}</span>
+                              <h3>{f.product}</h3>
+                            </div>
+                          </div>
+                          <strong>{money(f.amountCents, record.currency)}</strong>
+                        </div>
+                        <p>{f.explanation}</p>
+                        <div className="finding-math">
+                          <span>
+                            Invoiced{' '}
+                            <b>
+                              {f.invoicedQuantity} {f.unit}
+                            </b>
+                          </span>
+                          <ArrowRight size={15} />
+                          <span>
+                            Received{' '}
+                            <b>
+                              {f.receivedQuantity} {f.unit}
+                            </b>
+                          </span>
+                          <span className="math-result">
+                            {Math.max(0, f.invoicedQuantity - f.receivedQuantity)} missing ×{' '}
+                            {money(f.unitPriceCents, record.currency)}
+                          </span>
+                        </div>
+                        <div className="finding-evidence">
+                          {f.evidence.map((c, i) => (
+                            <button key={i} onClick={() => cite(c)}>
+                              <Link2 size={13} />
+                              {
+                                docNames[
+                                  record.documents.find((d) => d.id === c.documentId)?.kind ||
+                                    'invoice'
+                                ]
+                              }
+                              <ArrowUpRight size={12} />
+                            </button>
+                          ))}
+                        </div>
+                        <div className="finding-footer">
+                          <span className={f.needsReview ? 'warning-text' : 'muted'}>
+                            {f.needsReview ? (
+                              <>
+                                <CircleAlert size={13} />
+                                Needs clarification · excluded from claim
+                              </>
+                            ) : (
+                              <>
+                                <ShieldCheck size={13} />
+                                Source-checked · {f.confidence} confidence
+                              </>
+                            )}
+                          </span>
+                          {!finalized && !closed && (
+                            <label className="finding-checkbox">
+                              <input
+                                type="checkbox"
+                                checked={f.accepted}
+                                disabled={!!busy || f.needsReview}
+                                onChange={(e) => {
+                                  const checked = e.target.checked;
+                                  const ids = findings
+                                    .filter((x) => (x.id === f.id ? checked : x.accepted))
+                                    .map((x) => x.id);
+                                  setData((prev) =>
+                                    prev
+                                      ? {
+                                          ...prev,
+                                          case: {
+                                            ...prev.case,
+                                            analysis: prev.case.analysis
+                                              ? {
+                                                  ...prev.case.analysis,
+                                                  findings: prev.case.analysis.findings.map(
+                                                    (item) =>
+                                                      item.id === f.id
+                                                        ? { ...item, accepted: checked }
+                                                        : item,
+                                                  ),
+                                                }
+                                              : null,
+                                          },
+                                        }
+                                      : prev,
+                                  );
+                                  void action('selection', () =>
+                                    patch(`/cases/${record.id}`, {
+                                      version: record.version,
+                                      acceptedFindingIds: ids,
+                                    }),
+                                  );
+                                }}
+                              />
+                              Include in claim
+                            </label>
+                          )}
+                        </div>
+                      </article>
+                    ))
+                  ) : (
+                    <Empty title="No claimable shortage found.">
+                      The documents did not establish a supported shortage. Review any warnings and
+                      keep the evidence for your records.
+                    </Empty>
+                  )}
+                  {record.analysis.credits.length > 0 && (
+                    <section className="credits-section">
+                      <h2>Credits to connect</h2>
+                      {record.analysis.credits.map((credit) => (
+                        <article
+                          className={`credit-match ${credit.verified ? 'verified' : ''}`}
+                          key={credit.documentId}
+                        >
+                          <div className="credit-match-top">
+                            <span className="credit-icon">
+                              <CheckCheck size={20} />
+                            </span>
+                            <div>
+                              <h3>{credit.reference}</h3>
+                              <p>
+                                {credit.verified
+                                  ? 'You verified this credit note'
+                                  : 'Review the note before counting this credit'}
+                              </p>
+                            </div>
+                            <strong>{money(credit.amountCents, record.currency)}</strong>
+                          </div>
+                          <div className="credit-match-bottom">
+                            <button
+                              className="text-link"
+                              onClick={() => credit.evidence[0] && cite(credit.evidence[0])}
+                            >
+                              Inspect evidence <ArrowUpRight size={14} />
+                            </button>
+                            {credit.verified ? (
+                              <span className="status status-resolved">
+                                <Check size={14} />
+                                Verified
+                              </span>
+                            ) : (
+                              <Button
+                                className="button-small"
+                                disabled={!finalized || !!busy || closed}
+                                busy={busy === credit.documentId}
+                                onClick={() =>
+                                  void action(
+                                    credit.documentId,
+                                    () =>
+                                      post(`/cases/${record.id}/credits/verify`, {
+                                        documentId: credit.documentId,
+                                        version: record.version,
+                                      }),
+                                    'Credit note verified. The outstanding balance has been updated.',
+                                  )
+                                }
+                              >
+                                Verify credit <Check size={15} />
+                              </Button>
+                            )}
+                          </div>
+                        </article>
+                      ))}
+                    </section>
+                  )}
+                  {record.status === 'review' && selected > 0 && (
+                    <div className="review-action">
+                      <div>
+                        <strong>Evidence reviewed?</strong>
+                        <p>
+                          Prepare a supplier review request for {money(selected, record.currency)}.
+                        </p>
+                      </div>
+                      <Button disabled={!!busy} onClick={() => setConfirm('claim')}>
+                        Prepare claim <ArrowRight size={16} />
+                      </Button>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <Empty
+                  title="Let’s connect the paperwork."
+                  action={
+                    <Button
+                      busy={busy === 'analyze'}
+                      disabled={record.documents.length < 2}
+                      onClick={() =>
+                        void action(
+                          'analyze',
+                          () => post(`/cases/${record.id}/analyze`),
+                          'Analysis complete. Review the evidence below.',
+                        )
+                      }
+                    >
+                      <Sparkles size={16} />
+                      Analyze documents
+                    </Button>
+                  }
+                >
+                  Add an invoice and delivery note, then let the intelligence layer find supported
+                  discrepancies.
+                </Empty>
+              )}
+            </div>
+          )}
+          {tab === 'documents' && (
+            <div className="panel case-documents">
+              {record.documents.length ? (
+                record.documents.map((d) => (
+                  <div className="document-row" key={d.id}>
+                    <span className={`doc-symbol ${d.kind}`}>
+                      <FileText size={21} />
+                    </span>
+                    <button onClick={() => setEvidence({ doc: d })}>
+                      <strong>{d.name}</strong>
+                      <span>
+                        {docNames[d.kind]} · {d.text.length.toLocaleString()} characters ·{' '}
+                        {date(d.createdAt)}
+                      </span>
+                    </button>
+                    <button
+                      className="icon-button"
+                      onClick={() => setEvidence({ doc: d })}
+                      aria-label={`View ${d.name}`}
+                    >
+                      <ArrowUpRight size={17} />
+                    </button>
+                    {!finalized && !closed && (
+                      <button
+                        className="icon-button"
+                        disabled={!!busy}
+                        aria-label={`Remove ${d.name}`}
+                        onClick={() => {
+                          if (
+                            window.confirm(
+                              `Remove ${d.name}? This also clears the current analysis. Your original file is not deleted.`,
+                            )
+                          )
+                            void action('remove', () =>
+                              api(`/cases/${record.id}/documents/${d.id}`, { method: 'DELETE' }),
+                            );
+                        }}
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <Empty title="Build the paper trail.">
+                  Add your invoice first, then a delivery note or receiving record.
+                </Empty>
+              )}
+              {!closed && (
+                <button className="add-document-row" onClick={() => setAdd(true)}>
+                  <Plus size={18} />
+                  Add {finalized ? 'a credit note' : 'another document'}
+                </button>
+              )}
+            </div>
+          )}
+          {tab === 'claim' && (
+            <section className="panel claim-panel">
+              {record.claimText ? (
+                <>
+                  <div className="panel-heading">
+                    <div>
+                      <h2>
+                        {record.creditedCents > 0
+                          ? 'Original approved request'
+                          : 'A clear request. Ready for your review.'}
+                      </h2>
+                      <p>
+                        {record.creditedCents > 0
+                          ? 'Preserved for your records. Email export acknowledges verified credits and asks only for the remaining balance.'
+                          : 'No email is sent automatically.'}
+                      </p>
+                    </div>
+                    <Mail size={21} />
+                  </div>
+                  <textarea
+                    aria-label="Claim draft"
+                    className="claim-editor"
+                    value={claimText}
+                    onChange={(e) => setClaimText(e.target.value)}
+                    readOnly={!['review', 'approved'].includes(record.status)}
+                    rows={16}
+                  />
+                  <div className="claim-actions">
+                    <div>
+                      <a
+                        className="button button-secondary"
+                        href={`/api/cases/${record.id}/export?format=eml`}
+                      >
+                        <Download size={16} />
+                        {record.creditedCents > 0 ? 'Follow-up draft' : 'Email draft'}
+                      </a>
+                      <a
+                        className="button button-secondary"
+                        href={`/api/cases/${record.id}/export?format=pdf`}
+                      >
+                        <FileText size={16} />
+                        Evidence PDF
+                      </a>
+                    </div>
+                    {claimText !== record.claimText && (
+                      <Button
+                        busy={busy === 'save-claim'}
+                        onClick={() =>
+                          void action(
+                            'save-claim',
+                            () =>
+                              patch(`/cases/${record.id}`, { version: record.version, claimText }),
+                            'Claim wording saved.',
+                          )
+                        }
+                      >
+                        Save wording
+                      </Button>
+                    )}
+                    {record.status === 'approved' && claimText === record.claimText && (
+                      <Button onClick={() => setConfirm('sent')}>
+                        I’ve sent this claim <Check size={16} />
+                      </Button>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <Empty
+                  title="Good claims start with good evidence."
+                  action={
+                    <Button
+                      className="button-secondary"
+                      onClick={() => setParams({ tab: 'findings' })}
+                    >
+                      Review findings <ArrowRight size={16} />
+                    </Button>
+                  }
+                >
+                  Analyze your documents, check the findings, then prepare your claim here.
+                </Empty>
+              )}
+            </section>
+          )}
+          {tab === 'history' && (
+            <section className="panel padded">
+              <h2>Every step, on the record.</h2>
+              <div className="case-history">
+                {data?.activities.length ? (
+                  data.activities.map((a) => (
+                    <div key={a.id}>
+                      <span className="activity-dot">
+                        <Check size={12} />
+                      </span>
+                      <div>
+                        <b>{a.action.replaceAll('.', ' ').replaceAll('_', ' ')}</b>
+                        <p>{a.detail}</p>
+                        <time>{new Date(a.createdAt).toLocaleString()}</time>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="muted">The case activity will appear here.</p>
+                )}
+              </div>
+            </section>
+          )}
+        </div>
+        <aside className="case-rail">
+          <section className="panel padded">
+            <div className="section-card-heading">
+              <h3>Paper trail</h3>
+              <span className="count-pill">{record.documents.length}</span>
+            </div>
+            <div className="evidence-trail">
+              {(
+                ['invoice', 'delivery_note', 'supplier_message', 'credit_note'] as DocumentKind[]
+              ).map((kind) => {
+                const docs = record.documents.filter((d) => d.kind === kind);
+                return (
+                  <div key={kind} className={docs.length ? 'present' : ''}>
+                    <span>{docs.length ? <Check size={12} /> : <i />}</span>
+                    <div>
+                      <b>{docNames[kind]}</b>
+                      {docs.length ? (
+                        docs.map((d) => (
+                          <button key={d.id} onClick={() => setEvidence({ doc: d })}>
+                            {d.name}
+                            <ArrowUpRight size={11} />
+                          </button>
+                        ))
+                      ) : (
+                        <small>
+                          {kind === 'credit_note'
+                            ? 'Add when it arrives'
+                            : kind === 'supplier_message'
+                              ? 'Optional context'
+                              : 'Required for shortage analysis'}
+                        </small>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            {!closed && (
+              <Button
+                className="button-secondary full-width"
+                busy={busy === 'analyze'}
+                disabled={!!busy || record.documents.length < 2}
+                onClick={() =>
+                  void action(
+                    'analyze',
+                    () => post(`/cases/${record.id}/analyze`),
+                    'Analysis complete. Every finding is ready for inspection.',
+                  )
+                }
+              >
+                <Sparkles size={15} />
+                {hasUnanalyzed
+                  ? 'Match new credit'
+                  : record.analysis
+                    ? 'Run analysis again'
+                    : 'Analyze documents'}
+              </Button>
+            )}
+          </section>
+          {record.analysis && (
+            <section className="intelligence-card">
+              <div>
+                <Sparkles size={16} />
+                <b>
+                  {record.analysis.provider === 'demo'
+                    ? 'Sample replay'
+                    : record.analysis.provider === 'evorozen'
+                      ? 'Evorozen Neural Pulse'
+                      : record.analysis.provider === 'gemini'
+                        ? 'Gemini'
+                        : 'OpenAI'}
+                </b>
+              </div>
+              <p>
+                {record.analysis.provider === 'demo'
+                  ? 'A reproducible result for fictional sample documents. Real workspaces use live AI.'
+                  : 'AI interprets the paper trail. Quotes are validated and amounts calculated in code.'}
+              </p>
+              <dl>
+                <div>
+                  <dt>Processed</dt>
+                  <dd>{(record.analysis.durationMs / 1000).toFixed(1)}s</dd>
+                </div>
+                <div>
+                  <dt>Supplier context</dt>
+                  <dd>{record.analysis.memoryUsed ? 'Used' : 'No saved context'}</dd>
+                </div>
+                <div>
+                  <dt>Trace</dt>
+                  <dd title={record.analysis.traceId}>
+                    {record.analysis.traceId.slice(0, 22)}
+                    {record.analysis.traceId.length > 22 ? '…' : ''}
+                  </dd>
+                </div>
+              </dl>
+            </section>
+          )}
+          {record.status === 'partial' && (
+            <section className="remainder-note">
+              <span>
+                <Clock3 size={18} />
+                THE REMAINDER
+              </span>
+              <h3>{money(record.remainingCents, record.currency)} still deserves an answer.</h3>
+              <p>
+                A partial credit is progress. This case stays open so the rest doesn’t disappear.
+              </p>
+              <a href={`/api/cases/${record.id}/export?format=eml`} className="text-link">
+                Download follow-up context <ArrowRight size={15} />
+              </a>
+            </section>
+          )}
+          {!finalized && !closed && (
+            <button className="dismiss-link" onClick={() => setConfirm('dismiss')}>
+              Dismiss this case
+            </button>
+          )}
+        </aside>
+      </div>
+      {add && <AddDocument record={record} onClose={() => setAdd(false)} onSaved={update} />}{' '}
+      {evidence && <EvidenceModal {...evidence} onClose={() => setEvidence(null)} />}{' '}
+      {confirm && (
+        <Modal
+          title={
+            confirm === 'claim'
+              ? 'Ready to stand behind this claim?'
+              : confirm === 'sent'
+                ? 'Has the claim been sent?'
+                : 'Dismiss this recovery case?'
+          }
+          onClose={() => setConfirm(null)}
+        >
+          <p className="confirmation-copy">
+            {confirm === 'claim'
+              ? `You’re preparing a ${money(selected, record.currency)} supplier review request. Confirm you checked the source text, quantities, and prices. Claim evidence will be locked, and you can add credit notes as they arrive.`
+              : confirm === 'sent'
+                ? 'This records that you sent the request through your own email. Remainder will not send any message.'
+                : 'The case will be closed without claiming a credit. Its evidence and activity will remain available.'}
+          </p>
+          <div className="form-actions">
+            <Button className="button-secondary" onClick={() => setConfirm(null)}>
+              Go back
+            </Button>
+            <Button
+              busy={!!busy}
+              onClick={() => {
+                if (confirm === 'claim')
+                  void action(
+                    'claim',
+                    () => post(`/cases/${record.id}/claim`),
+                    'Claim prepared. Open Claim draft to export and send it.',
+                  );
+                else
+                  void action(
+                    confirm,
+                    () =>
+                      patch(`/cases/${record.id}`, {
+                        version: record.version,
+                        status: confirm === 'sent' ? 'sent' : 'dismissed',
+                      }),
+                    confirm === 'sent'
+                      ? 'Marked as sent. Add the supplier’s credit note when it arrives.'
+                      : 'Case dismissed.',
+                  );
+              }}
+            >
+              {confirm === 'claim'
+                ? 'I reviewed it. Prepare claim.'
+                : confirm === 'sent'
+                  ? 'Yes, mark as sent'
+                  : 'Dismiss case'}
+              <Check size={16} />
+            </Button>
+          </div>
+        </Modal>
+      )}
+    </>
+  );
 }

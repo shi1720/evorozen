@@ -20,13 +20,13 @@ The SQL adapter exposes `query` and `transaction`. PostgreSQL transactions use a
 
 | Table | Important properties |
 | --- | --- |
-| `users` | Unique normalized email; scrypt password and recovery hashes; workspace currency; demo flag. |
+| `users` | Unique normalized email; scrypt password and recovery hashes; workspace currency; demo flag; durable remote-memory cleanup marker. |
 | `sessions` | SHA-256 session-token hash; owner foreign key; seven-day expiry. |
 | `suppliers` | Owner-scoped JSON data and unique normalized name. |
 | `recovery_cases` | Owner-scoped case JSON, explicit version, analysis lease/token, timestamps. |
 | `verified_credits` | Grounded issuer/reference and text fingerprint uniqueness within the owner workspace; positive integer cents. |
 | `activities` | Owner-scoped timestamped events; case title captured at event time. |
-| `rate_limits` | Atomic counters with expiration for authentication, workspace requests, analysis, and daily AI budgets. |
+| `rate_limits` | Atomic counters with expiration for authentication, workspace requests, analysis, daily AI budgets, and bounded optional-memory allowances. |
 | `schema_migrations` | Applied schema version markers. |
 
 Case JSON contains the confirmed document text and structured analysis. This keeps the evidence snapshot and its financial state in one locked aggregate while the separate credit ledger enforces uniqueness across cases. List endpoints project document text to an empty string in SQL; detail and export endpoints return complete text. That avoids loading all stored evidence on every dashboard visit.
@@ -39,18 +39,22 @@ Current hard bounds are 200 cases per workspace, 12 documents per case, and 40,0
 2. Require one invoice and one consolidated delivery note. Load supplier memory from the same workspace.
 3. Compute a fingerprint over document IDs, kinds, text hashes, engine version, and supplier memory. Return an unchanged result from cache when that fingerprint matches.
 4. Store a random analysis token, then release the transaction before network work.
-5. Before each external request, renew this analysis token's lease and atomically reserve one global and one owner daily budget unit. Demo replay never enters this path.
+5. On an uncached real case, optionally recall signed supplier aliases from Evorozen under its separate conservative memory allowance. Before each external analysis request, renew this analysis token's lease and atomically reserve one global and one owner daily AI budget unit. Demo replay never enters this path.
 6. Request schema-constrained structured evidence through the selected provider adapter. Timeouts and upstream failures leave previous case state intact.
 7. Require exact source substrings, supported quantities/prices/units, matching issuer/invoice/currency, and safe integer amounts. Potential instruction text in evidence cannot authorize tool execution; suspicious or unsupported evidence is blocked from approval.
 8. Re-lock the case and check the analysis token and version. Commit the result and audit event together, then clear the lease.
 
 The model proposes document interpretation and semantic item matches. Quantity multiplication and subtraction use integer cents and integer thousandths of a unit, with an explicit half-cent rounding rule per line. No exchange rate, tax addition, or accounting adjustment is inferred.
 
-Supported provider order is **Evorozen -> OpenAI -> Gemini**, based on configured keys. With only Gemini configured, it is primary. Falling through a failed configured provider requires the relevant explicit fallback flag. An analysis records the actual provider, source hash, duration, timestamp, trace ID, warnings, and whether supplier memory contributed to a match. A `local-` trace is an application-generated identifier, not a provider request ID.
+`AI_PROVIDER=auto` selects **Evorozen -> OpenAI -> Gemini** based on configured keys. Explicit `evorozen`, `openai`, or `gemini` selects that provider directly; the public-preview deployment explicitly selects Gemini. Falling through a failed configured provider requires the relevant explicit fallback flag. An analysis records the actual provider, source hash, duration, timestamp, trace ID, warnings, and whether supplier memory contributed to a match. A `local-` trace is an application-generated identifier, not a provider request ID.
 
 The Evorozen adapter observes its live 2,000-character prompt cap through bounded extraction windows. It includes all nonblank source lines rather than silently truncating evidence; a case needing more than `EVOROZEN_MAX_CALLS_PER_ANALYSIS` windows (default 8, range 1–12) returns a size error or uses an explicitly enabled alternate provider. Every outbound window consumes a budget unit. Lease renewal before each request protects a longer multi-window analysis.
 
-Supplier memory is local, owner-scoped structured data passed to the AI layer. It is not a cross-customer training store, vector database, or implemented Evorozen persistent-memory integration.
+Local supplier memory is owner-scoped structured data passed to the AI layer. Optional Evorozen Virtual DB memory stores only reviewed product aliases in HMAC-scoped and HMAC-signed records. Remote hints may help a later uncached analysis but do not change its source fingerprint, authorize acceptance, or invalidate a cached result. A remote signature or workspace/supplier scope mismatch is rejected. No raw document text, invoice reference, price, or amount is stored in that memory table.
+
+After a new approval, the application reserves up to two metadata-call slots before taking an owner-row lock. It commits a cleanup marker before attempting a remote write, then locks and rechecks the owner while writing. Remote failure is nonfatal to the saved approval, and ambiguous writes retain the cleanup marker. Account deletion takes the same owner lock and removes remote records first—even if the feature has since been disabled. Cleanup failure returns `MEMORY_CLEANUP_FAILED` and keeps the account available to retry. This prevents a delayed remote write from recreating memory after deletion.
+
+Separate global memory allowances default to six reserved calls per UTC day and twelve over the installation lifetime. Each read/write reserves two slots for possible schema initialization plus the operation; cleanup bypasses these limits. The SQL database remains the system of record. Preserve the signing secret until remote records have been removed before rotating it.
 
 ## State and financial invariants
 
@@ -114,7 +118,7 @@ All endpoints return JSON unless an export is requested. Mutation bodies must be
 | `PATCH /api/settings` | `{name?,workspaceName?}` | Updated public user |
 | `GET /api/metrics` | Actual owner-scoped usage | Counts, currency, demo flag, timestamp |
 | `GET /api/export` | Complete owner data | Consistent JSON snapshot, including full audit history |
-| `DELETE /api/account` | `{password}` | Deletes own workspace through foreign-key cascades |
+| `DELETE /api/account` | `{password}` | Removes remote memory when necessary, then deletes own workspace through foreign-key cascades |
 
 Common failure codes include `UNAUTHENTICATED` (401), `ORIGIN_MISMATCH` (403), `NOT_FOUND` (404), `VERSION_CONFLICT` (409), `ANALYSIS_IN_PROGRESS` (409), `ANALYSIS_STALE` (409), `DUPLICATE_CREDIT` (409), `AI_DAILY_BUDGET` (429), and `AI_NOT_CONFIGURED` (503). Invalid schema input returns 400. The interface presents the server's actionable explanation.
 

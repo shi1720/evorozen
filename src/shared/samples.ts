@@ -67,4 +67,8 @@ export const DEMO_SUPPLIER = {
   notes: 'Invoice and delivery quantities are in cases; each oat case contains six 1L cartons.',
 };
 
-export const SAMPLE_CREDIT_DOCUMENT = { kind: 'credit_note' as const, name: 'Northstar-credit-CN-208.txt', text: SAMPLE_CREDIT };
+export const SAMPLE_CREDIT_DOCUMENT = {
+  kind: 'credit_note' as const,
+  name: 'Northstar-credit-CN-208.txt',
+  text: SAMPLE_CREDIT,
+};

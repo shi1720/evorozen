@@ -59,7 +59,7 @@ Demo workspaces, sample documents, and their derived amounts must remain labeled
 
 ## Why AI is necessary, and where it stops
 
-Invoices and receiving notes often use different item descriptions. AI can propose that “OAT BARISTA 6X1L” and “barista oat drink” refer to the same product, identify document roles, and extract evidence for review. Supplier alias memory provides explicit, tenant-specific context for later cases; it is not a globally trained proprietary model.
+Invoices and receiving notes often use different item descriptions. AI can propose that “OAT BARISTA 6X1L” and “barista oat drink” refer to the same product, identify document roles, and extract evidence for review. Supplier alias memory provides explicit, tenant-specific context for later cases; it is not a globally trained proprietary model. An optional signed Evorozen VirtualDB module has passed a live write, recall, and deletion check using fictional aliases; this validates memory integration separately from inference.
 
 The implementation contract requires source quotations from supplied documents, confidence handling, structured-output validation, and clear errors for unavailable providers. Amounts use integer cents. Arithmetic, currency checks, credit deduplication, authorization, and workflow transitions belong in deterministic code. A matching description alone is insufficient to establish the price, invoice reference, supplier, or credited amount.
 

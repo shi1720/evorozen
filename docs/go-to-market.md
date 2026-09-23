@@ -71,6 +71,8 @@ Measure actual calls, input size, retries, latency, successful analyses, and sup
 
 ## A finite 50-call launch budget
 
+Optional signed Evorozen memory adds storage requests for schema setup, recall, writes and deletion. These can consume the same sponsor-key allowance as inference. The implementation applies separate conservative memory caps, but those are application safeguards rather than a provider balance meter. Include actual memory traffic in the measured cost and remaining-call ledger; the base-case tables above exclude it.
+
 The allocation below is an initial budget for one 50-call provider allowance. Replace it with the real remaining balance after integration work; failed requests may also consume capacity. Do not create repeated accounts or keys to evade provider limits.
 
 | Activity | Maximum planned calls | Expected use |
@@ -168,4 +170,4 @@ The potential moat is a trusted recurring workflow, tenant-specific confirmed su
 - “Our pricing hypothesis is $29 per location per month. Our first validation channel is independent operators and hospitality bookkeepers.”
 - “We distinguish credit-note evidence from accounting application and cash recovery.”
 
-Only add a deployment URL, live provider result, customer quote, usage count, or commercial outcome after it exists and can be checked. Public evidence and competitive context are documented in [the research note](research.md).
+The [public preview](https://remainder-apex.onrender.com) is deployed, and [synthetic live integration results](validation-ai.md) are recorded. This does not establish customer adoption. Only add a customer quote, usage count, or commercial outcome after it exists and can be checked. Public evidence and competitive context are documented in [the research note](research.md).

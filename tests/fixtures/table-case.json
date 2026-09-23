@@ -1,13 +1,33 @@
 {
   "label": "Fictional independent CSV/TSV evaluation case",
-  "supplier": {"name":"Harbor Pantry","email":"accounts@harbor.example","aliases":["CHERRY TOMATOES 3KG = red cherry tomatoes","BARISTA OAT CASE 6X1L = barista oat milk"],"notes":"Quantities are delivery units, never individual items inside a case."},
-  "currency":"GBP",
-  "invoiceReference":"HP-7001",
-  "expectedClaimedCents":6355,
-  "expectedCreditedCents":1875,
-  "documents":[
-    {"kind":"invoice","name":"harbor-invoice.csv","text":"HARBOR PANTRY\nInvoice: HP-7001\nCurrency: GBP\nItem,Qty,Unit,Unit Price,Total\nCHERRY TOMATOES 3KG,6,crates,GBP 18.75,GBP 112.50\nBARISTA OAT CASE 6X1L,9,cases,GBP 22.40,GBP 201.60\nInvoice total: GBP 314.10"},
-    {"kind":"delivery_note","name":"harbor-receiving.tsv","text":"HARBOR PANTRY\nInvoice: HP-7001\nItem\tReceived\tUnit\nred cherry tomatoes\t5\tcrates\nbarista oat milk\t7\tcases"},
-    {"kind":"credit_note","name":"harbor-credit.txt","text":"HARBOR PANTRY\nCredit note: HP-C17\nFor invoice: HP-7001\nCurrency: GBP\nCHERRY TOMATOES 3KG | Credited quantity: 1 crate | Unit price: GBP 18.75\nCredit total: GBP 18.75\nReason: one crate missing at delivery."}
+  "supplier": {
+    "name": "Harbor Pantry",
+    "email": "accounts@harbor.example",
+    "aliases": [
+      "CHERRY TOMATOES 3KG = red cherry tomatoes",
+      "BARISTA OAT CASE 6X1L = barista oat milk"
+    ],
+    "notes": "Quantities are delivery units, never individual items inside a case."
+  },
+  "currency": "GBP",
+  "invoiceReference": "HP-7001",
+  "expectedClaimedCents": 6355,
+  "expectedCreditedCents": 1875,
+  "documents": [
+    {
+      "kind": "invoice",
+      "name": "harbor-invoice.csv",
+      "text": "HARBOR PANTRY\nInvoice: HP-7001\nCurrency: GBP\nItem,Qty,Unit,Unit Price,Total\nCHERRY TOMATOES 3KG,6,crates,GBP 18.75,GBP 112.50\nBARISTA OAT CASE 6X1L,9,cases,GBP 22.40,GBP 201.60\nInvoice total: GBP 314.10"
+    },
+    {
+      "kind": "delivery_note",
+      "name": "harbor-receiving.tsv",
+      "text": "HARBOR PANTRY\nInvoice: HP-7001\nItem\tReceived\tUnit\nred cherry tomatoes\t5\tcrates\nbarista oat milk\t7\tcases"
+    },
+    {
+      "kind": "credit_note",
+      "name": "harbor-credit.txt",
+      "text": "HARBOR PANTRY\nCredit note: HP-C17\nFor invoice: HP-7001\nCurrency: GBP\nCHERRY TOMATOES 3KG | Credited quantity: 1 crate | Unit price: GBP 18.75\nCredit total: GBP 18.75\nReason: one crate missing at delivery."
+    }
   ]
 }

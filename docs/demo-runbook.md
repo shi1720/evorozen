@@ -1,6 +1,6 @@
 # Remainder demo runbook
 
-Routes and controls below were exercised with headless Chromium against `http://localhost:3210` on 23 September 2026. The full fictional case passed through partial-credit verification and export. **The final public deployment still needs its own smoke test.** The base path is `/app`; a case identifier comes from the application's case list and must not be hard-coded into a public instruction. The case route is `/app/cases/:id`.
+Routes and controls below were exercised with headless Chromium against `http://localhost:3210` on 23 September 2026. The full fictional case passed through partial-credit verification and export. **The final public deployment still needs its own smoke test.** The public preview is [remainder-apex.onrender.com](https://remainder-apex.onrender.com). The base path is `/app`; a case identifier comes from the application's case list and must not be hard-coded into a public instruction. The case route is `/app/cases/:id`.
 
 ## Recording prerequisites
 
@@ -41,7 +41,7 @@ For a normal-account live AI recording, polished upload inputs are available at 
 
 Use a fresh real account with fictional documents if no customer documents are available. This demonstrates live inference without inventing a customer. Record the provider label, request timestamp, trace ID if supplied, source quotations, and final reviewed amounts. Exclude API keys, passwords, recovery codes, and session cookies from screenshots and published logs.
 
-The currently verified live extraction provider is Gemini 3.5 Flash-Lite. Two synthetic packs passed; the sponsor’s inference service failed upstream. A successful Gemini run does not prove Evorozen inference worked, and the separate VirtualDB probe does not establish that either. Record exactly what ran and keep the final video and submission consistent. See [AI validation](validation-ai.md).
+The currently verified live extraction provider is Gemini 3.5 Flash-Lite. Two synthetic packs passed; the sponsor’s inference service failed upstream. A successful Gemini run does not prove Evorozen inference worked. The separately verified signed Evorozen memory module proves alias storage and recall, not sponsor extraction. Record exactly what ran and keep the final video and submission consistent. See [AI validation](validation-ai.md).
 
 ## Quick robustness checks before filming
 

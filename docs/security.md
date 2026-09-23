@@ -49,14 +49,17 @@ A “verified credit” is a matching issued credit note, not proof of money rec
 | Analysis endpoint requests | 30 per hour per workspace | Database |
 | Actual AI requests | 30 per UTC day across the deployment | Database |
 | Actual AI requests per owner | 10 per UTC day per workspace | Database |
+| Optional memory reserved calls | 6 per UTC day; 12 lifetime across deployment | Database |
 
 Daily budgets count each outbound attempt, including explicit fallback attempts. Failed calls still count. Evorozen may require multiple bounded requests because of its 2,000-character prompt cap; each request counts, with a per-analysis window cap of 8 by default (`EVOROZEN_MAX_CALLS_PER_ANALYSIS`, configurable 1–12). Cached analyses and fictional demo replay consume no daily AI budget. `AI_MAX_DAILY_CALLS` and `AI_MAX_DAILY_CALLS_PER_USER` can lower or raise these caps; `0` disables new calls for that scope. A 429 budget response includes a `Retry-After` value for the next UTC day. Database counters make these limits shared across app instances.
+
+Optional Evorozen memory reads/writes reserve two units per operation before network work, covering schema setup plus the operation even when caching uses one request. `EVOROZEN_MEMORY_MAX_DAILY_CALLS` and `EVOROZEN_MEMORY_MAX_TOTAL_CALLS` set these separate global caps. Cleanup bypasses the caps. A finite provider starter allowance must be checked before increasing the lifetime allowance.
 
 Application limits supplement provider quotas; they do not replace project-level spend limits, billing alerts, network controls, or abuse monitoring. Budget units count requests, not tokens or dollars. The provider has independent response limits and billing rules.
 
 ## Failure and concurrency handling
 
-Mutations lock the case row, and edits/credit verification check a version number. A stale browser cannot overwrite a newer case. External AI requests run outside database transactions. A random analysis token and three-minute lease, renewed before each provider request, prevent overlapping analysis; the final transaction checks the token and version before accepting a result.
+Mutations lock the case row, and edits/credit verification check a version number. A stale browser cannot overwrite a newer case. External AI analysis requests run outside database transactions. Optional remote memory writes and cleanup serialize under the owner-row lock; these bounded metadata operations can briefly delay other owner-account actions. A random analysis token and three-minute lease, renewed before each provider request, prevent overlapping analysis; the final transaction checks the token and version before accepting a result.
 
 Provider failures, quota failures, and invalid model output leave previous analysis and financial state unchanged. The analysis token is cleared on a handled failure. After a process crash, a later request may replace an expired lease; a late response from an older token cannot overwrite it. AI requests time out after 45 seconds by default, configurable up to 90 seconds.
 
@@ -68,7 +71,9 @@ Local development persists under `.data/remainder`, whose directory is created w
 
 Production database transport encryption follows the configured PostgreSQL connection URL and provider certificates. The application does not disable TLS certificate verification. Encryption at rest, backups, restoration testing, regional placement, and infrastructure access controls are responsibilities of the deployment operator; they are not provisioned by this repository.
 
-Demo accounts are isolated and automatically expire after seven days. Cleanup also removes expired sessions and rate-limit records. Real accounts remain until their owner deletes them. Password-confirmed account deletion cascades through the owner's cases, supplier records, sessions, events, and credit ledger. Workspace JSON export provides the full data and audit history before deletion. Deletion cannot remove provider-side processing logs or infrastructure backups governed by their own retention policies.
+Demo accounts are isolated and automatically expire after seven days. Cleanup also removes expired sessions and rate-limit records. Real accounts remain until their owner deletes them. Password-confirmed account deletion cascades through the owner's cases, supplier records, sessions, events, and credit ledger. If optional remote memory may exist, deletion first removes the HMAC-scoped remote records; upstream cleanup failure keeps the local account intact for retry. A durable flag is committed before remote writes, including those whose outcome later becomes ambiguous, and owner locking prevents a delayed write after cleanup. Workspace JSON export provides the full data and audit history before deletion. Deletion cannot remove provider-side processing logs or infrastructure backups governed by their own retention policies.
+
+AI analysis sends confirmed document text and relevant supplier context to the selected Evorozen, OpenAI, or Gemini API; opt-in fallback may send it to an alternate configured provider. Review the selected provider's applicable data terms before uploading sensitive records. Optional Evorozen Virtual DB memory sends only owner-reviewed product aliases with signed scope metadata, not raw documents or financial values. HMAC validation protects integrity and scope; it is not encryption. Keep `EVOROZEN_MEMORY_SIGNING_KEY` private and stable until stored records have been deleted. Rotating or losing it prematurely prevents deriving their deletion scope.
 
 Keep original invoices, photos, and receiving notes outside Remainder. SHA-256 fingerprints describe the stored text the user confirmed; they are not forensic hashes of the original binaries or proof that a supplier issued a document.
 

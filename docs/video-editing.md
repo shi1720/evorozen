@@ -2,6 +2,8 @@
 
 The prepared master is **`deliverables/remainder-walkthrough-silent.mp4`**, exactly **2 minutes 50 seconds**, 1920×1080, H.264, with no audio track. It is actual Chromium footage of the working sample case, with editorial title/caption cards. The recording preserves the fictional sample labels. Its separate live-integration card summarizes two verified Gemini tests; it does not pretend the sample replay invoked the provider.
 
+The public product is [remainder-apex.onrender.com](https://remainder-apex.onrender.com). The existing 170-second master remains accurate and does not need rerecording merely to add the URL; use the video description or a small final-frame link.
+
 The remaining human contribution is Shivam's voice. Read [the supplied narration](video-script.md) in a quiet room, then place it over this master. The script credits Shivam and makes no invented customer or supplier claims. At approximately 350 words, a calm 130–140 words per minute leaves room for the visual pauses. Record once for practice and once cleanly; avoid speeding speech up to fit.
 
 ## Editing sequence
@@ -12,7 +14,7 @@ The remaining human contribution is Shivam's voice. Read [the supplied narration
 4. The card at 2:08 explicitly separates the real Gemini checks from sample footage. Keep the provider wording in the current script. If replacing this card with footage of a fresh successful request, name the actual provider and keep its provenance visible without keys or private account details.
 5. Keep the final title from 2:42 to 2:50. The event allows at most three minutes, including all credits. There is ten seconds of margin, but do not add a long logo animation or extra introduction.
 6. Export an H.264 MP4 with AAC audio. Watch it completely with headphones and verify that text is readable, the voice is audible, the ending is complete, and the duration remains below 3:00.
-7. Upload to the selected public or unlisted video host. Test its link in a signed-out window. Add the verified URL to Devpost and the submission file. This repository's silent MP4 is a prepared asset, not a claim that a final narrated video has been uploaded.
+7. Put [the live app](https://remainder-apex.onrender.com) and [public repository](https://github.com/shi1720/evorozen) in the video description. Upload to the selected public or unlisted video host. Test its link in a signed-out window. Add the verified URL to Devpost and the submission file. This repository's silent MP4 is a prepared asset, not a claim that a final narrated video has been uploaded.
 
 ## Actual master timeline
 

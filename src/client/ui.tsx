@@ -2,18 +2,192 @@ import { useEffect, useRef, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Check, CircleAlert, Loader2, ReceiptText, X } from 'lucide-react';
 import type { CaseStatus } from '../shared/types';
-export function Logo({ small = false }: { small?: boolean }) { return <Link className={`logo ${small ? 'small' : ''}`} to="/" aria-label="Remainder home"><img src="/favicon.svg" alt=""/><span>remainder<span className="logo-dot">.</span></span></Link>; }
-export const Button = ({ children, busy, className = '', ...props }: React.ButtonHTMLAttributes<HTMLButtonElement> & { busy?: boolean }) => <button {...props} className={`button ${className}`} disabled={busy || props.disabled}>{busy && <Loader2 className="spin" size={16}/>} {children}</button>;
-export function ErrorBanner({ children }: { children: ReactNode }) { return <div className="error-banner" role="alert"><CircleAlert size={18}/><span>{children}</span></div>; }
-export function Loading({ text = 'Loading your workspace…' }: { text?: string }) { return <div className="loading" role="status"><Loader2 className="spin" size={25}/><span>{text}</span></div>; }
-const statusLabels: Record<CaseStatus,string> = { draft: 'Collecting evidence', review: 'Ready for review', approved: 'Claim prepared', sent: 'Awaiting credit', partial: 'Partially credited', resolved: 'Credit verified', dismissed: 'Dismissed' };
-export function Status({ status }: { status: CaseStatus }) { return <span className={`status status-${status}`}><i/>{statusLabels[status]}</span>; }
-export function Empty({ title, children, action }: { title: string; children: ReactNode; action?: ReactNode }) { return <div className="empty"><div className="empty-icon"><ReceiptText size={28}/></div><h3>{title}</h3><p>{children}</p>{action}</div>; }
-export function Modal({ title, description, children, onClose, wide = false }: { title: string; description?: string; children: ReactNode; onClose: () => void; wide?: boolean }) {
-  const ref = useRef<HTMLDivElement>(null); const closer = useRef(onClose); closer.current = onClose;
-  useEffect(() => { const previous = document.activeElement as HTMLElement; const scroll = document.body.style.overflow; document.body.style.overflow = 'hidden'; ref.current?.focus(); const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') closer.current(); if (e.key === 'Tab') { const els = ref.current?.querySelectorAll<HTMLElement>('button:not(:disabled), a[href], input:not(:disabled), textarea:not(:disabled), select:not(:disabled), [tabindex="0"]'); if (!els?.length) return; const first = els[0], last = els[els.length-1]; if (e.shiftKey && (document.activeElement === first || document.activeElement === ref.current)) { e.preventDefault(); last.focus(); } else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); } } }; document.addEventListener('keydown', handler); return () => { document.body.style.overflow = scroll; document.removeEventListener('keydown', handler); previous?.focus(); }; }, []);
-  return <div className="modal-backdrop" onClick={e => { if(e.target === e.currentTarget) onClose(); }}><div className={`modal ${wide ? 'wide' : ''}`} role="dialog" aria-modal="true" aria-labelledby="modal-title" ref={ref} tabIndex={-1}><div className="modal-header"><div><h2 id="modal-title">{title}</h2>{description && <p>{description}</p>}</div><button className="icon-button" aria-label="Close dialog" onClick={onClose}><X size={20}/></button></div>{children}</div></div>;
+export function Logo({ small = false }: { small?: boolean }) {
+  return (
+    <Link className={`logo ${small ? 'small' : ''}`} to="/" aria-label="Remainder home">
+      <img src="/favicon.svg" alt="" />
+      <span>
+        remainder<span className="logo-dot">.</span>
+      </span>
+    </Link>
+  );
 }
-export function PageHeading({ eyebrow, title, subtitle, action }: { eyebrow?: string; title: string; subtitle?: string; action?: ReactNode }) { return <div className="page-heading"><div>{eyebrow && <div className="eyebrow">{eyebrow}</div>}<h1>{title}</h1>{subtitle && <p>{subtitle}</p>}</div>{action}</div>; }
-export function Success({ children }: { children: ReactNode }) { return <div className="success-banner" role="status"><Check size={18}/>{children}</div>; }
-export function TextLink({ to, children }: { to: string; children: ReactNode }) { return <Link className="text-link" to={to}>{children}<ArrowRight size={16}/></Link>; }
+export const Button = ({
+  children,
+  busy,
+  className = '',
+  ...props
+}: React.ButtonHTMLAttributes<HTMLButtonElement> & { busy?: boolean }) => (
+  <button {...props} className={`button ${className}`} disabled={busy || props.disabled}>
+    {busy && <Loader2 className="spin" size={16} />} {children}
+  </button>
+);
+export function ErrorBanner({ children }: { children: ReactNode }) {
+  return (
+    <div className="error-banner" role="alert">
+      <CircleAlert size={18} />
+      <span>{children}</span>
+    </div>
+  );
+}
+export function Loading({ text = 'Loading your workspace…' }: { text?: string }) {
+  return (
+    <div className="loading" role="status">
+      <Loader2 className="spin" size={25} />
+      <span>{text}</span>
+    </div>
+  );
+}
+const statusLabels: Record<CaseStatus, string> = {
+  draft: 'Collecting evidence',
+  review: 'Ready for review',
+  approved: 'Claim prepared',
+  sent: 'Awaiting credit',
+  partial: 'Partially credited',
+  resolved: 'Credit verified',
+  dismissed: 'Dismissed',
+};
+export function Status({ status }: { status: CaseStatus }) {
+  return (
+    <span className={`status status-${status}`}>
+      <i />
+      {statusLabels[status]}
+    </span>
+  );
+}
+export function Empty({
+  title,
+  children,
+  action,
+}: {
+  title: string;
+  children: ReactNode;
+  action?: ReactNode;
+}) {
+  return (
+    <div className="empty">
+      <div className="empty-icon">
+        <ReceiptText size={28} />
+      </div>
+      <h3>{title}</h3>
+      <p>{children}</p>
+      {action}
+    </div>
+  );
+}
+export function Modal({
+  title,
+  description,
+  children,
+  onClose,
+  wide = false,
+}: {
+  title: string;
+  description?: string;
+  children: ReactNode;
+  onClose: () => void;
+  wide?: boolean;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const closer = useRef(onClose);
+  closer.current = onClose;
+  useEffect(() => {
+    const previous = document.activeElement as HTMLElement;
+    const scroll = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    ref.current?.focus();
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closer.current();
+      if (e.key === 'Tab') {
+        const els = ref.current?.querySelectorAll<HTMLElement>(
+          'button:not(:disabled), a[href], input:not(:disabled), textarea:not(:disabled), select:not(:disabled), [tabindex="0"]',
+        );
+        if (!els?.length) return;
+        const first = els[0],
+          last = els[els.length - 1];
+        if (
+          e.shiftKey &&
+          (document.activeElement === first || document.activeElement === ref.current)
+        ) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+    document.addEventListener('keydown', handler);
+    return () => {
+      document.body.style.overflow = scroll;
+      document.removeEventListener('keydown', handler);
+      previous?.focus();
+    };
+  }, []);
+  return (
+    <div
+      className="modal-backdrop"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div
+        className={`modal ${wide ? 'wide' : ''}`}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+        ref={ref}
+        tabIndex={-1}
+      >
+        <div className="modal-header">
+          <div>
+            <h2 id="modal-title">{title}</h2>
+            {description && <p>{description}</p>}
+          </div>
+          <button className="icon-button" aria-label="Close dialog" onClick={onClose}>
+            <X size={20} />
+          </button>
+        </div>
+        {children}
+      </div>
+    </div>
+  );
+}
+export function PageHeading({
+  eyebrow,
+  title,
+  subtitle,
+  action,
+}: {
+  eyebrow?: string;
+  title: string;
+  subtitle?: string;
+  action?: ReactNode;
+}) {
+  return (
+    <div className="page-heading">
+      <div>
+        {eyebrow && <div className="eyebrow">{eyebrow}</div>}
+        <h1>{title}</h1>
+        {subtitle && <p>{subtitle}</p>}
+      </div>
+      {action}
+    </div>
+  );
+}
+export function Success({ children }: { children: ReactNode }) {
+  return (
+    <div className="success-banner" role="status">
+      <Check size={18} />
+      {children}
+    </div>
+  );
+}
+export function TextLink({ to, children }: { to: string; children: ReactNode }) {
+  return (
+    <Link className="text-link" to={to}>
+      {children}
+      <ArrowRight size={16} />
+    </Link>
+  );
+}

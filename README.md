@@ -48,7 +48,7 @@ A real workspace needs one server-side provider key to analyze documents. Docume
 
 ### Configure live AI
 
-Edit `.env`, then restart the server. Keep keys out of source control and out of `VITE_*` variables.
+Edit `.env`, then restart the server. Keep keys out of source control and out of `VITE_*` variables. `AI_PROVIDER=auto` uses the order below; set `AI_PROVIDER=gemini`, `openai`, or `evorozen` to select a configured provider directly. The public-preview configuration selects Gemini directly.
 
 | Provider | Configuration | Behavior |
 | --- | --- | --- |
@@ -62,7 +62,11 @@ Fallback is explicit. If Evorozen fails, OpenAI is tried only with `OPENAI_FALLB
 
 Evorozen Neural Pulse imposes a 2,000-character prompt cap. Its adapter uses bounded extraction windows instead of silently dropping source text. `EVOROZEN_MAX_CALLS_PER_ANALYSIS` defaults to 8 (configurable from 1 to 12). A larger document set produces an actionable size error or uses an explicitly enabled alternate provider; each window consumes a daily request-budget unit. Account for those extra requests when setting a pilot's budget.
 
-Evorozen's adapter is implemented; do not describe it as a verified live integration until a successful run with an issued key has been recorded. Supplier memory currently lives in the application's tenant-scoped database and is passed to the intelligence layer. Remainder does not claim to use Evorozen's persistent memory service.
+Live synthetic testing verified Gemini extraction and Evorozen Virtual DB operations. Evorozen's chat route returned an upstream-provider error during validation, so it is not the verified primary analysis engine. See [AI validation](docs/validation-ai.md) for the actual evidence and limits.
+
+Local supplier memory is always tenant-scoped. Optional **Evorozen Virtual DB memory** stores signed, owner-reviewed product aliases after approval and recalls them for a later uncached analysis. Enable `EVOROZEN_MEMORY_ENABLED=true` with `EVOROZEN_API_KEY` and a private `EVOROZEN_MEMORY_SIGNING_KEY` of at least 32 characters. It stores no raw documents, invoice references, or financial amounts. Read/write failures leave the approved claim usable and are recorded honestly; local evidence and deterministic checks remain authoritative. Preserve the signing key so remote records can later be removed.
+
+Optional memory has separate conservative global allowances: `EVOROZEN_MEMORY_MAX_DAILY_CALLS=6` and `EVOROZEN_MEMORY_MAX_TOTAL_CALLS=12`. Each read/write reserves two slots for schema setup plus the operation, even when caching uses one request. This protects a finite starter-key allowance; it is not a provider-usage meter. Account-deletion cleanup remains allowed after either cap is exhausted. Raise the lifetime cap only after checking the provider's remaining allowance.
 
 ### Control usage
 

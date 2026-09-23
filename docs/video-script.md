@@ -38,9 +38,11 @@ I'm Shivam Gupta. This is Remainder.
 
 ## Provider evidence and optional replacement
 
-The base narration reflects two successful Gemini 3.5 Flash-Lite tests on synthetic packs. Those checks verify integration and the tested calculations; they do not establish customer traction, broad accuracy, or successful Evorozen inference. The sponsor’s VirtualDB probe is separate from its chat endpoint and must not be presented as proof that sponsor inference worked. See [AI validation](validation-ai.md).
+The base narration reflects two successful Gemini 3.5 Flash-Lite tests on synthetic packs. Those checks verify integration and the tested calculations; they do not establish customer traction, broad accuracy, or successful Evorozen inference. The signed Evorozen memory module also passed a real write/recall/delete check. This is separate from its chat endpoint and must not be presented as proof that sponsor inference worked. See [AI validation](validation-ai.md).
 
 If the final recording includes a fresh successful request, replace the provider paragraph with a truthful description naming the actual provider shown. Keep the sample replay label on any fixture replay footage. A failed provider call should be fixed or disclosed; never edit a failure into an apparent success.
+
+The working preview is [remainder-apex.onrender.com](https://remainder-apex.onrender.com); place it and [the source repository](https://github.com/shi1720/evorozen) in the final video description. The supplied silent master remains 170 seconds.
 
 ## Screen sequence
 
